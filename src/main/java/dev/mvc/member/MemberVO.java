@@ -23,6 +23,7 @@ import lombok.ToString;
 //    PRIMARY KEY (memberno)
 //);
 
+
 /** MemberVO*/
 
 @Getter @Setter @ToString
