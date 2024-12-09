@@ -1,7 +1,6 @@
 package dev.mvc.site;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,13 +24,10 @@ public class SiteVO {
     private Integer siteno = 0;
 
     /** 사이트 이름 */
-    @NotEmpty(message="사이트 이름은 필수 항목입니다.")
-    @Size(min=2, max=100, message="사이트 이름은 최소 2자에서 최대 100자입니다.")
+    
     private String sitename;
 
     /** 사이트 주소 */
-    @NotEmpty(message="사이트 주소는 필수 항목입니다.")
-    @Size(min=5, max=100, message="사이트 주소는 최소 5자에서 최대 100자입니다.")
     private String siteurl;
 
     // Example: SiteVO(siteno=1, sitename=Google, siteurl=https://www.google.com)
