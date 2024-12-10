@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.mvc.recom.RecomMapper">
+
+    <!-- 추천 제품 정보 조회 -->
+    <select id="getRecomByScore" parameterType="int" resultType="map">
+        SELECT recomno, scoreid, contentsno
+        FROM recom
+        WHERE scoreid = #{scoreid};
+    </select>
+
+    <!-- 추천 제품 삽입 -->
+    <insert id="insertRecom" parameterType="map">
+        INSERT INTO recom (recomno, scoreid, contentsno)
+        VALUES (recom_seq.NEXTVAL, #{scoreid}, #{contentsno});
+    </insert>
+
+    <!-- 추천 제품 삭제 -->
+    <delete id="deleteRecom" parameterType="int">
+        DELETE FROM recom
+        WHERE recomno = #{recomno};
+    </delete>
+
+</mapper>

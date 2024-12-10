@@ -23,4 +23,13 @@ public class RecomVO {
     /** 제품 번호 (외래키) */
     private int contentsno;
     
+    public int getRecomno() { return recomno; }
+    public void setRecomno(int recomno) { this.recomno = recomno; }
+
+    public int getScoreid() { return scoreid; }
+    public void setScoreid(int scoreid) { this.scoreid = scoreid; }
+
+    public int getContentsno() { return contentsno; }
+    public void setContentsno(int contentsno) { this.contentsno = contentsno; }
+
 }
