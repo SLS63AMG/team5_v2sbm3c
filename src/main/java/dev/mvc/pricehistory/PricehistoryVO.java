@@ -16,13 +16,13 @@ import lombok.ToString;
 // COMMENT ON COLUMN pricehistory.timestamp is '제품 과거 가격 시점';
 
 @Setter @Getter @ToString
-public class PricehistoryVO {
+public class PriceHistoryVO {
 
     /** 기록 번호, Primary Key */
     private Integer historyno = 0;
 
     /** 제품 과거 가격 */
-
+    
     private String historyprice;
 
     /** 제품 과거 가격 시점 */
