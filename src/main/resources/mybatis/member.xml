@@ -3,13 +3,130 @@
 <!-- SB가 자동으로 구현하여 연동하는 interface -->
 <mapper namespace="dev.mvc.member.MemberDAOInter"> <!-- SB가 자동으로 구현하여 연동하는 interface -->
 
-  <!-- 아이디 중복 검사 -->
+  <!-- 아이디 중복 검사(1:중복, 0:미중복) -->
   <select id="checkID" resultType="int" parameterType="String">
-    SELECT COUNT(mid) as cnt
+    SELECT COUNT(id) as cnt
     FROM member
-    WHERE mid=#{id}
+    WHERE id=#{id}
   </select>
   
+  <!-- 회원 가입 -->
+  <insert id="sign_up" parameterType="dev.mvc.member.MemberVO">
+    INSERT INTO member(memberno, name, id, passwd, tel, email, zipcode, address1, address2, sdate)
+    VALUES(member_seq.nextval, #{name}, #{id}, #{passwd}, #{tel}, #{email}, #{zipcode}, #{address1}, #{address2}, sysdate)
+  </insert>
+    
+  <!-- 로그인(1:성공, 0:실패) -->
+  <select id="login" resultType="int" parameterType="HashMap">
+    SELECT COUNT(memberno) as cnt
+    FROM member
+    WHERE id=#{id} AND passwd=#{passwd}
+  </select>
+  
+  <!-- 토큰 중복 확인(1:중복값 있음, 0:중복값 없음) -->
+  <select id="checkToken" resultType="int" parameterType="String">
+    SELECT COUNT(token) as cnt
+    FROM member
+    WHERE token=#{token}
+  </select>
+  
+  <!-- 토큰 부여/토큰 생성 -->
+  <update id="token_grant" parameterType="HashMap">
+    UPDATE member
+    SET token=#{token}
+    WHERE id=#{id}
+  </update>
+  
+  <!-- 세션 기본 값 호출 -->
+  <select id="basic_session" resultType="dev.mvc.member.MemberVO" parameterType="String">
+    SELECT name, id, grade
+    FROM member
+    WHERE token=#{token}
+  </select>
+  
+  <!-- 토큰을 통한 정보 가져오기(기본 표기 정보 호출) -->
+  <select id="basic_info" resultType="dev.mvc.member.MemberVO" parameterType="String">
+    SELECT name, id
+    FROM member
+    WHERE token=#{token}
+  </select>
+  
+  <!-- 토큰을 통한 상세 정보 가져오기(프로필 정보 가져오기)) -->
+  <select id="detail_info" resultType="dev.mvc.member.MemberVO" parameterType="String">
+    SELECT name, id, tel, email, zipcode, address1, address2, state
+    FROM member
+    WHERE token=#{token}
+  </select>
+  
+  <!-- 회원 정보 수정 -->
+  <update id="propile_update" parameterType="dev.mvc.member.MemberVO">
+    UPDATE member
+    SET name=#{name}, tel=#{tel}, email=#{email}, zipcode=#{zipcode}, address1=#{address1}, address2=#{address2}, udate=sysdate
+    WHERE token=#{token}
+  </update>
+  
+  <!-- 비밀 번호 조회(1:현재 비밀번호, 0:현재 비밀번호 아님) -->
+  <select id="checkPasswd" resultType="int" parameterType="HashMap">
+    SELECT COUNT(memberno) as cnt
+    FROM member
+    WHERE token=#{token} AND passwd=#{passwd};
+  </select>
+  
+  <!-- 비밀 번호 조회(1:현재 비밀번호, 0:현재 비밀번호 아님) -->
+  <select id="update_passwd" resultType="int" parameterType="HashMap">
+    UPDATE member
+    SET passwd = #{passwd}, udate=sysdate
+    WHERE token = #{token};
+  </select>
+  
+  <!-- 1차 회원 탈퇴(100:탈퇴 회원 권한, state:탈퇴한 회원) -->
+  <update id="leave_member" parameterType="String">
+      UPDATE member
+      SET grade = 100, state = 3
+      WHERE token = #{token}
+  </update>
+  
+  <!-- 회원 정보 삭제 -->
+  <delete id="delete_member" parameterType="int">
+      DELETE FROM member
+      WHERE memberno = #{memberno}
+  </delete>
+  
+  <!-- 배정된 토큰 삭제 -->
+  <update  id="token_del" parameterType="String">
+    UPDATE member
+    SET token = ''
+    WHERE token=#{token}
+  </update>
+  
+  
+  <!-- 모든 회원 목록 -->
+  <select id="member_list" resultType="dev.mvc.member.MemberVO">
+      SELECT memberno, name, id, tel, email, zipcode, address1, address2, grade, state
+      FROM member
+  </select>
+  
+  <!-- 특정 회원 정보 -->
+  <select id="member_read" resultType="dev.mvc.member.MemberVO" parameterType="int">
+      SELECT memberno, name, id, tel, email, zipcode, address1, address2, grade, state
+      FROM member
+      WHERE memberno = #{memberno}
+  </select>
+  
+  <!-- 특정 회원 정보 수정 -->
+  <update id="updateMember" parameterType="dev.mvc.member.MemberVO">
+      UPDATE member
+      SET name = #{name}, 
+          id = #{id}, 
+          tel = #{tel}, 
+          email = #{email}, 
+          zipcode = #{zipcode}, 
+          address1 = #{address1}, 
+          address2 = #{address2}, 
+          grade = #{grade}, 
+          state = #{state}
+      WHERE memberno = #{memberno}
+  </update>
   
   
 </mapper>

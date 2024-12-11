@@ -4,11 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-//CREATE TABLE test (
+//CREATE TABLE member(
 //    memberno   NUMBER(10)    NOT NULL,
 //    name       VARCHAR2(100) NOT NULL,
-//    mid        VARCHAR2(200) NOT NULL,
-//    mpasswd    VARCHAR2(500) NOT NULL,
+//    id        VARCHAR2(200) NOT NULL,
+//    passwd    VARCHAR2(500) NOT NULL,
 //    tel        VARCHAR2(20),
 //    email      VARCHAR2(100) NOT NULL,
 //    zipcode    VARCHAR2(200),
@@ -17,10 +17,11 @@ import lombok.ToString;
 //    grade      NUMBER(10)    DEFAULT 10 NOT NULL,
 //    state      NUMBER(10)    DEFAULT 0 NOT NULL,
 //    sdate      DATE          DEFAULT SYSDATE,
-//    udate      DATE          DEFAULT SYSDATE,
+//    udate      DATE,
 //    ddate      DATE,
-//    ecode      VARCHAR2(200),
-//    PRIMARY KEY (memberno)
+//    token      VARCHAR2(200),
+//    CONSTRAINT PK_member_no PRIMARY KEY (memberno),
+//    CONSTRAINT UQ_member_token UNIQUE (token)
 //);
 
 @Getter @Setter @ToString
@@ -33,10 +34,10 @@ public class MemberVO {
   private int name;
   
   /** 아이디 */
-  private int mid;
+  private int id;
   
   /** 비밀번호 */
-  private int mpasswd;
+  private int passwd;
   
   /** 전화번호 */
   private int tel;
@@ -69,5 +70,5 @@ public class MemberVO {
   private int ddate;
   
   /** 이메일 인증 코드 */
-  private int ecode;
+  private int token;
 }
