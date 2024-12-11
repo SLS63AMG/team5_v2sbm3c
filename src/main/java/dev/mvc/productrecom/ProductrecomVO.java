@@ -3,10 +3,10 @@ package dev.mvc.productrecom;
 public class ProductrecomVO {
     private int productrecomno; // 제품 추천 번호
     private int scoreid;        // 점수 계산
-    private int contentsno;     // 컨텐츠 번호
+    private int contentsno;     // 콘텐츠 번호
     private int memberno;       // 회원 번호
 
-    // Getter & Setter
+    // Getter & Setter methods
     public int getProductrecomno() {
         return productrecomno;
     }
@@ -37,5 +37,10 @@ public class ProductrecomVO {
 
     public void setMemberno(int memberno) {
         this.memberno = memberno;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductRecomVO [productrecomno=" + productrecomno + ", scoreid=" + scoreid + ", contentsno=" + contentsno + ", memberno=" + memberno + "]";
     }
 }
