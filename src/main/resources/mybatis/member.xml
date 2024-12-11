@@ -3,5 +3,13 @@
 <!-- SB가 자동으로 구현하여 연동하는 interface -->
 <mapper namespace="dev.mvc.member.MemberDAOInter"> <!-- SB가 자동으로 구현하여 연동하는 interface -->
 
+  <!-- 아이디 중복 검사 -->
+  <select id="checkID" resultType="int" parameterType="String">
+    SELECT COUNT(mid) as cnt
+    FROM member
+    WHERE mid=#{id}
+  </select>
+  
+  
   
 </mapper>
