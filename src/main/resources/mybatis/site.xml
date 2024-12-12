@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.mvc.site.SiteMapper">
+
+    <!-- 사이트 등록 -->
+    <insert id="insertSite" parameterType="dev.mvc.site.SiteVO">
+        INSERT INTO site (siteno, sitename, siteurl, contentsno)
+        VALUES (#{siteno}, #{sitename}, #{siteurl}, #{contentsno})
+    </insert>
+
+    <!-- 사이트 조회 -->
+    <select id="selectSite" parameterType="int" resultType="dev.mvc.site.SiteVO">
+        SELECT siteno, sitename, siteurl, contentsno
+        FROM site
+        WHERE siteno = #{siteno}
+    </select>
+
+    <!-- 모든 사이트 조회 -->
+    <select id="selectAllSites" resultType="dev.mvc.site.SiteVO">
+        SELECT siteno, sitename, siteurl, contentsno
+        FROM site
+    </select>
+
+    <!-- 사이트 수정 -->
+    <update id="updateSite" parameterType="dev.mvc.site.SiteVO">
+        UPDATE site
+        SET sitename = #{sitename}, 
+            siteurl = #{siteurl}, 
+            contentsno = #{contentsno}
+        WHERE siteno = #{siteno}
+    </update>
+
+    <!-- 사이트 삭제 -->
+    <delete id="deleteSite" parameterType="int">
+        DELETE FROM site
+        WHERE siteno = #{siteno}
+    </delete>
+
+</mapper>
