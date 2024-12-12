@@ -51,7 +51,7 @@
     WHERE token=#{token}
   </select>
   
-  <!-- 토큰을 통한 상세 정보 가져오기(프로필 정보 가져오기)) -->
+  <!-- 토큰을 통한 상세 정보 가져오기(프로필 정보 가져오기) -->
   <select id="detail_info" resultType="dev.mvc.member.MemberVO" parameterType="String">
     SELECT name, id, tel, email, zipcode, address1, address2, state
     FROM member
@@ -72,7 +72,7 @@
     WHERE token=#{token} AND passwd=#{passwd};
   </select>
   
-  <!-- 비밀 번호 조회(1:현재 비밀번호, 0:현재 비밀번호 아님) -->
+  <!-- 비밀 번호 변경 -->
   <select id="update_passwd" resultType="int" parameterType="HashMap">
     UPDATE member
     SET passwd = #{passwd}, udate=sysdate
@@ -114,7 +114,7 @@
   </select>
   
   <!-- 특정 회원 정보 수정 -->
-  <update id="updateMember" parameterType="dev.mvc.member.MemberVO">
+  <update id="update_member" parameterType="dev.mvc.member.MemberVO">
       UPDATE member
       SET name = #{name}, 
           id = #{id}, 
