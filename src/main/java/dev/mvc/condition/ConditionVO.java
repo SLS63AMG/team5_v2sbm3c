@@ -15,5 +15,8 @@ public class ConditionVO {
 
     /** 물품 상태 상세 설명 */
     private String description;
+    
+    /** 컨텐츠 번호, Foreign Key */
+    private Integer contentsno;
 
 }

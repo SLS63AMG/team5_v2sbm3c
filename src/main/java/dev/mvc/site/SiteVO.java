@@ -15,5 +15,8 @@ public class SiteVO {
 
     /** 사이트 주소 */
     private String siteurl;
+    
+    /** 컨텐츠 번호, Foreign Key */
+    private Integer contentsno;
 
 }
