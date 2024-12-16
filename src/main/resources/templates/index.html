@@ -1,20 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=5.0, width=device-width" /> 
-<title>깃 테스트 http://localhost:9093</title>
-</head>
-<body>
-  <div style="margin: 50px;">
-      <h1>깃 테스트</h1>
-    <ol>
-      <li>두번째 변경 진행함.</li>
-      <li>이지운</li>
-      <li>이재훈</li>
-      <li>조재혁</li>
-      <li>한태구</li>
-    </ol>      
-  </div> 
-</body>
+<html layout:decorate="~{layout}"> <!-- layout.html 상속 -->
+  <div layout:fragment="content" style="width: 80%; margin: 50px auto; text-align: center;">
+    <h1>시작 화면</h1>
+    <img src="/images/main.jpg" style="width: 70%;"> <!-- /static/images/main.jpg -->
+  </div>
 </html>
