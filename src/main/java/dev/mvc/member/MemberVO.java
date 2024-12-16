@@ -31,28 +31,34 @@ public class MemberVO {
   private int memberno;
 
   /** 이름(닉네임) */
-  private int name;
+  private String name;
   
   /** 아이디 */
-  private int id;
+  private String id;
   
   /** 비밀번호 */
-  private int passwd;
+  private String passwd;
   
   /** 전화번호 */
-  private int tel;
+  private String tel;
   
   /** 이메일 */
-  private int email;
+  private String email;
     
   /** 우편 번호 */
-  private int zipcode;
+  private String zipcode;
   
   /** 도로명 주소(주소1) */
-  private int address1;
+  private String address1;
   
   /** 상세 주소(주소2) */
-  private int address2;
+  private String address2;
+  
+  /** 상세 주소(주소2) */
+  private String gender;
+  
+  /** 상세 주소(주소2) */
+  private String birth;
   
   /** 권한 */
   private int grade;
@@ -61,14 +67,14 @@ public class MemberVO {
   private int state;
   
   /** 가입일 */
-  private int sdate;
+  private String sdate;
   
   /** 정보 수정일 */
-  private int udate;
+  private String udate;
   
   /** 탈퇴일 */
-  private int ddate;
+  private String ddate;
   
-  /** 이메일 인증 코드 */
-  private int token;
+  /** 식별 토큰 */
+  private String token;
 }

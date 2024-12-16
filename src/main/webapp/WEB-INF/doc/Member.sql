@@ -10,6 +10,8 @@ CREATE TABLE member(
     zipcode    VARCHAR2(200),
     address1   VARCHAR2(400),
     address2   VARCHAR2(400),
+    gender     VARCHAR2(40),
+    birth      DATE,
     grade      NUMBER(10)    DEFAULT 10 NOT NULL,
     state      NUMBER(10)    DEFAULT 0 NOT NULL,
     sdate      DATE          DEFAULT SYSDATE,
@@ -38,6 +40,8 @@ COMMENT ON COLUMN member.email      IS '이메일';
 COMMENT ON COLUMN member.zipcode    IS '우편 번호';
 COMMENT ON COLUMN member.address1   IS '도로명 주소';
 COMMENT ON COLUMN member.address2   IS '상세 주소';
+COMMENT ON COLUMN member.birth   IS '성별';
+COMMENT ON COLUMN member.birth   IS '출생일';
 COMMENT ON COLUMN member.grade      IS '권한';
 COMMENT ON COLUMN member.state      IS '상태';
 COMMENT ON COLUMN member.sdate      IS '가입일';
@@ -56,8 +60,8 @@ FROM member
 WHERE id='아이디';
 
 -- 1-2. 회원 가입 ※ sign_up
-INSERT INTO member(memberno, name, id, passwd, tel, email, zipcode, address1, address2, sdate)
-VALUES(member_seq.nextval, '이름', '아이디', '비밀번호', '전화번호', '이메일', '우편번호', '도로명주소', '상세주소', sysdate);
+INSERT INTO member(memberno, name, id, passwd, tel, email, zipcode, address1, address2, gender, birth, sdate)
+VALUES(member_seq.nextval, '이름', '아이디', '비밀번호', '전화번호', '이메일', '우편번호', '도로명주소', '상세주소', '성별', '출생일', sysdate);
 ------------------------------------------------------------------------------------------------
 -- 2-1. 로그인(1:성공, 0:실패) ※ login
 SELECT COUNT(memberno) as cnt
@@ -85,13 +89,13 @@ FROM member
 WHERE token='식별토큰';
 
 -- 3-2. 토큰을 통한 상세 정보 가져오기(프로필 정보 가져오기) ※ detail_info
-SELECT name, id, tel, email, zipcode, address1, address2, state
+SELECT name, id, tel, email, zipcode, address1, address2, gender, birth state
 FROM member
 WHERE token='token';
 
 -- 3-3. 회원 정보 수정 ※ propile_update
 UPDATE member
-SET name='이름', tel='전화번호', email='이메일', zipcode='우편번호', address1='도로명 주소', address2='상세 주소', udate=sysdate
+SET name='이름', tel='전화번호', email='이메일', zipcode='우편번호', address1='도로명 주소', address2='상세 주소', gender='성별', birth='생일', udate=sysdate
 WHERE token='식별토큰';
 
 -- 3-4. 비밀 번호 조회(1:현재 비밀번호, 0:현재 비밀번호 아님) ※ checkPasswd
@@ -125,11 +129,12 @@ WHERE token='식별토큰';
 
 -------------------------Member.xml 관리자 시작-------------------------
 -- 1. 모든 회원 목록 ※ member_list
-SELECT memberno, name, id, tel, email, zipcode, address1, address2, grade, state
-FROM member;
+SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state
+FROM member
+ORDER BY grade ASC, state ASC, name ASC;
 
 -- 2. 특정 회원 정보 ※ member_read
-SELECT memberno, name, id, tel, email, zipcode, address1, address2, grade, state
+SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state
 FROM member
 WHERE memberno = 1;
 
@@ -137,12 +142,23 @@ WHERE memberno = 1;
 UPDATE member
 SET name='이름', id='아이디', tel='전화번호', email='이메일', 
 zipcode='우편번호', address1='도로명 주소', address2='상세 주소', 
+gender='성별', birth='생일',
 grade='권한', state='상태'
 WHERE memberno = 1;
 -------------------------Member.xml 관리자 끝-------------------------
 
 
-
+SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state, r
+FROM (
+    SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state, rownum as r
+    FROM (
+        SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state
+        FROM member
+        WHERE (UPPER(name) LIKE '%' || UPPER('word') || '%') OR (UPPER(id) LIKE '%' || UPPER('word') || '%')
+    )
+)
+WHERE r &gt;='시작번호' AND r &lt;='끝번호' <!-- WHERE r >= 1 AND r <= 3 -->
+ORDER BY grade ASC, state ASC name ASC
 
 
 
