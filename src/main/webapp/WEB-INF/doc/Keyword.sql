@@ -3,8 +3,8 @@ DROP TABLE keyword;
 
 -- 테이블 생성
 CREATE TABLE keyword (
-    keyno       NUMBER(10)    NOT NULL,       -- 키워드 번호
-    searchkey   VARCHAR(50)   NOT NULL,       -- 검색 키워드
+    searchno       NUMBER(10)    NOT NULL,       -- 검색어 번호
+    searchword   VARCHAR(50)   NOT NULL,       -- 검색어
     searchdate  DATE          NOT NULL,       -- 검색 날짜
     memberno    NUMBER(10)    NOT NULL       -- 회원 번호 (memberno 컬럼 추가)
 --    CONSTRAINT PK_KEYWORD PRIMARY KEY (keyno),
@@ -12,10 +12,10 @@ CREATE TABLE keyword (
 );
 
 -- 테이블 및 컬럼 주석 추가
-COMMENT ON TABLE keyword IS '사용자 키워드'; 
-COMMENT ON COLUMN keyword.keyno IS '키워드 번호';
-COMMENT ON COLUMN keyword.searchkey IS '검색기록 키워드';
-COMMENT ON COLUMN keyword.searchdate IS '검색기록 날짜';
+COMMENT ON TABLE keyword IS '사용자 검색어'; 
+COMMENT ON COLUMN keyword.searchno IS '검색어 번호';
+COMMENT ON COLUMN keyword.searchword IS '검색어';
+COMMENT ON COLUMN keyword.searchdate IS '검색어 기록 날짜';
 COMMENT ON COLUMN keyword.memberno IS '회원 번호';
 
 DROP SEQUENCE keyword_seq;
@@ -27,17 +27,17 @@ CREATE SEQUENCE keyword_seq
   CACHE 2                        -- 2번은 메모리에서만 계산
   NOCYCLE;    
 
-INSERT INTO keyword (keyno, searchkey, searchdate, memberno) 
-VALUES (keyword_seq.nextval, '스마트폰', SYSDATE,1);
+INSERT INTO keyword (searchno, searchword, searchdate, memberno) 
+VALUES (keyword_seq.nextval, '아이폰6', SYSDATE,1);
 
-INSERT INTO keyword (keyno, searchkey, searchdate, memberno) 
-VALUES (keyword_seq.nextval, '데님', SYSDATE, 1);
+INSERT INTO keyword (searchno, searchword, searchdate, memberno) 
+VALUES (keyword_seq.nextval, '플레어 데님', SYSDATE, 1);
 
-INSERT INTO keyword (keyno, searchkey, searchdate, memberno) 
-VALUES (keyword_seq.nextval, '청바지', SYSDATE, 1);
+INSERT INTO keyword (searchno, searchword, searchdate, memberno) 
+VALUES (keyword_seq.nextval, 'stu 가디건', SYSDATE, 1);
 
-INSERT INTO keyword (keyno, searchkey, searchdate, memberno) 
-VALUES (keyword_seq.nextval, '패션', SYSDATE, 1);
+INSERT INTO keyword (searchno, searchword, searchdate, memberno) 
+VALUES (keyword_seq.nextval, '갤럭시 울트라22s', SYSDATE, 1);
   
 COMMIT;
 
