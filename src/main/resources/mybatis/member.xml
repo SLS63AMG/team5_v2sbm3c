@@ -12,8 +12,8 @@
   
   <!-- 회원 가입 -->
   <insert id="sign_up" parameterType="dev.mvc.member.MemberVO">
-    INSERT INTO member(memberno, name, id, passwd, tel, email, zipcode, address1, address2, sdate)
-    VALUES(member_seq.nextval, #{name}, #{id}, #{passwd}, #{tel}, #{email}, #{zipcode}, #{address1}, #{address2}, sysdate)
+    INSERT INTO member(memberno, name, id, passwd, tel, email, zipcode, address1, address2, gender, birth, sdate)
+    VALUES(member_seq.nextval, #{name}, #{id}, #{passwd}, #{tel}, #{email}, #{zipcode}, #{address1}, #{address2}, #{gender}, #{birth}, sysdate)
   </insert>
     
   <!-- 로그인(1:성공, 0:실패) -->
@@ -53,7 +53,7 @@
   
   <!-- 토큰을 통한 상세 정보 가져오기(프로필 정보 가져오기) -->
   <select id="detail_info" resultType="dev.mvc.member.MemberVO" parameterType="String">
-    SELECT name, id, tel, email, zipcode, address1, address2, state
+    SELECT name, id, tel, email, zipcode, address1, address2, gender, birth state
     FROM member
     WHERE token=#{token}
   </select>
@@ -101,7 +101,7 @@
   
   <!-- 모든 회원 목록 -->
   <select id="member_list" resultType="dev.mvc.member.MemberVO">
-      SELECT memberno, name, id, tel, email, zipcode, address1, address2, grade, state
+      SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state
       FROM member
       ORDER BY grade ASC, state ASC, name ASC
   </select>
@@ -120,11 +120,11 @@
    
   <!-- 회원 목록(검색 + 페이징) -->
   <select id="member_list_search_paging" resultType="dev.mvc.member.MemberVO" parameterType="Map">
-    SELECT memberno, name, id, tel, email, zipcode, address1, address2, grade, state, r
+    SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state, r
     FROM (
-        SELECT memberno, name, id, tel, email, zipcode, address1, address2, grade, state, rownum as r
+        SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state, rownum as r
         FROM (
-            SELECT memberno, name, id, tel, email, zipcode, address1, address2, grade, state
+            SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state
             FROM member
             WHERE (UPPER(name) LIKE '%' || UPPER(#{word}) || '%') OR (UPPER(id) LIKE '%' || UPPER(#{word}) || '%')
         )
@@ -135,7 +135,7 @@
   
   <!-- 특정 회원 정보 -->
   <select id="member_read" resultType="dev.mvc.member.MemberVO" parameterType="int">
-      SELECT memberno, name, id, tel, email, zipcode, address1, address2, grade, state
+      SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state
       FROM member
       WHERE memberno = #{memberno}
   </select>
@@ -150,6 +150,8 @@
           zipcode = #{zipcode}, 
           address1 = #{address1}, 
           address2 = #{address2}, 
+          gender = #{gender},
+          birth = #{birth},
           grade = #{grade}, 
           state = #{state}
       WHERE memberno = #{memberno}

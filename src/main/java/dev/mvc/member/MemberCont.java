@@ -62,10 +62,12 @@ public class MemberCont {
     System.out.println(memberVO.getZipcode());
     System.out.println(memberVO.getAddress1());
     System.out.println(memberVO.getAddress2());
+    System.out.println(memberVO.getGender());
+    System.out.println(memberVO.getBirth());
 
     
-//    int cnt = this.memberProc.sign_up(memberVO);
-//    System.out.println();
+    int cnt = this.memberProc.sign_up(memberVO);
+    System.out.println(cnt);
     
     return "redirect:/";
   }

@@ -54,6 +54,12 @@ public class MemberVO {
   /** 상세 주소(주소2) */
   private String address2;
   
+  /** 상세 주소(주소2) */
+  private String gender;
+  
+  /** 상세 주소(주소2) */
+  private String birth;
+  
   /** 권한 */
   private int grade;
   
