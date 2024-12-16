@@ -7,7 +7,6 @@ public class KeywordVO {
   private String searchkey; // 검색 키워드
   private int searchcnt;    // 검색 횟수
   private Date searchdate;  // 검색 날짜
-  private String interkey;  // 인터 키워드
   private int memberno;     // 회원 번호 (memberno 참조)
 
   // Getter & Setter methods
@@ -43,14 +42,6 @@ public class KeywordVO {
       this.searchdate = searchdate;
   }
 
-  public String getInterkey() {
-      return interkey;
-  }
-
-  public void setInterkey(String interkey) {
-      this.interkey = interkey;
-  }
-
   public int getMemberno() {
       return memberno;
   }
@@ -61,6 +52,6 @@ public class KeywordVO {
 
   @Override
   public String toString() {
-      return "KeywordVO [keyno=" + keyno + ", searchkey=" + searchkey + ", searchcnt=" + searchcnt + ", searchdate=" + searchdate + ", interkey=" + interkey + ", memberno=" + memberno + "]";
+      return "KeywordVO [keyno=" + keyno + ", searchkey=" + searchkey + ", searchcnt=" + searchcnt + ", searchdate=" + searchdate + memberno + "]";
   }
 }

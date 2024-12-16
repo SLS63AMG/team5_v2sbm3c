@@ -5,7 +5,6 @@ DROP TABLE productrecom;
 -- productrecom 테이블 생성
 CREATE TABLE productrecom (
     productrecomno NUMBER(10) NOT NULL PRIMARY KEY,   -- 제품 추천 번호
-    scoreid        NUMBER(10) NOT NULL,               -- 점수 계산
     contentsno     NUMBER(10) NOT NULL,               -- 콘텐츠 번호
     memberno       NUMBER(10) NOT NULL,               -- 회원 번호
     CONSTRAINT FK_PRODUCTRECOM_CONTENTS FOREIGN KEY (contentsno) REFERENCES contents (contentsno) ON DELETE CASCADE,
@@ -15,7 +14,6 @@ CREATE TABLE productrecom (
 -- productrecom 테이블 주석 추가
 COMMENT ON TABLE productrecom IS '제품 추천'; 
 COMMENT ON COLUMN productrecom.productrecomno IS '제품 추천 번호';
-COMMENT ON COLUMN productrecom.scoreid IS '점수 계산';
 COMMENT ON COLUMN productrecom.contentsno IS '콘텐츠 번호';
 COMMENT ON COLUMN productrecom.memberno IS '회원 번호';
 

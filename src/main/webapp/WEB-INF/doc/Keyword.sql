@@ -1,58 +1,43 @@
--- 카테고리 테이블 생성
-DROP TABLE cate CASCADE CONSTRAINTS;
+DROP TABLE keyword CASCADE CONSTRAINTS; -- 자식 무시하고 삭제 가능
+DROP TABLE keyword;
 
-CREATE TABLE cate (
-    cateno     NUMBER(10)     NOT NULL,       -- 카테고리 번호
-    name       VARCHAR2(100)    NOT NULL,       -- 카테고리 이름
-    cnt        NUMBER(7)      DEFAULT 0 NOT NULL, -- 관련 자료 수
-    rdate      DATE           NOT NULL,       -- 등록일
-    categrpno  NUMBER(10)     NOT NULL,       -- 카테고리 그룹 번호
-    categrpname VARCHAR2(100) NOT NULL
-  --  CONSTRAINT PK_CATE PRIMARY KEY (cateno),
-  --  CONSTRAINT FK_CATE_CATEGRP FOREIGN KEY (categrpno) REFERENCES categrp(categrpno) ON DELETE CASCADE
+-- 테이블 생성
+CREATE TABLE keyword (
+    keyno       NUMBER(10)    NOT NULL,       -- 키워드 번호
+    searchkey   VARCHAR(50)   NOT NULL,       -- 검색 키워드
+    searchdate  DATE          NOT NULL,       -- 검색 날짜
+    memberno    NUMBER(10)    NOT NULL       -- 회원 번호 (memberno 컬럼 추가)
+--    CONSTRAINT PK_KEYWORD PRIMARY KEY (keyno),
+--    CONSTRAINT FK_KEYWORD_MEMBER FOREIGN KEY (memberno) REFERENCES member(memberno) ON DELETE CASCADE
 );
 
+-- 테이블 및 컬럼 주석 추가
+COMMENT ON TABLE keyword IS '사용자 키워드'; 
+COMMENT ON COLUMN keyword.keyno IS '키워드 번호';
+COMMENT ON COLUMN keyword.searchkey IS '검색기록 키워드';
+COMMENT ON COLUMN keyword.searchdate IS '검색기록 날짜';
+COMMENT ON COLUMN keyword.memberno IS '회원 번호';
 
--- 각 컬럼에 주석 추가
-COMMENT ON TABLE cate IS '카테고리 테이블';
-COMMENT ON COLUMN cate.cateno IS '카테고리 번호';
-COMMENT ON COLUMN cate.name IS '카테고리 이름';
-COMMENT ON COLUMN cate.cnt IS '관련 자료 수';
-COMMENT ON COLUMN cate.rdate IS '등록일';
-COMMENT ON COLUMN cate.categrpno IS '카테고리 그룹 번호';
-COMMENT ON COLUMN cate.categrpname IS '카테고리 그룹 이름';
+DROP SEQUENCE keyword_seq;
 
-DROP SEQUENCE cate_seq;
-
-CREATE SEQUENCE cate_seq
+CREATE SEQUENCE keyword_seq
   START WITH 1                -- 시작 번호
   INCREMENT BY 1            -- 증가값
   MAXVALUE 9999999999  -- 최대값: 9999999999 --> NUMBER(10) 대응
   CACHE 2                        -- 2번은 메모리에서만 계산
-  NOCYCLE;  
+  NOCYCLE;    
 
-INSERT INTO cate (cateno, name, cnt, rdate, categrpno, categrpname) 
-VALUES (cate_seq.nextval, '아이폰6xe', 1, SYSDATE, 1, '스마트폰');
+INSERT INTO keyword (keyno, searchkey, searchdate, memberno) 
+VALUES (keyword_seq.nextval, '스마트폰', SYSDATE,1);
 
-INSERT INTO cate (cateno, name, cnt, rdate, categrpno, categrpname) 
-VALUES (cate_seq.nextval, '아키라 플레어 데님팬츠', 1, SYSDATE, 2, '청바지');
+INSERT INTO keyword (keyno, searchkey, searchdate, memberno) 
+VALUES (keyword_seq.nextval, '데님', SYSDATE, 1);
 
-INSERT INTO cate (cateno, name, cnt, rdate, categrpno, categrpname) 
-VALUES (cate_seq.nextval, 'stu 가디건', 1, SYSDATE, 2, '패션');
+INSERT INTO keyword (keyno, searchkey, searchdate, memberno) 
+VALUES (keyword_seq.nextval, '청바지', SYSDATE, 1);
 
-INSERT INTO cate (cateno, name, cnt, rdate, categrpno, categrpname) 
-VALUES (cate_seq.nextval, '갤럭시S22', 1, SYSDATE, 1, '스마트폰');
-
-INSERT INTO cate (cateno, name, cnt, rdate, categrpno) 
-VALUES (cate_seq.nextval, '6', '아이폰6xe', 1, SYSDATE, 5);
-
-
-commit;
-
-
-
-
-
-
-
+INSERT INTO keyword (keyno, searchkey, searchdate, memberno) 
+VALUES (keyword_seq.nextval, '패션', SYSDATE, 1);
+  
+COMMIT;
 
