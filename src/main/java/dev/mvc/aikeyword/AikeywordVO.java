@@ -1,10 +1,13 @@
 package dev.mvc.aikeyword;
 
-public class AikeywordVO {
-    private int aino;      // AI 추천 번호
-    private int searchno;  // 검색 기록 번호
+import java.util.Date;
 
-    // Getter & Setter
+public class AikeywordVO {
+    private int aino;          // AI 추천 번호
+    private String aikey;      // AI 추천 키워드
+    private Date aidate;       // AI 키워드 생성 날짜
+
+    // Getter & Setter methods
     public int getAino() {
         return aino;
     }
@@ -13,11 +16,24 @@ public class AikeywordVO {
         this.aino = aino;
     }
 
-    public int getSearchno() {
-        return searchno;
+    public String getAikey() {
+        return aikey;
     }
 
-    public void setSearchno(int searchno) {
-        this.searchno = searchno;
+    public void setAikey(String aikey) {
+        this.aikey = aikey;
+    }
+
+    public Date getAidate() {
+        return aidate;
+    }
+
+    public void setAidate(Date aidate) {
+        this.aidate = aidate;
+    }
+
+    @Override
+    public String toString() {
+        return "AIKeywordVO [aino=" + aino + ", aikey=" + aikey + ", aidate=" + aidate + "]";
     }
 }

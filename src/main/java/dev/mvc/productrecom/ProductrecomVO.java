@@ -1,37 +1,38 @@
 package dev.mvc.productrecom;
 
+import java.util.Date;
+
+/**
+ * VO 클래스: productrecom 테이블을 매핑한 클래스
+ */
 public class ProductrecomVO {
-    private int productrecomno; // 제품 추천 번호
-    private int contentsno;     // 콘텐츠 번호
-    private int memberno;       // 회원 번호
+    private int productRecomNo;       // 제품 추천 번호
+    private Date productRecomDate;   // 제품 추천 날짜
 
-    // Getter & Setter methods
-    public int getProductrecomno() {
-        return productrecomno;
+    // 기본 생성자
+    public ProductrecomVO() {
+        super();
     }
 
-    public void setProductrecomno(int productrecomno) {
-        this.productrecomno = productrecomno;
+    // Getter 및 Setter 메서드
+    public int getProductRecomNo() {
+        return productRecomNo;
     }
 
-    public int getContentsno() {
-        return contentsno;
+    public void setProductRecomNo(int productRecomNo) {
+        this.productRecomNo = productRecomNo;
     }
 
-    public void setContentsno(int contentsno) {
-        this.contentsno = contentsno;
+    public Date getProductRecomDate() {
+        return productRecomDate;
     }
 
-    public int getMemberno() {
-        return memberno;
-    }
-
-    public void setMemberno(int memberno) {
-        this.memberno = memberno;
+    public void setProductRecomDate(Date productRecomDate) {
+        this.productRecomDate = productRecomDate;
     }
 
     @Override
     public String toString() {
-        return "ProductRecomVO [productrecomno=" + productrecomno + ", contentsno=" + contentsno + ", memberno=" + memberno + "]";
+        return "ProductRecomVO [productRecomNo=" + productRecomNo + ", productRecomDate=" + productRecomDate + "]";
     }
 }
