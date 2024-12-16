@@ -6,45 +6,39 @@
   <script>
     window.onload = () => {
       document.querySelector('#id').addEventListener('keypress', (event) => {
-      // document.getElementById('passwd').addEventListener('keypress', (event) => {
-        if(event.key === 'Enter') { // ===: 타입까지 확인
+        if(event.key === 'Enter') {
           document.getElementById('btn_checkID').focus();
         }
       }); 
   
       document.querySelector('#passwd').addEventListener('keypress', (event) => {
-      // document.getElementById('passwd').addEventListener('keypress', (event) => {
         if(event.key === 'Enter') {
           document.getElementById('passwd2').focus();
         }
       }); 
   
       document.querySelector('#passwd2').addEventListener('keypress', (event) => {
-      // document.getElementById('passwd').addEventListener('keypress', (event) => {
         if(event.key === 'Enter') {
-          document.getElementById('mname').focus();
+          document.getElementById('name').focus();
         }
       }); 
   
-      document.querySelector('#mname').addEventListener('keypress', (event) => {
-      // document.getElementById('passwd').addEventListener('keypress', (event) => {
+      document.querySelector('#name').addEventListener('keypress', (event) => {
         if(event.key === 'Enter') {
           document.getElementById('tel').focus();
         }
       });
       
       document.querySelector('#tel').addEventListener('keypress', (event) => {
-      // document.getElementById('passwd').addEventListener('keypress', (event) => {
         if(event.key === 'Enter') {
-          document.getElementById('btn_DaumPostcode').focus();
+          document.getElementById('email').focus();
         }
-      }); 
-      
-      document.querySelector('#address2').addEventListener('keypress', (event) => {
-      // document.getElementById('passwd').addEventListener('keypress', (event) => {
-        if(event.key === 'Enter') {
-          document.getElementById('btn_send').focus();
-        }
+      });
+
+      document.querySelector('#email').addEventListener('keypress', (event) => {
+          if(event.key === 'Enter') {
+            document.getElementById('btn_DaumPostcode').focus();
+          }
       }); 
       
     }
@@ -55,9 +49,9 @@
       let id = document.getElementById('id');
       let id_msg = document.getElementById('id_msg');
   
-      if (id.value.trim().length == 0) {
-        id_msg.innerHTML= 'ID 입력은 필수 입니다. ID(이메일)는 3자이상 권장합니다.';
-        id_msg.classList.add('span_warning');    // class 적용
+      if (id.value.trim().length <= 5) {
+        id_msg.innerHTML= '아이디 입력은 필수 입니다. ID는 5자이상 권장합니다.';
+        id_msg.classList.add('span_warning');
         id.focus();
   
         return false;  // 회원 가입 진행 중지
@@ -72,7 +66,7 @@
         let url = './checkID?id=' + id.value;
     
         fetch(url, {
-            method: 'GET',
+            method: 'GET'
             // headers: {
             //   'Content-Type': 'application/json' // JSON 형식으로 데이터 전송을 알림
             // },
@@ -88,7 +82,6 @@
               
           } else { // 아이디 중복 안됨.
             id_msg.innerHTML= '사용 가능한 ID(이메일) 입니다.';
-            // id_msg.classList.add('span_info');
             document.getElementById('passwd').focus(); 
           }
         })
@@ -132,13 +125,13 @@
         return false;  // 회원 가입 진행 중지
       }
   
-      let mname = document.getElementById('mname');
-      let mname_msg = document.getElementById('mname_msg');
+      let name = document.getElementById('name');
+      let name_msg = document.getElementById('name_msg');
   
-      if (mname.value.length == 0) {
-        mname_msg.innerHTML= '이름 입력은 필수입니다.';
-        mname_msg.classList.add('span_warning');    // class 적용
-        mname.focus();
+      if (name.value.length == 0) {
+        name_msg.innerHTML= '이름 입력은 필수입니다.';
+        name_msg.classList.add('span_warning');    // class 적용
+        name.focus();
   
         return false;  // 회원 가입 진행 중지
       }
@@ -151,7 +144,7 @@
   <aside class="aside_right">
     <a href="javascript:location.reload();">새로고침</a>
     <span class='menu_divide' >│</span> 
-    <a href='./create'>회원 가입</a>
+    <a href='./signup'>회원 가입</a>
     <span class='menu_divide' >│</span> 
     <a href='./list'>목록</a>
   </aside> 
@@ -159,9 +152,9 @@
   <div class='menu_line'></div>
   
   <div style="width: 60%; margin: 0px auto ">
-    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/create">
+    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/signup">
       <div>
-        <label for="id">아이디(이메일)*</label>
+        <label for="id">아이디*</label>
         <input type="text" name="id" id="id" value="" autofocus="autofocus"
                class="form-control fom-control-sm" style="width: 50%;" th:field="*{id}">
         <button type='button' id="btn_checkID" onclick="checkID()" 
@@ -170,23 +163,23 @@
       </div>
       
       <div class="form-group">
-        <label for="passwd">패스워드*</label> 
+        <label for="passwd">비밀번호*</label>
         <input type='password' name='passwd' id='passwd' value='1234' required="required" 
-                  placeholder="패스워드" class="form-control form-control-sm" style="width: 30%;">
+                  placeholder="비밀번호" class="form-control form-control-sm" style="width: 30%;">
       </div>
 
       <div class="form-group">
-        <label for="passwd2">패스워드 확인*</label>
+        <label for="passwd2">비밀번호 확인*</label>
         <input type='password' name='passwd2' id='passwd2' value='1234' required="required" 
-                  placeholder="패스워드 확인" class="form-control form-control-sm" style="width: 30%;">
+                  placeholder="비밀번호 확인" class="form-control form-control-sm" style="width: 30%;">
         <span id='passwd2_msg'></span>
       </div>
 
       <div class="form-group">
-        <label for="mname">성명*</label>
-        <input type='text' name='mname' id='mname' value='하정우' required="required" 
-                   placeholder="성명" class="form-control form-control-sm" style="width: 30%;">
-        <span id='mname_msg'></span>
+        <label for="name">이름*</label>
+        <input type='text' name='name' id='name' value='하정우' required="required" 
+                   placeholder="이름" class="form-control form-control-sm" style="width: 30%;">
+        <span id='name_msg'></span>
       </div>   
   
       <div class="form-group">
@@ -195,7 +188,13 @@
                   placeholder="전화번호" class="form-control form-control-sm" style="width: 30%;">
         예) 010-0000-0000
       </div>
-      
+
+      <div class="form-group">
+        <label for="email">이메일</label>
+        <input type='email' name='email' id='email' value='test@gmail.com' required="required" 
+                  placeholder="이메일" class="form-control form-control-sm" style="width: 30%;">
+      </div>
+
       <div class="form-group"> 
         <label for="zipcode">우편 번호</label>
         <input type='text' name='zipcode' id='zipcode' value='' placeholder="우편번호"
@@ -307,7 +306,7 @@
 <!-- ------------------------------ DAUM 우편번호 API 종료 ------------------------------ -->
 
       <div class="content_body_bottom">
-        <button type="button" onclick="send();" class="btn btn-secondary btn-sm">가입</button>
+        <button id="btn_send" type="button" onclick="send();" class="btn btn-secondary btn-sm">가입</button>
         <button type="button" onclick="history.back();" class="btn btn-secondary btn-sm">취소</button>
       </div>
 

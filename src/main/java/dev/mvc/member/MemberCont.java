@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,6 +44,30 @@ public class MemberCont {
                                    @ ModelAttribute("memberVO") MemberVO memberVO) {
     
     return "/member/signup";
+  }
+  
+  /**
+   * 회원 가입 페이지(기능)
+   */
+  @PostMapping(value="/signup")
+  public String signup_proc(Model model,
+                                   @ModelAttribute("memberVO") MemberVO memberVO,
+                                   @RequestParam(name="passwd2") String passwd2) {
+    
+    System.out.println(memberVO.getId());
+    System.out.println(memberVO.getPasswd());
+    System.out.println(memberVO.getName());
+    System.out.println(memberVO.getTel());
+    System.out.println(memberVO.getEmail());
+    System.out.println(memberVO.getZipcode());
+    System.out.println(memberVO.getAddress1());
+    System.out.println(memberVO.getAddress2());
+
+    
+//    int cnt = this.memberProc.sign_up(memberVO);
+//    System.out.println();
+    
+    return "redirect:/";
   }
   
 }
