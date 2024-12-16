@@ -1,20 +1,143 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=5.0, width=device-width" /> 
-<title>깃 테스트 http://localhost:9093</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* 검색창 중앙 배치 */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .form-control {
+            width: 60%; /* 검색창 너비 */
+            padding: 12px 15px; /* 내부 여백 추가 */
+            border-radius: 25px; /* 둥근 모서리 */
+            border: 3px solid #ddd; /* 기본 테두리 두께 */
+            transition: all 0.4s ease-in-out; /* 애니메이션 효과 */
+        }
+
+        /* 검색창에 포커스 시 두께가 증가하고 색상이 변하도록 설정 */
+        .form-control:focus {
+            width: 70%; /* 포커스 시 검색창 너비 증가 */
+            border-color: #007bff; /* 포커스 시 테두리 색상 변경 */
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.7); /* 화려한 그림자 효과 */
+            transform: scale(1.05); /* 포커스 시 살짝 확대 */
+        }
+
+        /* 네비게이션 스타일 */
+        .navbar-nav .nav-item {
+            margin-right: 20px; /* 항목 간격 띄우기 */
+        }
+
+        /* 로그인/회원가입 스타일 */
+        .navbar-nav.ms-auto .nav-item {
+            margin-left: 10px;
+        }
+
+        .nav-divider {
+            display: none; /* '/' 제거 */
+        }
+
+        /* 정사각형 컨테이너: 2*5 배열 */
+        .category-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5개의 열로 설정 */
+            grid-gap: 20px; /* 상하좌우 간격 */
+            margin: 30px auto;
+            max-width: 900px; /* 전체 폭 제한 */
+        }
+
+        .category-box {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer; /* 클릭 가능한 느낌 추가 */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* 클릭했을 때 크기 커지도록 */
+        .category-box.active {
+            transform: scale(1.1); /* 클릭 시 크기 10% 커지게 */
+        }
+
+    </style>
 </head>
 <body>
-  <div style="margin: 50px;">
-      <h1>깃 테스트</h1>
-    <ol>
-      <li>두번째 변경 진행함.</li>
-      <li>이지운</li>
-      <li>이재훈</li>
-      <li>조재혁</li>
-      <li>한태구</li>
-    </ol>      
-  </div> 
+    <!-- 검색창 중앙 배치 -->
+    <div class="search-container">
+        <input type="text" class="form-control" placeholder="검색어를 입력하세요">
+    </div>
+
+    <!-- 네비게이션 바 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">이지하조 Ver1</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">쿠팡 최저가</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">최근 본 상품</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">찜 목록</a>
+                    </li>
+                </ul>
+                <!-- 회원가입과 로그인 우측 정렬 -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">회원가입</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">로그인</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 정사각형 탭: 2*5 배열 -->
+    <div class="category-container">
+        <div class="category-box" onclick="goToCategoryPage('가전, TV')">가전, TV</div>
+        <div class="category-box" onclick="goToCategoryPage('컴퓨터, 노트북')">컴퓨터, 노트북</div>
+        <div class="category-box" onclick="goToCategoryPage('전자기기')">전자기기</div>
+        <div class="category-box" onclick="goToCategoryPage('패션, 잡화, 뷰티')">패션, 잡화, 뷰티</div>
+        <div class="category-box" onclick="goToCategoryPage('상품권, 기프티콘')">상품권, 기프티콘</div>
+        <div class="category-box" onclick="goToCategoryPage('운동, 헬스용품')">운동, 헬스용품</div>
+        <div class="category-box" onclick="goToCategoryPage('자동차, 자전거')">자동차, 자전거</div>
+        <div class="category-box" onclick="goToCategoryPage('청소, 인테리어')">청소, 인테리어</div>
+        <div class="category-box" onclick="goToCategoryPage('캠핑, 등산')">캠핑, 등산</div>
+        <div class="category-box" onclick="goToCategoryPage('기타, 취미생활')">기타, 취미생활</div>
+    </div>
+
+    <!-- 스크립트 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        function goToCategoryPage(category) {
+            // 카테고리 클릭 시 해당 카테고리 페이지로 이동
+            const categoryPageUrl = `/category/${encodeURIComponent(category)}`;
+            window.location.href = categoryPageUrl; // 페이지 이동
+        }
+    </script>
 </body>
 </html>
