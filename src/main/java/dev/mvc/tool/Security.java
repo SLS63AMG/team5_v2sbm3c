@@ -5,7 +5,8 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
- 
+import java.util.Random;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -69,5 +70,28 @@ public class Security {
     return enStr;
   }
  
- 
+  // 토큰 생성
+  public static String createToken() {
+    // 가능한 문자들의 집합
+    String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+                        "abcdefghijklmnopqrstuvwxyz" +
+                        "0123456789" +
+                        "!@#$";
+
+    Random random = new Random();
+
+    // 문자열 길이를 8 ~ 50 사이의 랜덤 값으로 설정
+    int length = random.nextInt(43) + 8;
+
+    // StringBuilder로 랜덤 문자열 생성
+    StringBuilder stringBuilder = new StringBuilder(length);
+
+    for (int i = 0; i < length; i++) {
+        // 랜덤한 인덱스로 문자 선택
+        int index = random.nextInt(characters.length());
+        stringBuilder.append(characters.charAt(index));
+    }
+
+    return stringBuilder.toString();
+}
 }

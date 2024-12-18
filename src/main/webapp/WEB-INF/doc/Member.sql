@@ -145,9 +145,14 @@ zipcode='우편번호', address1='도로명 주소', address2='상세 주소',
 gender='성별', birth='생일',
 grade='권한', state='상태'
 WHERE memberno = 1;
+
+-- 4. 회원의 번호 가져오기
+SELECT memberno
+FROM member
+WHERE token='식별토큰';
 -------------------------Member.xml 관리자 끝-------------------------
 
-
+-- 1. 회원목록 페이징
 SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state, r
 FROM (
     SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state, rownum as r
@@ -158,9 +163,15 @@ FROM (
     )
 )
 WHERE r &gt;='시작번호' AND r &lt;='끝번호' <!-- WHERE r >= 1 AND r <= 3 -->
-ORDER BY grade ASC, state ASC name ASC
+ORDER BY grade ASC, state ASC, memberno ASC;
 
-
+-- 2. 검색 항목 갯수
+SELECT count(*) as cnt
+FROM member
+<if test="word != null and word != ''"> <!-- 검색 상태라면 WHERE 생성-->
+WHERE (UPPER(name) LIKE '%' || UPPER(#{word}) || '%')
+OR (UPPER(id) LIKE '%' || UPPER(#{word}) || '%')
+</if>;
 
 
 

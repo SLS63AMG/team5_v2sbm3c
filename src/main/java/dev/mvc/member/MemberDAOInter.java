@@ -81,6 +81,11 @@ public interface MemberDAOInter {
   public ArrayList<MemberVO> member_list();
   
   /**
+   * 검색된 회원 목록 갯수
+   */
+  public Integer list_search_count(String word);
+  
+  /**
    * 회원 목록 + 검색 + 페이징
    */
   public ArrayList<MemberVO> member_list_search_paging(HashMap<String, Object> map);
