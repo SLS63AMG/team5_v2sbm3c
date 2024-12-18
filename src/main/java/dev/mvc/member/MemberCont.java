@@ -83,6 +83,10 @@ public class MemberCont {
       return "redirect:/member/signup";
     }
     else {
+      if(memberVO.getGender() == null) {
+        memberVO.setGender("N");
+      }
+      
       int cnt = this.memberProc.sign_up(memberVO);
       model.addAttribute("code", "create_success");
       model.addAttribute("name", memberVO.getName());
