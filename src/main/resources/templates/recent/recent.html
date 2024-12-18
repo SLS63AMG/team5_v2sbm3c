@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연령대별 추천 제품</title>
+</head>
+<body>
+    <h1>연령대별 추천 제품</h1>
+    <form action="/agerecom/filter" method="get">
+        <label for="gender">성별:</label>
+        <select name="gender" id="gender">
+            <option value="M">남성</option>
+            <option value="F">여성</option>
+        </select><br><br>
+
+        <label for="age">연령대:</label>
+        <select name="age" id="age">
+            <option value="10">10대</option>
+            <option value="20">20대</option>
+            <option value="30">30대</option>
+            <option value="40">40대</option>
+            <option value="50">50대</option>
+        </select><br><br>
+
+        <button type="submit">추천 제품 보기</button>
+    </form>
+
+    <h2>추천 제품</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>제품명</th>
+                <th>가격</th>
+                <th>카테고리</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 추천 제품 목록은 서버에서 동적으로 로딩되어야 합니다 -->
+            <tr>
+  
+            </tr>
+            <tr>
+
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
