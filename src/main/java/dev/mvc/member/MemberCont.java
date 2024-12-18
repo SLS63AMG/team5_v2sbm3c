@@ -198,12 +198,11 @@ public class MemberCont {
   /**
    * 로그아웃
    */
-  @GetMapping(value="/logout")
-  public String logout(HttpSession session, Model model) {
-    String token = (String) session.getAttribute("token");
-    this.memberProc.token_del(token);
-    session.invalidate();
-    return "redirect:/";
+  @RequestMapping("/logout")
+  public String logout(HttpServletRequest request) {
+      HttpSession session = request.getSession();
+      session.invalidate();  // 세션 무효화
+      return "redirect:/";  // 홈으로 리다이렉트
   }
   // 로그아웃-------------------------------------------------------------------
   
@@ -283,7 +282,7 @@ public class MemberCont {
   // 패스워드 수정-------------------------------------------------------------------
   
   
-  //회원 목록-------------------------------------------------------------------
+  // 회원 목록-------------------------------------------------------------------
   @GetMapping(value="/list")
   public String member_list(Model model, HttpSession session, 
       @RequestParam(name="word", defaultValue="") String word, 
@@ -313,10 +312,10 @@ public class MemberCont {
     }
     return "redirect:/";
   }
-  //회원 목록-------------------------------------------------------------------
+  // 회원 목록-------------------------------------------------------------------
       
   
-  //조회-------------------------------------------------------------------
+  // 조회-------------------------------------------------------------------
   @GetMapping(value="/read")
   public String read(HttpSession session, Model model,
       @RequestParam(name="memberno", defaultValue = "") int memberno) {
@@ -358,10 +357,34 @@ public class MemberCont {
     } 
     return "redirect:/";
   }
-  //조회-------------------------------------------------------------------
+  // 조회-------------------------------------------------------------------
       
     
+  // 삭제-------------------------------------------------------------------
+  @GetMapping(value="/delete")
+  public String delete(Model model, HttpSession session,
+      @RequestParam(name="memberno", defaultValue = "") int memberno) {
+    
+    if(this.memberProc.isAdmin(session)) {
+      MemberVO memberVO = this.memberProc.member_read(memberno);
+      model.addAttribute("memberVO", memberVO);
+      
+      return "/member/delete";
+    } else {
+      
+      return "redirect:/";
+    }
+  }
   
+  @PostMapping(value="/delete")
+  public String delete_process(Model model, HttpSession session,
+      @RequestParam(name="memberno", defaultValue = "") int memberno) {
+    
+    
+    return "redirect:/";
+  }
+  
+  // 삭제-------------------------------------------------------------------
   
   /**
    * 추가 예정
