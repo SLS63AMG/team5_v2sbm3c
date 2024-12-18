@@ -3,12 +3,24 @@ package dev.mvc.cate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
+@RequestMapping("/cate")
 public class CateCont {
 
-    // 가전제품 정사각형 탭 클릭 시 번개장터 URL로 리다이렉트
+    public CateCont() {
+        System.out.println("-> CateCont created.");
+    }
+
+    /**
+     * 정사각형 탭 클릭 시 외부 URL로 리다이렉트
+     * http://localhost:9091/cate/subcategory/{category}
+     * 
+     * @param category 선택된 카테고리명
+     * @return 외부 URL로 리다이렉트
+     */
     @GetMapping("/subcategory/{category}")
     public RedirectView subCategoryRedirect(@PathVariable("category") String category) {
         String redirectUrl = "";
@@ -18,35 +30,35 @@ public class CateCont {
             case "가전제품":
                 redirectUrl = "https://m.bunjang.co.kr/categories/610?&req_ref=popular_category";
                 break;
-            case "컴퓨터_노트북":
+            case "디지털":
                 redirectUrl = "https://m.bunjang.co.kr/categories/611?&req_ref=popular_category";
                 break;
-            case "전자기기":
+            case "남성의류":
                 redirectUrl = "https://m.bunjang.co.kr/categories/612?&req_ref=popular_category";
                 break;
-            case "패션_잡화_뷰티":
+            case "여성의류":
                 redirectUrl = "https://m.bunjang.co.kr/categories/613?&req_ref=popular_category";
                 break;
-            case "상품권_기프티콘":
+            case "티켓_쿠폰_교환권":
                 redirectUrl = "https://m.bunjang.co.kr/categories/614?&req_ref=popular_category";
                 break;
-            case "운동_헬스용품":
+            case "스포츠_레저":
                 redirectUrl = "https://m.bunjang.co.kr/categories/615?&req_ref=popular_category";
                 break;
-            case "자동차_자전거":
+            case "뷰티_미용":
                 redirectUrl = "https://m.bunjang.co.kr/categories/616?&req_ref=popular_category";
                 break;
-            case "청소_인테리어":
+            case "차량_오토바이":
                 redirectUrl = "https://m.bunjang.co.kr/categories/617?&req_ref=popular_category";
                 break;
-            case "캠핑_등산":
+            case "가구_인테리어":
                 redirectUrl = "https://m.bunjang.co.kr/categories/618?&req_ref=popular_category";
                 break;
-            case "기타_취미생활":
+            case "게임_취미":
                 redirectUrl = "https://m.bunjang.co.kr/categories/619?&req_ref=popular_category";
                 break;
             default:
-                redirectUrl = "/";
+                redirectUrl = "/cate/list_search"; // 기본 페이지
                 break;
         }
 
