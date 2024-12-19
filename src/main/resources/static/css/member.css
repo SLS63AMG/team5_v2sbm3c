@@ -1,0 +1,98 @@
+
+  
+
+.input_form{
+  outline: none; 
+  border: 1px solid #ccc; 
+  border-radius:inherit; 
+  margin-top: -1px; 
+  width:100%; 
+  padding: 0 10px 0 45px; 
+  min-height: 50px;
+}
+
+.input_form_top{
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.input_form_bottom{
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.gender {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 10px; /* 버튼 간 간격 조정 */
+}
+
+.radio_item {
+    display: flex;
+}
+
+.blind {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.radio_box {
+    display: inline-block;
+    padding: 10px 20px; /* 버튼 크기 조정 */
+    border: 1px solid #ccc;
+    border-radius: 5px; /* 둥근 모서리 */
+    cursor: pointer;
+    background-color: #f9f9f9;
+    text-align: center;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* 부모 컨테이너 설정 */
+.input-container {
+    position: relative; /* 버튼 위치 조정을 위한 기준 설정 */
+    display: flex;
+    align-items: center;
+    width: 100%; /* 필요에 따라 조정 */
+}
+
+/* Input 스타일 */
+.input-container input {
+    width: 100%; /* input이 컨테이너의 넓이를 채움 */
+    padding-right: 100px; /* 버튼 영역 확보 */
+    box-sizing: border-box; /* padding 포함한 크기 계산 */
+}
+
+/* 버튼 스타일 */
+.btn-inside {
+    position: absolute; /* input 위에 버튼 배치 */
+    right: 5px; /* input 내부의 오른쪽 여백 */
+    top: 50%; /* 세로 중앙 정렬 */
+    transform: translateY(-50%); /* 중앙 정렬 보정 */
+    height: calc(100% - 10px); /* input 높이에 맞춤 */
+    padding: 0 10px; /* 버튼 내부 여백 */
+    border-radius: 5px; /* 둥근 모서리 */
+}
+
+
+input[type="radio"]:checked + .radio_box {
+  border-color: #09aa5c;
+  color: #09aa5c;
+}
+
+.form_group_btn{
+  margin-top: -1px; 
+  min-height: 50px;
+  display: flex; /* Flexbox 활성화 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  border: 1px solid #ccc; /* 시각적 확인용 */
+}
+
+dl, ol, ul {
+    margin-top: 0;
+    margin-bottom: 0;
+}

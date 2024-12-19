@@ -12,8 +12,8 @@
   
   <!-- 회원 가입 -->
   <insert id="sign_up" parameterType="dev.mvc.member.MemberVO">
-    INSERT INTO member(memberno, name, id, passwd, tel, email, zipcode, address1, address2, gender, birth, sdate)
-    VALUES(member_seq.nextval, #{name}, #{id}, #{passwd}, #{tel}, #{email}, #{zipcode}, #{address1}, #{address2}, #{gender}, #{birth}, sysdate)
+    INSERT INTO member(memberno, name, id, passwd, tel, email, zipcode, address1, address2, gender, birth, grade, sdate)
+    VALUES(member_seq.nextval, #{name}, #{id}, #{passwd}, #{tel}, #{email}, #{zipcode}, #{address1}, #{address2}, #{gender}, #{birth}, #{grade}, sysdate)
   </insert>
     
   <!-- 로그인(1:성공, 0:실패) -->
@@ -118,6 +118,16 @@
   </select>
    -->
    
+   <!-- 검색된 회원 목록 갯수 -->
+   <select id="list_search_count" resultType="Integer" parameterType="String">
+     SELECT count(*) as cnt
+    FROM member
+    <if test="word != null and word != ''"> <!-- 검색 상태라면 WHERE 생성-->
+    WHERE (UPPER(name) LIKE '%' || UPPER(#{word}) || '%')
+    OR (UPPER(id) LIKE '%' || UPPER(#{word}) || '%')
+    </if>
+   </select>
+   
   <!-- 회원 목록(검색 + 페이징) -->
   <select id="member_list_search_paging" resultType="dev.mvc.member.MemberVO" parameterType="Map">
     SELECT memberno, name, id, tel, email, zipcode, address1, address2, gender, birth, grade, state, r
@@ -130,7 +140,7 @@
         )
     )
     WHERE r &gt;=#{start_num} AND r &lt;=#{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
-    ORDER BY grade ASC, state ASC name ASC
+    ORDER BY grade ASC, state ASC, memberno ASC
   </select>
   
   <!-- 특정 회원 정보 -->

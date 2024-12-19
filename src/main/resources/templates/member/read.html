@@ -13,22 +13,11 @@
   
       document.querySelector('#passwd').addEventListener('keypress', (event) => {
         if(event.key === 'Enter') {
-          document.getElementById('passwd2').focus();
+          document.getElementById('name').focus();
         }
       }); 
   
-      document.querySelector('#passwd2').addEventListener('keypress', (event) => {
-        if(event.key === 'Enter') {
-          document.getElementById('email').focus();
-        }
-      }); 
-      
-      document.querySelector('#email').addEventListener('keypress', (event) => {
-          if(event.key === 'Enter') {
-            document.getElementById('name').focus();
-          }
-      }); 
-          
+  
       document.querySelector('#name').addEventListener('keypress', (event) => {
         if(event.key === 'Enter') {
           document.getElementById('tel').focus();
@@ -37,10 +26,15 @@
       
       document.querySelector('#tel').addEventListener('keypress', (event) => {
         if(event.key === 'Enter') {
-          document.getElementById('btn_DaumPostcode').focus();
+          document.getElementById('email').focus();
         }
       });
 
+      document.querySelector('#email').addEventListener('keypress', (event) => {
+          if(event.key === 'Enter') {
+            document.getElementById('btn_DaumPostcode').focus();
+          }
+      }); 
       
     }
     
@@ -109,17 +103,6 @@
         return false;  // 회원 가입 진행 중지
       } 
   
-      // 패스워드를 정상적으로 2번 입력했는지 확인
-      let passwd = document.getElementById('passwd');
-      let passwd2 = document.getElementById('passwd2');
-      let passwd2_msg = document.getElementById('passwd2_msg');
-  
-      if (passwd.value != passwd2.value) {
-        passwd2_msg.innerHTML= '입력된 패스워드가 일치하지 않습니다.';
-        passwd2_msg.classList.add('span_warning');    // class 적용
-  
-        return false;  // 회원 가입 진행 중지
-      }
   
       let name = document.getElementById('name');
       let name_msg = document.getElementById('name_msg');
@@ -131,7 +114,7 @@
         return false;  // 회원 가입 진행 중지
       }
       
-      
+      console.log('submit() called');
       document.getElementById('frm').submit(); // required="required" 작동 안됨.
     }    
   </script>
@@ -150,35 +133,32 @@
   <div class='menu_line'></div>
           
   <div style="width: 450px; margin: 0px auto ">
-    <h4>필수 입력</h4>
-    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/signup">
-      
+
+    <h4>기본 정보</h4>
+    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/update">
+      <input type="hidden" name="memberno" th:value="*{memberno}">
       <div style="margin-top:15px; margin-bottom:15px;">
         <div class="form-group">
-          <input type="text" name="id" id="id" 
+          <input type="text" name="id" id="id"
                    placeholder="아이디" class="form-control-sm input_form input_form_top" th:field="*{id}" 
                    onblur="checkID()">
         </div>
-        
         <div class="form-group">
-          <input type="password" name="passwd" id="passwd" required="required" 
-                   placeholder="비밀번호" class="form-control-sm input_form">
+          <input type='text' name='name' id='name' required="required"  th:field="*{name}"
+                     placeholder="이름" class="form-control-sm input_form ">
+        </div>
+
+        <div class="form-group" style="min-height: 50px;">
+          <span>비밀번호 변경 페이지 이동 추가 예정</span>
+
         </div>
         
         <div class="form-group">
-          <input type='password' name='passwd2' id='passwd2' required="required" 
-                   placeholder="비밀번호 확인" class="form-control-sm input_form">
+          <input type='email' name='email' id='email' required="required"  th:field="*{email}"
+                    placeholder="이메일" class="form-control-sm input_form input_form_bottom">
         </div>
         
-        <div class="form-group">
-          <input type='email' name='email' id='email' required="required" 
-                    placeholder="이메일" class="form-control-sm input_form ">
-        </div>
-        
-        <div class="form-group">
-        <input type='text' name='name' id='name' required="required" 
-                   placeholder="이름" class="form-control-sm input_form input_form_bottom">
-        </div>
+
       </div>
 
       
@@ -187,36 +167,36 @@
       <span id='name_msg'></span>
 
       <div style="margin-top:15px; margin-bottom:15px;">
-        <h4>선택 입력</h4>
+        <h4>상세 정보</h4>
         <div class="form-group">
-          <input type='text' name='tel' id='tel' required="required" 
+          <input type='text' name='tel' id='tel' required="required" th:field="*{tel}"
                     placeholder="전화번호" class="form-control-sm input_form input_form_top">
         </div>
   
-
         <div class="form-group form_group_btn">
           <ul class="gender" id="gender">
               <li class="radio_item">
-                  <input type="radio" id="male" name="gender" value="M" class="blind">
+                  <input type="radio" id="male" name="gender" value="M" th:checked="*{gender == 'M'}" class="blind">
                   <label for="male" class="radio_box">남자</label>
               </li>
               <li class="radio_item">
-                  <input type="radio" id="female" name="gender" value="F" class="blind">
+                  <input type="radio" id="female" name="gender" value="F" th:checked="*{gender == 'F'}" class="blind">
                   <label for="female" class="radio_box">여자</label>
               </li>
           </ul>
         </div>
-
+        
         <div class="form-group">
-          <input type='date' name='birth' id='birth' value='' placeholder="출생일"
+          <input type='date' name='birth' id='birth' value='' placeholder="출생일" th:field="*{birth}"
                     class="form-control-sm input_form input_form_bottom">
         </div>   
+
       </div>
       
       <div style="margin-top:15px; margin-bottom:15px;">
         <div class="form-group">
             <div class="input-container">
-                <input type="text" name="zipcode" id="zipcode" value="" placeholder="우편번호"
+                <input type="text" name="zipcode" id="zipcode" value="" placeholder="우편번호" th:field="*{zipcode}"
                        class="form-control-sm input_form input_form_top">
                 <button type="button" id="btn_DaumPostcode" onclick="DaumPostcode()" 
                         class="radio_box btn-inside">우편번호 찾기</button>
@@ -224,12 +204,12 @@
         </div>
     
         <div class="form-group">
-          <input type='text' name='address1' id='address1' value='' placeholder="주소"
+          <input type='text' name='address1' id='address1' value='' placeholder="주소" th:field="*{address1}"
                      class="form-control-sm input_form">
         </div>   
     
         <div class="form-group">
-          <input type='text' name='address2' id='address2' value='' placeholder="상세 주소"
+          <input type='text' name='address2' id='address2' value='' placeholder="상세 주소" th:field="*{address2}"
                     class="form-control-sm input_form input_form_bottom">
         </div>
 
@@ -331,7 +311,7 @@
 <!-- ------------------------------ DAUM 우편번호 API 종료 ------------------------------ -->
 
       <div class="content_body_bottom">
-        <button id="btn_send" type="button" onclick="send();" class="btn btn-secondary btn-sm">가입</button>
+        <button id="btn_send" type="button" onclick="send();" class="btn btn-secondary btn-sm">수정</button>
         <button type="button" onclick="history.back();" class="btn btn-secondary btn-sm">취소</button>
       </div>
 

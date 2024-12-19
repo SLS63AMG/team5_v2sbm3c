@@ -13,14 +13,29 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             
-              <li th:each="cateVO:${menu}" class="nav-item">
-                <a class="nav-link" href="#" th:text="${cateVO.genre}"></a>
-              </li>
-              
               <li class="nav-item">
                 <a class="nav-link" th:href="@{/cate/list_all}">카테고리 목록</a>
               </li>
+            
+              <li class="nav-item dropdown" th:if="${session.grade != null and session.grade <= 9}">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" 
+                  role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="관리자">                                                             
+                  </a>
               
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li class="nav-item"><a class="nav-link" th:href="@{|/cate/list_search?word=${word}|}">카테고리 목록</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{|/member/list|}">회원목록</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{|/contents/list_all|}">글 목록</a></li>
+                  </ul>
+              
+              </li>
+
+              
+
+              <li class="nav-item">
+                  <span th:if="${session.token == null}"><a class="nav-link" href="/member/login" th:text="@{|로그인|}"></a></span>
+                  <span th:if="${session.token != null}"><a class="nav-link" href="/member/logout" th:text="@{|${session.id} 로그아웃|}"></a></span>
+              </li>
             </ul>
         </div>
     </div>  
