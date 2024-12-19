@@ -3,17 +3,15 @@ DROP TABLE aikeyword;
 
 -- 테이블 생성
 CREATE TABLE aikeyword (
-	aino	NUMBER(10)	NOT NULL PRIMARY KEY,
-    aikey VARCHAR(50)   NOT NULL,
-    aidate  DATE          NOT NULL
-	-- searchno	NUMBER(10)	NOT NULL
+	aino	NUMBER(10)	NOT NULL,
+  aikey VARCHAR(50)   NOT NULL,
+  CONSTRAINT PK_aikeyword PRIMARY KEY (aino),
+  CONSTRAINT FK_AIKEYWORD_KEYWORD FOREIGN KEY (aino) REFERENCES keyword(searchno) ON DELETE CASCADE
 );
 
 COMMENT ON TABLE aikeyword is 'ai 추천 키워드'; 
 COMMENT ON COLUMN aikeyword.aino is 'ai 추천 번호';
 COMMENT ON COLUMN aikeyword.aikey is 'ai 추천 키워드';
-COMMENT ON COLUMN aikeyword.aidate is 'ai 키워드 생성 날짜';
--- OMMENT ON COLUMN aikeyword.searchno is '검색 기록 번호';
 
 DROP SEQUENCE aikeyword_seq;
 
@@ -24,14 +22,16 @@ CREATE SEQUENCE aikeyword_seq
   CACHE 2                        -- 2번은 메모리에서만 계산
   NOCYCLE;  
 
-INSERT INTO aikeyword (aino, aikey, aidate) 
-VALUES (keyword_seq.nextval, '아이폰', SYSDATE);
+INSERT INTO aikeyword (aino, aikey) 
+VALUES (keyword_seq.nextval, '아이폰');
+
+INSERT INTO aikeyword (aino, aikey) 
+VALUES (keyword_seq.nextval, '아이폰6');
 
 INSERT INTO aikeyword (aino, aikey, aidate) 
-VALUES (keyword_seq.nextval, '아이폰6', SYSDATE);
+VALUES (keyword_seq.nextval, '스마트폰');
 
-INSERT INTO aikeyword (aino, aikey, aidate) 
-VALUES (keyword_seq.nextval, '스마트폰', SYSDATE);
+INSERT INTO aikeyword (aino, aikey) 
+VALUES (keyword_seq.nextval, '애플');
 
-INSERT INTO aikeyword (aino, aikey, aidate) 
-VALUES (keyword_seq.nextval, '애플', SYSDATE);
+COMMIT;

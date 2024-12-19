@@ -3,15 +3,17 @@ DROP TABLE productrecom;
 
 -- 테이블 생성
 CREATE TABLE productrecom (
-	productrecomno	NUMBER(10)	NOT NULL PRIMARY KEY,
-  productrecomdate  DATE      NOT NULL
-	-- FOREIGN KEY (contentsno) REFERENCES contents (contentsno) ON DELETE CASCADE,
-  -- FOREIGN KEY (memberno) REFERENCES member (memberno) ON DELETE CASCADE
+	productrecomno	NUMBER(10)	NOT NULL ,
+  productrecomdate  DATE          NOT NULL,
+  CONSTRAINT PK_productrecom PRIMARY KEY (productrecomno),
+	CONSTRAINT FK_PRODUCTRECOM_CONTENTS FOREIGN KEY (productrecomno) REFERENCES contents(contentsno) ON DELETE CASCADE,
+  CONSTRAINT FK_PRODUCTRECOM_MEMBER FOREIGN KEY (productrecomno) REFERENCES member(memberno) ON DELETE CASCADE,
+  CONSTRAINT FK_PRODUCTRECOM_AIKEYWORD FOREIGN KEY (productrecomno) REFERENCES aikeyword(aino) ON DELETE CASCADE
 );
 
 COMMENT ON TABLE productrecom is '제품 추천'; 
 COMMENT ON COLUMN productrecom.productrecomno is '제품 추천 번호';
-COMMENT ON COLUMN productrecom.productrecomnodate is '제품 추천 날짜';
+COMMENT ON COLUMN productrecom.productrecomdate is '제품 추천 날짜';
 
 DROP SEQUENCE productrecom_seq;
 
@@ -22,5 +24,5 @@ CREATE SEQUENCE productrecom_seq
   CACHE 2                        -- 2번은 메모리에서만 계산
   NOCYCLE;  
 
-
+commit;
 
