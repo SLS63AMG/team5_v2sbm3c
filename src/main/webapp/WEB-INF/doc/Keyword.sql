@@ -5,9 +5,10 @@ DROP TABLE keyword;
 CREATE TABLE keyword (
     searchno       NUMBER(10)    NOT NULL,       -- 검색어 번호
     searchword   VARCHAR(50)   NOT NULL,       -- 검색어
-    searchdate  DATE          NOT NULL,       -- 검색 날짜
+    searchdate  DATE          NOT NULL,
+    memberno  NUMBER(10) NOT NULL,-- 검색 날짜
     CONSTRAINT PK_keyword PRIMARY KEY (searchno),
-    CONSTRAINT FK_KEYWORD_MEMBER FOREIGN KEY (searchno) REFERENCES member(memberno) ON DELETE CASCADE
+    FOREIGN KEY (memberno) REFERENCES member(memberno) ON DELETE CASCADE
 );
 
 -- 테이블 및 컬럼 주석 추가
@@ -15,6 +16,7 @@ COMMENT ON TABLE keyword IS '사용자 검색어';
 COMMENT ON COLUMN keyword.searchno IS '검색어 번호';
 COMMENT ON COLUMN keyword.searchword IS '검색어';
 COMMENT ON COLUMN keyword.searchdate IS '검색어 기록 날짜';
+COMMENT ON COLUMN keyword.memberno IS '회원 번호';
 
 DROP SEQUENCE keyword_seq;
 

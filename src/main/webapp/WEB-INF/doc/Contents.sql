@@ -13,10 +13,10 @@ CREATE TABLE contents (
 	state	VARCHAR2(100)	NOT NULL,
 	url	VARCHAR2(2000)	NOT NULL,
 	file1	VARCHAR2(500)	NOT NULL,
-	size1	NUMBER(10)	DEFAULT 0 NOT NULL,
+	size1	VARCHAR2(10)	DEFAULT 0 NOT NULL,
   CONSTRAINT PK_CONTENTS PRIMARY KEY (contentsno)
-    -- CONSTRAINT FK_CONTENTS_CATE FOREIGN KEY (cateno) REFERENCES cate(cateno) ON DELETE CASCADE,
-    -- CONSTRAINT FK_CONTENTS_CATEGRP FOREIGN KEY (categrpno) REFERENCES categrp(categrpno) ON DELETE CASCADE
+  -- FOREIGN KEY (cateno) REFERENCES cate(cateno) ON DELETE CASCADE,
+  -- FOREIGN KEY (categrpno) REFERENCES categrp(categrpno) ON DELETE CASCADE
 );
 
 -- 각 컬럼에 주석 추가
@@ -34,6 +34,8 @@ COMMENT ON COLUMN contents.state IS '판매상태';
 COMMENT ON COLUMN contents.url IS '사이트 주소';
 COMMENT ON COLUMN contents.file1 IS '제품 이미지';
 COMMENT ON COLUMN contents.size1 IS '메인 이미지 크기';
+-- COMMENT ON COLUMN contents.cateno IS '카테고리 번호';
+-- COMMENT ON COLUMN contents.categrpno IS '카테고리 그룹 번호';
 
 DROP SEQUENCE contents_seq;
 

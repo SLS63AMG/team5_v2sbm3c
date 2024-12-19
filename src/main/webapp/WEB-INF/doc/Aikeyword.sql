@@ -4,14 +4,16 @@ DROP TABLE aikeyword;
 -- 테이블 생성
 CREATE TABLE aikeyword (
 	aino	NUMBER(10)	NOT NULL,
-  aikey VARCHAR(50)   NOT NULL,
-  CONSTRAINT PK_aikeyword PRIMARY KEY (aino),
-  CONSTRAINT FK_AIKEYWORD_KEYWORD FOREIGN KEY (aino) REFERENCES keyword(searchno) ON DELETE CASCADE
+    aikey VARCHAR(50)   NOT NULL,
+    searchno NUMBER(10) NOT NULL, 
+    CONSTRAINT PK_aikeyword PRIMARY KEY (aino),
+    FOREIGN KEY (searchno) REFERENCES keyword(searchno) ON DELETE CASCADE
 );
 
 COMMENT ON TABLE aikeyword is 'ai 추천 키워드'; 
 COMMENT ON COLUMN aikeyword.aino is 'ai 추천 번호';
 COMMENT ON COLUMN aikeyword.aikey is 'ai 추천 키워드';
+COMMENT ON COLUMN aikeyword.searchno is '검색어 번호';
 
 DROP SEQUENCE aikeyword_seq;
 
