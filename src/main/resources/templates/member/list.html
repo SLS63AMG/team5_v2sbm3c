@@ -12,7 +12,8 @@
     <span class='menu_divide' >│</span> 
     <a href='./list'>목록</a>
   </aside> 
-   
+  
+  <div th:replace="~{member/list_search_com::list_search_fragment}"></div>
   <div class='menu_line'></div>
        
   <table class="table table-striped" style='width: 100%;'>
@@ -22,7 +23,7 @@
       <col style='width: 15%;'/>
       <col style='width: 15%;'/>
       <col style='width: 15%;'/>
-      <col style='width: 10%;'/>
+      <col style='width: 5%;'/>
     </colgroup>
     <tr>
       <th class='th_bs'> </TH>
@@ -42,8 +43,8 @@
           <div th:if="${memberVO.grade >= 50 and memberVO.grade <= 59}"><img src='/member/images/x.png' title="탈퇴 회원" class="icon"></div>
         </div>
       </td>
-      <td class='td_left'><a th:href="@{|./read?memberno=${memberVO.memberno}|}" th:text="${memberVO.id}"></a></td>
-      <td class='td_left'><a th:href="@{|./read?memberno=${memberVO.memberno}|}" th:text="${memberVO.name}"></a></td>
+      <td class='td_left'><a th:href="@{|./admin_read?memberno=${memberVO.memberno}|}" th:text="${memberVO.id}"></a></td>
+      <td class='td_left'><a th:href="@{|./admin_read?memberno=${memberVO.memberno}|}" th:text="${memberVO.name}"></a></td>
       <td class='td_basic' th:text="${memberVO.tel}"></td>
       <td class='td_left'>
         <span th:if="${memberVO.address1 != null and #strings.length(memberVO.address1) > 15}" 
@@ -53,7 +54,6 @@
         <span th:if="${memberVO.address1 == null}">주소 없음</span>
       </td>
       <td class='td_basic'>
-        <a th:href="@{|./read?memberno=${memberVO.memberno}|}"><img src='/member/images/update.png' title='수정' class="icon"></a>
         <a th:href="@{|./delete?memberno=${memberVO.memberno}|}"><img src='/member/images/delete.png' title='삭제' class="icon"></a>
       </td>
 

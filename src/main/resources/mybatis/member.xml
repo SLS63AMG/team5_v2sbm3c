@@ -53,31 +53,38 @@
   
   <!-- 토큰을 통한 상세 정보 가져오기(프로필 정보 가져오기) -->
   <select id="detail_info" resultType="dev.mvc.member.MemberVO" parameterType="String">
-    SELECT name, id, tel, email, zipcode, address1, address2, gender, birth state
+    SELECT name, id, tel, email, zipcode, address1, address2, gender, birth, state
     FROM member
     WHERE token=#{token}
   </select>
   
   <!-- 회원 정보 수정 -->
-  <update id="propile_update" parameterType="dev.mvc.member.MemberVO">
+  <update id="profile_update" parameterType="dev.mvc.member.MemberVO">
     UPDATE member
     SET name=#{name}, tel=#{tel}, email=#{email}, zipcode=#{zipcode}, address1=#{address1}, address2=#{address2}, udate=sysdate
     WHERE token=#{token}
   </update>
   
-  <!-- 비밀 번호 조회(1:현재 비밀번호, 0:현재 비밀번호 아님) -->
+  <!-- 회원의 비밀 번호 조회(1:현재 비밀번호, 0:현재 비밀번호 아님) -->
   <select id="checkPasswd" resultType="int" parameterType="HashMap">
-    SELECT COUNT(memberno) as cnt
-    FROM member
-    WHERE token=#{token} AND passwd=#{passwd}
+      SELECT COUNT(memberno) as cnt
+      FROM member
+      WHERE token = #{token} AND passwd = #{passwd}
   </select>
   
   <!-- 비밀 번호 변경 -->
-  <select id="update_passwd" resultType="int" parameterType="HashMap">
-    UPDATE member
-    SET passwd = #{passwd}, udate=sysdate
-    WHERE token = #{token}
-  </select>
+  <update id="update_passwd" parameterType="HashMap">
+      UPDATE member
+      SET passwd = #{passwd}, udate = sysdate
+      WHERE 
+      <if test="token != null">
+          token = #{token}
+      </if>
+      <if test="memberno != null">
+          memberno = #{memberno}
+      </if>
+  </update>
+
   
   <!-- 1차 회원 탈퇴(100:탈퇴 회원 권한, state:탈퇴한 회원) -->
   <update id="leave_member" parameterType="String">

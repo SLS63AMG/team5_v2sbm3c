@@ -1,5 +1,7 @@
 package dev.mvc.member;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,8 +80,8 @@ public class MemberProc implements MemberProcInter {
   }
 
   @Override
-  public int propile_update(MemberVO memberVO) {
-    int cnt = this.memberDAO.propile_update(memberVO);
+  public int profile_update(MemberVO memberVO) {
+    int cnt = this.memberDAO.profile_update(memberVO);
     return cnt;
   }
 
@@ -88,13 +90,15 @@ public class MemberProc implements MemberProcInter {
     String passwd = (String)map.get("passwd");
     passwd = this.security.aesEncode(passwd);
     map.put("passwd", passwd);
-    
     int cnt = this.memberDAO.checkPasswd(map);
     return cnt;
   }
 
   @Override
   public int update_passwd(HashMap<String, Object> map) {
+    String passwd = (String)map.get("passwd");
+    passwd = this.security.aesEncode(passwd);
+    map.put("passwd", passwd);
     int cnt = this.memberDAO.update_passwd(map);
     return cnt;
   }
@@ -151,6 +155,8 @@ public class MemberProc implements MemberProcInter {
   @Override
   public MemberVO member_read(int memberno) {
     MemberVO memberVO = this.memberDAO.member_read(memberno);
+    
+    memberVO.setBirth(formatBirth(memberVO.getBirth()));
     return memberVO;
   }
 
@@ -273,5 +279,26 @@ public class MemberProc implements MemberProcInter {
     return str.toString(); 
   }
   // 페이징 끝
+  
+  // 날짜형식 String로 바꾸는 코드
+  @Override
+  public String formatBirth(String birth) {
+    // birth 값이 null이 아니고 비어 있지 않으면
+    if (birth != null && !birth.isEmpty()) {
+        try {
+            // "yyyy-MM-dd HH:mm:ss" 형식으로 입력받은 값을 LocalDate로 변환
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDate localDate = LocalDate.parse(birth, inputFormatter);
+            
+            // LocalDate 값을 "yyyy-MM-dd" 형식으로 변환하여 반환
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return localDate.format(outputFormatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // 오류 발생 시 null 반환
+        }
+    }
+    return null;
+}
   
 }
