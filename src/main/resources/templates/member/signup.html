@@ -151,35 +151,57 @@
           
   <div style="width: 450px; margin: 0px auto ">
     <h4>필수 입력</h4>
-    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/signup">
+    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/signup" enctype="multipart/form-data">
       
       <div style="margin-top:15px; margin-bottom:15px;">
         <div class="form-group">
           <input type="text" name="id" id="id" 
                    placeholder="아이디" class="form-control-sm input_form input_form_top" th:field="*{id}" 
                    onblur="checkID()">
-        </div>
+      </div>
         
-        <div class="form-group">
-          <input type="password" name="passwd" id="passwd" required="required" 
-                   placeholder="비밀번호" class="form-control-sm input_form">
-        </div>
+      <div class="form-group" style="position: relative;">
+        <input type="password" name="passwd" id="passwd" required="required" 
+               placeholder="비밀번호" class="form-control-sm input_form">
         
-        <div class="form-group">
-          <input type='password' name='passwd2' id='passwd2' required="required" 
-                   placeholder="비밀번호 확인" class="form-control-sm input_form">
-        </div>
+        <!-- 비밀번호 보이기/숨기기 버튼 (아이콘 사용) -->
+        <button type="button" id="togglePassword" class="btn btn-outline-secondary" 
+                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: none; background: transparent;">
+          <img src="/member/images/hide.png" id="passwordIcon" alt="아이콘" style="width: 20px; height: 20px;">
+        </button>
+      </div>
+      <script>
+        // 비밀번호 보이기/숨기기 기능을 구현하는 JavaScript
+        document.getElementById("togglePassword").addEventListener("click", function() {
+          var passwordField = document.getElementById("passwd");
+          var passwordIcon = document.getElementById("passwordIcon");
+          var type = passwordField.type === "password" ? "text" : "password"; // 비밀번호 타입을 바꿔줌
+          passwordField.type = type;
+      
+          // 아이콘 변경
+          if (type === "password") {
+            passwordIcon.src = "/member/images/hide.png"; // 비밀번호 숨기기 아이콘
+          } else {
+            passwordIcon.src = "/member/images/show.png"; // 비밀번호 보이기 아이콘
+          }
+        });
+      </script>
+      
+      <div class="form-group">
+        <input type='password' name='passwd2' id='passwd2' required="required" 
+                 placeholder="비밀번호 확인" class="form-control-sm input_form">
+      </div>
         
-        <div class="form-group">
-          <input type='email' name='email' id='email' required="required" 
-                    placeholder="이메일" class="form-control-sm input_form ">
-        </div>
+      <div class="form-group">
+        <input type='email' name='email' id='email' required="required" 
+                  placeholder="이메일" class="form-control-sm input_form ">
+      </div>
         
-        <div class="form-group">
+      <div class="form-group">
         <input type='text' name='name' id='name' required="required" 
                    placeholder="이름" class="form-control-sm input_form input_form_bottom">
-        </div>
       </div>
+    </div>
 
       
       <span id="id_msg" style="margin-top: 4px; display: block;"></span>
@@ -188,6 +210,16 @@
 
       <div style="margin-top:15px; margin-bottom:15px;">
         <h4>선택 입력</h4>
+        
+        <!-- /* <span>
+          <div style="text-align: center; margin-top: 20px;">
+            <label for="profileMF" class="btn_model" style="cursor: pointer;">
+              <span id="btnChangeProfile" class="btn2">사진 업로드</span>
+            </label>
+            <input type="file" id="profileMF" name="profileMF" style="display: none;" accept=".jpg,.png">
+          </div>
+        </span>
+        */ -->
         <div class="form-group">
           <input type='text' name='tel' id='tel' required="required" 
                     placeholder="전화번호" class="form-control-sm input_form input_form_top">

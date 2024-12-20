@@ -133,7 +133,7 @@
   <div style="width: 450px; margin: 0px auto ">
 
     <h4>기본 정보</h4>
-    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/admin_update">
+    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/profile_update">
       <input type="hidden" name="memberno" th:value="*{memberno}">
       <div style="margin-top:15px; margin-bottom:15px;">
         <div class="form-group">
@@ -151,30 +151,10 @@
           <span class="passwd_span">비밀번호</span>
           
           <!-- 버튼 -->
-          <a th:href="@{|./admin_passwd_update?memberno=${memberVO.memberno}|}" class="passwd_button">변경</a>
+          <a th:href="@{|./passwd_update|}" class="passwd_button">변경</a>
         </div>
 
 
-<div class="form-group form_group_btn">
-  <ul class="user_status" id="user_status">
-      <li class="radio_item">
-          <input type="radio" id="admin" name="grade" value="1" th:checked="*{grade == 1}" class="blind">
-          <label for="admin" class="radio_box">관리자</label>
-      </li>
-      <li class="radio_item">
-          <input type="radio" id="user" name="grade" value="10" th:checked="*{grade == 10}" class="blind">
-          <label for="user" class="radio_box">유저</label>
-      </li>
-      <li class="radio_item">
-          <input type="radio" id="suspended" name="grade" value="30" th:checked="*{grade == 30}" class="blind">
-          <label for="suspended" class="radio_box">정지</label>
-      </li>
-      <li class="radio_item">
-          <input type="radio" id="withdrawn" name="grade" value="50" th:checked="*{grade == 50}" class="blind">
-          <label for="withdrawn" class="radio_box">탈퇴</label>
-      </li>
-  </ul>
-</div>
 
 
         <div class="form-group">

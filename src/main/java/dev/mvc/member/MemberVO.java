@@ -1,5 +1,7 @@
 package dev.mvc.member;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -77,4 +79,12 @@ public class MemberVO {
   
   /** 식별 토큰 */
   private String token;
+  
+  
+  /** 쿠키 */
+  private String id_save;
+
+  private MultipartFile profileMF = null;
+  private String profileIMG = "";
+  
 }
