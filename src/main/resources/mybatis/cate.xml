@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.mvc.cate.CateMapper">
+    
+    <!-- 카테고리 목록 조회 -->
+    <select id="list_all" resultType="dev.mvc.cate.CateVO">
+        SELECT cateno, genre, name, seqno, visible, rdate
+        FROM cate
+        ORDER BY seqno ASC
+    </select>
+    
+    <!-- 카테고리 등록 -->
+    <insert id="create" parameterType="dev.mvc.cate.CateVO">
+        INSERT INTO cate (cateno, genre, name, seqno, visible, rdate)
+        VALUES (cate_seq.nextval, #{genre}, #{name}, #{seqno}, #{visible}, SYSDATE)
+    </insert>
+    
+    <!-- 특정 카테고리 조회 -->
+    <select id="read" parameterType="int" resultType="dev.mvc.cate.CateVO">
+        SELECT cateno, genre, name, seqno, visible, rdate
+        FROM cate
+        WHERE cateno = #{cateno}
+    </select>
+    
+    <!-- 카테고리 수정 -->
+    <update id="update" parameterType="dev.mvc.cate.CateVO">
+        UPDATE cate
+        SET genre = #{genre}, name = #{name}, seqno = #{seqno}, visible = #{visible}
+        WHERE cateno = #{cateno}
+    </update>
+    
+    <!-- 카테고리 삭제 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM cate
+        WHERE cateno = #{cateno}
+    </delete>
+    
+</mapper>

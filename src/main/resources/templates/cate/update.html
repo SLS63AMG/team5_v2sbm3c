@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>카테고리 수정</title>
+</head>
+<body>
+<h1>카테고리 수정</h1>
+<form method="post" th:action="@{/cate/update}" th:object="${cateVO}">
+    <input type="hidden" th:field="*{cateno}">
+    
+    <label>카테고리 그룹:</label>
+    <input type="text" th:field="*{genre}" required><br>
+    
+    <label>카테고리명:</label>
+    <input type="text" th:field="*{name}" required><br>
+    
+    <label>출력 순서:</label>
+    <input type="number" th:field="*{seqno}" min="1" required><br>
+    
+    <label>출력 모드:</label>
+    <select th:field="*{visible}">
+        <option value="Y">Y</option>
+        <option value="N">N</option>
+    </select><br>
+    
+    <button type="submit">저장</button>
+    <a th:href="@{/cate/list_all}">목록</a>
+</form>
+</body>
+</html>

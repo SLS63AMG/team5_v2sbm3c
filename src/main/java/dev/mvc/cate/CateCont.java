@@ -1,68 +1,80 @@
 package dev.mvc.cate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/cate")
 public class CateCont {
 
-    public CateCont() {
-        System.out.println("-> CateCont created.");
+    @Autowired
+    private CateProcInter cateProc;
+
+    // 목록
+    @GetMapping("/list_all")
+    public String listAll(Model model) {
+        List<CateVO> list = cateProc.list_all();
+        model.addAttribute("list", list);
+        return "/cate/list_all";
     }
 
-    /**
-     * 정사각형 탭 클릭 시 외부 URL로 리다이렉트
-     * http://localhost:9091/cate/subcategory/{category}
-     * 
-     * @param category 선택된 카테고리명
-     * @return 외부 URL로 리다이렉트
-     */
-    @GetMapping("/subcategory/{category}")
-    public RedirectView subCategoryRedirect(@PathVariable("category") String category) {
-        String redirectUrl = "";
+    // 조회
+    @GetMapping("/read/{cateno}")
+    public String read(@PathVariable("cateno") int cateno, Model model) {
+        CateVO cate = cateProc.read(cateno);
+        model.addAttribute("cate", cate);
+        return "/cate/read";
+    }
 
-        // 카테고리별 URL 설정
-        switch (category) {
-            case "가전제품":
-                redirectUrl = "https://m.bunjang.co.kr/categories/610?&req_ref=popular_category";
-                break;
-            case "디지털":
-                redirectUrl = "https://m.bunjang.co.kr/categories/611?&req_ref=popular_category";
-                break;
-            case "남성의류":
-                redirectUrl = "https://m.bunjang.co.kr/categories/612?&req_ref=popular_category";
-                break;
-            case "여성의류":
-                redirectUrl = "https://m.bunjang.co.kr/categories/613?&req_ref=popular_category";
-                break;
-            case "티켓_쿠폰_교환권":
-                redirectUrl = "https://m.bunjang.co.kr/categories/614?&req_ref=popular_category";
-                break;
-            case "스포츠_레저":
-                redirectUrl = "https://m.bunjang.co.kr/categories/615?&req_ref=popular_category";
-                break;
-            case "뷰티_미용":
-                redirectUrl = "https://m.bunjang.co.kr/categories/616?&req_ref=popular_category";
-                break;
-            case "차량_오토바이":
-                redirectUrl = "https://m.bunjang.co.kr/categories/617?&req_ref=popular_category";
-                break;
-            case "가구_인테리어":
-                redirectUrl = "https://m.bunjang.co.kr/categories/618?&req_ref=popular_category";
-                break;
-            case "게임_취미":
-                redirectUrl = "https://m.bunjang.co.kr/categories/619?&req_ref=popular_category";
-                break;
-            default:
-                redirectUrl = "/cate/list_search"; // 기본 페이지
-                break;
+    // 등록 화면
+    @GetMapping("/create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("cateVO", new CateVO());  // 새로운 CateVO 객체를 모델에 추가
+        return "/cate/create";  // cate/create.html 뷰를 반환
+    }
+
+    // 등록 처리
+    @PostMapping("/create")
+    public String createCategory(@ModelAttribute("cateVO") CateVO cateVO, BindingResult result) {
+        if (result.hasErrors()) {
+            return "/cate/create";  // 폼에 오류가 있으면 다시 등록 폼으로 돌아감
         }
+        cateProc.create(cateVO);  // cateProc를 통해 cateVO 데이터 처리
+        return "redirect:/cate/list_all";  // 카테고리 목록 페이지로 리다이렉트
+    }
 
-        // 외부 URL로 리다이렉트
-        return new RedirectView(redirectUrl);
+    // 수정 화면
+    @GetMapping("/update/{cateno}")
+    public String updateForm(@PathVariable("cateno") int cateno, Model model) {
+        CateVO cate = cateProc.read(cateno);
+        model.addAttribute("cate", cate);
+        return "/cate/update";
+    }
+
+    // 수정 처리
+    @PostMapping("/update")
+    public String update(CateVO cateVO) {
+        cateProc.update(cateVO);
+        return "redirect:/cate/list_all";
+    }
+
+    // 삭제 화면
+    @GetMapping("/delete/{cateno}")
+    public String deleteForm(@PathVariable("cateno") int cateno, Model model) {
+        CateVO cate = cateProc.read(cateno);
+        model.addAttribute("cate", cate);
+        return "/cate/delete";
+    }
+
+    // 삭제 처리
+    @PostMapping("/delete")
+    public String delete(@RequestParam("cateno") int cateno) {
+        cateProc.delete(cateno);
+        return "redirect:/cate/list_all";
     }
 }

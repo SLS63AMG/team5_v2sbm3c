@@ -1,15 +1,17 @@
 package dev.mvc.cate;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
+
+@Service("dev.mvc.cate.CateProc")
+@Primary
 public class CateProc implements CateProcInter {
 
     @Autowired
-    private CateDAOInter cateDAO;
+    private CateDAO cateDAO;
 
     @Override
     public int create(CateVO cateVO) {
@@ -17,8 +19,8 @@ public class CateProc implements CateProcInter {
     }
 
     @Override
-    public List<CateVO> list() {
-        return cateDAO.list();
+    public List<CateVO> list_all() {
+        return cateDAO.list_all();
     }
 
     @Override

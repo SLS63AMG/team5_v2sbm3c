@@ -1,67 +1,106 @@
 package dev.mvc.contents;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.util.Date;
 
-@Setter @Getter @ToString
 public class ContentsVO {
+    private int contentsno;      // 콘텐츠 번호
+    private String title;        // 제목
+    private int recom;           // 관심 수
+    private int cnt;             // 조회 수
+    private String word;         // 검색어
+    private Date rdate;          // 등록일
+    private String file1;        // 제품 이미지 경로
+    private int size1;           // 이미지 크기
+    private int price;           // 판매가
+    private int cateno;          // 카테고리 번호
+    private int categrpno;       // 카테고리 그룹 번호
 
-    /** 컨텐츠 번호, Primary Key */
-    private Integer contentsno = 0;
+    // Getters and Setters
+    public int getContentsno() {
+        return contentsno;
+    }
 
-    /** 내용 */
-    private String content;
+    public void setContentsno(int contentsno) {
+        this.contentsno = contentsno;
+    }
 
-    /** 추천수 */
-    private Integer recom = 0;
+    public String getTitle() {
+        return title;
+    }
 
-    /** 조회수 */
-    private Integer cnt = 0;
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    /** 댓글수 */
-    private Integer replycnt = 0;
+    public int getRecom() {
+        return recom;
+    }
 
-    /** 검색어 */
-    private String word;
+    public void setRecom(int recom) {
+        this.recom = recom;
+    }
 
-    /** 등록일 */
-    private Date rdate;
+    public int getCnt() {
+        return cnt;
+    }
 
-    /** 제품 이미지 */
-    private String file1;
+    public void setCnt(int cnt) {
+        this.cnt = cnt;
+    }
 
-    /** 메인 이미지 */
-    private String preview;
+    public String getWord() {
+        return word;
+    }
 
-    /** 메인 이미지 크기 */
-    private String size1;
+    public void setWord(String word) {
+        this.word = word;
+    }
 
-    /** 장르 */
-    private String dc;
+    public Date getRdate() {
+        return rdate;
+    }
 
-    /** 할인율 */
-    private String saleprice;
+    public void setRdate(Date rdate) {
+        this.rdate = rdate;
+    }
 
-    /** 판매 가격 */
-    private String salerate;
+    public String getFile1() {
+        return file1;
+    }
 
-    /** 제조사 */
-    private String edition;
+    public void setFile1(String file1) {
+        this.file1 = file1;
+    }
 
-    /** url */
-    private String url;
+    public int getSize1() {
+        return size1;
+    }
 
-    /** 회원 번호 */
-    private Integer memberno2;
+    public void setSize1(int size1) {
+        this.size1 = size1;
+    }
 
-    /** 카테고리 그룹 번호 */
-    private Integer categrpno;
+    public int getPrice() {
+        return price;
+    }
 
-    /** 카테고리 번호 */
-    private Integer cateno;
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
-    // 예시: ContentsVO(contentsno=1, content=Example Content, recom=100, cnt=250, replycnt=10, word="fashion", rdate=2024-12-09, file1="image.jpg", preview="preview.jpg", size1="large", dc="genre", saleprice="10%", salerate="20%", edition="brand", url="www.example.com", memberno2=1, categrpno=10, cateno=5)
+    public int getCateno() {
+        return cateno;
+    }
+
+    public void setCateno(int cateno) {
+        this.cateno = cateno;
+    }
+
+    public int getCategrpno() {
+        return categrpno;
+    }
+
+    public void setCategrpno(int categrpno) {
+        this.categrpno = categrpno;
+    }
 }
