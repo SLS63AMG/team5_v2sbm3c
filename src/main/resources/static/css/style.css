@@ -1,15 +1,15 @@
   /* ver 2.5 2024_09_12 */
   
-  @font-face {
-      font-family: 'TTHakgyoansimMonggeulmonggeulR';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimMonggeulmonggeulR.woff2') format('woff2');
-      font-weight: normal;
-      font-style: normal;
-  }
+@font-face {
+    font-family: 'GowunBatang-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
   /* 모든 태그에 적용 */
   *{
-     font-family: TTHakgyoansimMonggeulmonggeulR; 
+     font-family: GowunBatang-Regular; 
      margin: 0px;  /* top right bottom left */
      padding: 0px;
      color: #555555;

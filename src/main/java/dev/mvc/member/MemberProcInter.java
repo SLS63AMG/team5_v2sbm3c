@@ -50,7 +50,7 @@ public interface MemberProcInter {
   /**
    * 회원 정보 수정
    */
-  public int propile_update(MemberVO memberVO);
+  public int profile_update(MemberVO memberVO);
   
   /**
    * 비밀 번호 조회(1:현재 비밀번호, 0:현재 비밀번호 아님)
@@ -127,4 +127,9 @@ public interface MemberProcInter {
    */
   public String pagingBox(int now_page, String word, String list_file, int search_count, int record_per_page, int page_per_block);
   
+  
+  /**
+   * 날짜 형식 String으로 바꾸기
+   */
+  public String formatBirth(String birth);
 }

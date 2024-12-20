@@ -48,7 +48,7 @@ public interface MemberDAOInter {
   /**
    * 회원 정보 수정
    */
-  public int propile_update(MemberVO memberVO);
+  public int profile_update(MemberVO memberVO);
   
   /**
    * 비밀 번호 조회(1:현재 비밀번호, 0:현재 비밀번호 아님)
