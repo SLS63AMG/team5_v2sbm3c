@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html layout:decorate="~{layout}"> <!-- layout.html 상속-->
+<div layout:fragment="content">
+
+  <div class='title_line'>전체 글 목록</div>
+
+  <aside class="aside_right">
+    <a href="javascript:location.reload();">새로고침</a>
+  </aside> 
+   
+  <div class='menu_line'></div>
+       
+  <table class="table table-striped" style='width: 100%;'>
+    <colgroup>
+      <col style='width: 10%;'/>
+      <col style='width: 90%;'/>
+    </colgroup>
+    <tr>
+      <th class='th_bs'>파일</th>
+      <th class='th_bs'>제목</th>
+    </tr>
+   
+    <tr th:each="contentsVO, status:${contentsList}" 
+        th:attr="onclick=|location.href='/contents/read?contentsno=${contentsVO.contentsno}'|"
+        style="cursor: pointer;">
+      <td class='td_basic'>
+        <!-- 파일 이름이나 이미지를 표시 -->
+        <span th:text="${contentsVO.file1}"></span>
+      </td>
+      <td class='td_left'>
+        <!-- 제목을 표시하고, 내용의 처음 160자를 간략히 표시 -->
+        <span th:text="${contentsVO.title}" style="font-weight: bold;"></span><br>
+        <span th:if="${contentsVO.content.length() > 160 }" 
+              th:text="|${contentsVO.content.substring(0, 160)}...|"></span>
+        <span th:if="${contentsVO.content.length() <= 160 }" 
+              th:text="|${contentsVO.content}|"></span>
+      </td>
+    </tr>
+  </table>
+   
+  <div class='bottom_menu'>
+    <!-- 새로 고침 버튼 -->
+    <button type='button' onclick="location.reload();" class="btn btn-primary btn-sm">새로 고침</button>
+  </div>
+
+</div>
+</html>

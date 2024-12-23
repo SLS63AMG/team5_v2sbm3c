@@ -125,6 +125,12 @@ public class MemberCont {
 //      }
 //      
 //      return "redirect:/member/signup";
+      
+//      int cnt = this.memberProc.sign_up(memberVO);
+//      model.addAttribute("code", "create_success");
+//      model.addAttribute("name", memberVO.getName());
+//      model.addAttribute("id", memberVO.getId());
+//      return "/member/msg";
     }
   }
   // 회원 가입-------------------------------------------------------------------
@@ -470,7 +476,6 @@ public class MemberCont {
       @ModelAttribute("memberVO") MemberVO memberVO) {
     
     String token = (String) session.getAttribute("token");
-    
     if(this.memberProc.isMember(session)) {
       memberVO.setToken(token);
       if(memberVO.getGender() == null) {
