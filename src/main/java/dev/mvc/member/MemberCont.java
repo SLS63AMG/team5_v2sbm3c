@@ -389,7 +389,7 @@ public class MemberCont {
       @RequestParam(name="now_page", defaultValue = "1") int now_page) {
     
     if(this.memberProc.isAdmin(session)) {
-      
+
       word = Tool.checkNull(word);
 
       ArrayList<MemberVO> list = this.memberProc.member_list_search_paging(word, now_page, this.record_per_page);
