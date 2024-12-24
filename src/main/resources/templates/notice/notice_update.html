@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html layout:decorate="~{layout}"> <!-- layout.html 상속-->
+
+<div layout:fragment="content">
+
+
+  <div style="height: 50px; display: flex; justify-content: space-between; align-items: center;">
+    <h1 style="margin: 0;">공지사항</h1>
+    
+    <div style="display: flex; align-items: center; gap: 10px; justify-content: flex-end;">
+      <a href='./update' th:if="${grade <= 9}">업데이트</a>
+      <span class='menu_divide'>│</span>
+      <a href='./list' style="margin-right: 20px;">목록</a>
+    </div>
+    
+  </div>
+
+  <div style="margin: 0px auto; ">
+    <div style="width: 100%; background-color:#F4EDD3; border-top: 1px solid #7e7e7e;">
+      <p style="padding: 20px 0; margin:0px;" th:text="${noticeVO.title}"></p>
+    </div>
+    <div style="display: flex; justify-content: flex-end; gap: 10px; margin: 0; padding: 10px 0; border-top: 1px solid #d3d3d3; border-bottom: 1px solid #d3d3d3;">
+      <p style="margin: 0;" th:text="조회수 + ${noticeVO.cnt}"></p>
+      <p style="margin: 0;" th:text="등록일 + ${noticeVO.cdate}"></p>
+    </div>
+    <div>
+      <p th:text="${noticeVO.content}"></p>
+    </div>
+    
+    
+    <div style="width: 100%; background-color:#F4EDD3; border-top: 1px solid #7e7e7e;">
+
+      <input style="margin: 20px 0;" th:value="${noticeVO.title}">
+    </div>
+    <div style="display: flex; justify-content: flex-end; gap: 10px; margin: 0; padding: 10px 0; border-top: 1px solid #d3d3d3; border-bottom: 1px solid #d3d3d3;">
+      <p style="margin: 0;" th:text="조회수 + ${noticeVO.cnt}"></p>
+      <p style="margin: 0;" th:text="등록일 + ${noticeVO.cdate}"></p>
+    </div>
+    <div>
+      <p ></p>
+      <input style="margin: 10px 0;" th:value="${noticeVO.content}">
+    </div>
+  </div>
+  
+    
+</div>
+</html>

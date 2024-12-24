@@ -210,6 +210,7 @@ public class MemberCont {
       session.setAttribute("id", memberVO.getId());
       session.setAttribute("grade", memberVO.getGrade());
       session.setAttribute("token", token);
+      session.setAttribute("memberno", memberVO.getMemberno());
       
       // Cookie코드
       if(id_save.equals("Y")) {
@@ -238,10 +239,13 @@ public class MemberCont {
    */
   @RequestMapping("/logout")
   public String logout(HttpServletRequest request, HttpSession session) {
-      String token = (String) session.getAttribute("token");
-      this.memberProc.token_del(token);
-      session = request.getSession();
-      session.invalidate();  // 세션 무효화
+    
+      if(Tool.isMember(session)) {
+        String token = (String) session.getAttribute("token");
+        this.memberProc.token_del(token);
+        session = request.getSession();
+        session.invalidate();  // 세션 무효화
+      }
       return "redirect:/";  // 홈으로 리다이렉트
   }
   // 로그아웃-------------------------------------------------------------------
@@ -249,11 +253,11 @@ public class MemberCont {
   
   // 비밀번호 변경-------------------------------------------------------------------
   /**
-   * 패스워드 수정 페이지(추가 개발 필요)
+   * 패스워드 수정 페이지
    */
   @GetMapping(value="passwd_update")
   public String passwd_update_form(HttpSession session, Model model) {
-    if(this.memberProc.isMember(session)) {
+    if(Tool.isMember(session)) {
       
       
       return "/member/passwd_update";
@@ -270,7 +274,7 @@ public class MemberCont {
       @RequestParam(value="passwd", defaultValue = "") String passwd) {
 
     // 회원 확인
-    if(this.memberProc.isMember(session)) {
+    if(Tool.isMember(session)) {
       // 세션에서 토큰 가져오기
       String token = (String)session.getAttribute("token");
       HashMap<String, Object> map = new HashMap<String, Object>();
@@ -345,7 +349,7 @@ public class MemberCont {
       @RequestParam(value="memberno") int memberno) {
 
     // 관리자인지 확인
-    if(this.memberProc.isAdmin(session)) {
+    if(Tool.isAdmin(session)) {
 
       model.addAttribute("memberno", memberno);  // 모델에 추가
 
@@ -362,7 +366,7 @@ public class MemberCont {
       @RequestParam(value="memberno", defaultValue = "") String memberno){
 
     
-    if(this.memberProc.isAdmin(session)) {
+    if(Tool.isAdmin(session)) {
       HashMap<String, Object> map = new HashMap<String, Object>();
 
       map.put("memberno", memberno);
@@ -394,7 +398,7 @@ public class MemberCont {
       @RequestParam(name="word", defaultValue="") String word, 
       @RequestParam(name="now_page", defaultValue = "1") int now_page) {
     
-    if(this.memberProc.isAdmin(session)) {
+    if(Tool.isAdmin(session)) {
 
       word = Tool.checkNull(word);
 
@@ -406,7 +410,9 @@ public class MemberCont {
       model.addAttribute("search_cnt", search_cnt);
       model.addAttribute("word", word);
       
-      String paging = this.memberProc.pagingBox(now_page, word, list_file_name, search_cnt, this.record_per_page, this.page_per_block);
+//      String paging = this.memberProc.pagingBox(now_page, word, list_file_name, search_cnt, this.record_per_page, this.page_per_block);
+      String paging = Tool.pagingBox(now_page, word, list_file_name, search_cnt, this.record_per_page, this.page_per_block);
+      
       model.addAttribute("paging", paging);
       model.addAttribute("now_page", now_page);
       
@@ -425,7 +431,7 @@ public class MemberCont {
   public String read(HttpSession session, Model model,
       @RequestParam(name="memberno", defaultValue = "") int memberno) {
     
-    if(this.memberProc.isAdmin(session)) {
+    if(Tool.isAdmin(session)) {
       MemberVO memberVO = this.memberProc.member_read(memberno);
       
 
@@ -441,7 +447,7 @@ public class MemberCont {
       @ModelAttribute("memberVO") MemberVO memberVO,
       @RequestParam(name="memberno", defaultValue = "") int memberno ) {
     
-    if(this.memberProc.isAdmin(session)) {
+    if(Tool.isAdmin(session)) {
       memberVO.setMemberno(memberno);
       if(memberVO.getGender() == null) {
         memberVO.setGender("N");
@@ -465,18 +471,24 @@ public class MemberCont {
   // 사용자의 조회(프로필)-------------------------------------------------------------------
   @GetMapping(value="/profile")
   public String profile(HttpSession session, Model model) {
-    String token = (String) session.getAttribute("token");
-    MemberVO memberVO = this.memberProc.detail_info(token);
-    model.addAttribute("memberVO", memberVO);
-    return "/member/profile";
+    
+    if(Tool.isMember(session)) {
+      String token = (String) session.getAttribute("token");
+      MemberVO memberVO = this.memberProc.detail_info(token);
+      model.addAttribute("memberVO", memberVO);
+      return "/member/profile";
+    }
+    
+    return "redirect:/member/login";
+
   }
   
   @PostMapping(value="/profile_update")
   public String profil_update(Model model, HttpSession session,
       @ModelAttribute("memberVO") MemberVO memberVO) {
     
-    String token = (String) session.getAttribute("token");
-    if(this.memberProc.isMember(session)) {
+    if(Tool.isMember(session)) {
+      String token = (String) session.getAttribute("token");
       memberVO.setToken(token);
       if(memberVO.getGender() == null) {
         memberVO.setGender("N");
@@ -504,7 +516,7 @@ public class MemberCont {
   public String delete(Model model, HttpSession session,
       @RequestParam(name="memberno", defaultValue = "") int memberno) {
     
-    if(this.memberProc.isAdmin(session)) {
+    if(Tool.isAdmin(session)) {
       MemberVO memberVO = this.memberProc.member_read(memberno);
       model.addAttribute("memberVO", memberVO);
       
@@ -518,7 +530,7 @@ public class MemberCont {
   @PostMapping(value="/delete")
   public String delete_process(Model model, HttpSession session,
       @RequestParam(name="memberno", defaultValue = "") int memberno) {
-    if(this.memberProc.isAdmin(session)) {
+    if(Tool.isAdmin(session)) {
       int cnt = this.memberProc.delete_member(memberno);
       if(cnt == 1) {
         return "redirect:/member/list";
@@ -531,12 +543,10 @@ public class MemberCont {
     return "redirect:/";
   }
   // 삭제-------------------------------------------------------------------
-  
+
   /**
    * 추가 예정
-   * 삭제(delete, delete_process)
-   * 
-   * 프로필 수정
+   * 마이페이지
    */
 
 }

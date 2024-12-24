@@ -39,7 +39,7 @@
   
   <!-- 세션 기본 값 호출 -->
   <select id="basic_session" resultType="dev.mvc.member.MemberVO" parameterType="String">
-    SELECT name, id, grade
+    SELECT memberno, name, id, grade
     FROM member
     WHERE token=#{token}
   </select>

@@ -146,7 +146,7 @@ gender='성별', birth='생일',
 grade='권한', state='상태'
 WHERE memberno = 1;
 
--- 4. 회원의 번호 가져오기
+-- 4. 회원의 번호 가져오기 ※ member_no
 SELECT memberno
 FROM member
 WHERE token='식별토큰';
@@ -172,6 +172,7 @@ FROM member
 WHERE (UPPER(name) LIKE '%' || UPPER(#{word}) || '%')
 OR (UPPER(id) LIKE '%' || UPPER(#{word}) || '%')
 </if>;
+
 
 
 

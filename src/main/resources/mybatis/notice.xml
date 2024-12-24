@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- SB가 자동으로 구현하여 연동하는 interface -->
+<mapper namespace="dev.mvc.notice.NoticeDAOInter"> <!-- SB가 자동으로 구현하여 연동하는 interface -->
+  
+  <!-- 공지사항 등록 -->
+  <insert id="notice_create" parameterType="dev.mvc.notice.NoticeVO">
+    INSERT INTO notice (noticeno, title, content, cdate, memberno)
+    VALUES (notice_seq.nextval, #{title}, #{content}, SYSDATE, #{memberno})
+  </insert>
+  
+  <!-- 공지사항 수정 -->
+  <update id="notice_update" parameterType="dev.mvc.notice.NoticeVO">
+    UPDATE notice
+    SET title=#{title}, content=#{content}, udate=sysdate, visible=#{visible}, importance=#{importance}
+    WHERE noticeno=#{noticeno}
+  </update>
+  
+  <!-- 조회수 상승 -->
+  <update id="views_up" parameterType="int">
+    UPDATE notice
+    SET cnt = cnt + 1
+    WHERE noticeno=#{noticeno}
+  </update>
+  
+  <!-- 공지사항 삭제 -->
+  <delete id="notice_delete" parameterType="int">
+    DELETE FROM notice
+    WHERE noticeno=#{noticeno}
+  </delete>
+  
+  <!-- 공지사항(검색 + 페이징) -->
+  <select id="notice_list_search_paging" resultType="dev.mvc.notice.NoticeVO" parameterType="Map">
+    SELECT noticeno, title, cdate, udate, cnt, importance, visible, memberno, name, r
+    FROM (
+        SELECT noticeno, title, cdate, udate, cnt, importance, visible, memberno, name, rownum as r
+        FROM (
+      SELECT n.noticeno, n.title, n.cdate, n.udate, n.cnt, n.importance, n.visible, n.memberno, m.name
+      FROM notice n INNER JOIN member m
+      ON n.memberno = m.memberno
+      WHERE UPPER(n.title) LIKE '%' || UPPER(#{word}) || '%'
+        )
+        ORDER BY importance ASC, r ASC
+    )
+    WHERE r &gt;=#{start_num} AND r &lt;=#{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
+  </select>
+  
+  <!-- 검색된 공지사항 목록 갯수 -->
+  <select id="list_search_count" resultType="Integer" parameterType="String">
+    SELECT count(*) as cnt
+    FROM notice
+    <if test="word != null and word != ''"> <!-- 검색 상태라면 WHERE 생성-->
+    WHERE (UPPER(title) LIKE '%' || UPPER(#{word}) || '%')
+    </if>
+  </select>
+  
+  <!-- 공지사항 조회 -->
+  <select id="notice_read" resultType="dev.mvc.notice.NoticeVO" parameterType="int">
+    SELECT n.noticeno, n.title, n.content, n.cdate, n.udate, n.cnt, n.importance, n.visible, n.memberno, m.name
+    FROM notice n INNER JOIN member m
+    ON n.memberno = m.memberno
+    WHERE n.noticeno = #{noticeno}
+  </select>
+</mapper>
