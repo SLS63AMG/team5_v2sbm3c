@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.mvc.survey.SurveyDAOInter">
+
+    <!-- 등록 -->
+    <insert id="create" parameterType="dev.mvc.survey.SurveyVO">
+        INSERT INTO survey (surveyno, topic, startdate, enddate, poster, postersaved, posterthumb, postersize, cnt, continueyn)
+        VALUES (survey_seq.NEXTVAL, #{topic}, #{startdate}, #{enddate}, #{poster}, #{postersaved}, #{posterthumb}, #{postersize}, #{cnt}, #{continueyn})
+    </insert>
+
+    <!-- 목록 -->
+    <select id="list" resultType="dev.mvc.survey.SurveyVO">
+        SELECT * FROM survey ORDER BY surveyno DESC
+    </select>
+
+    <!-- 조회 -->
+    <select id="read" parameterType="int" resultType="dev.mvc.survey.SurveyVO">
+        SELECT * FROM survey WHERE surveyno = #{surveyno}
+    </select>
+
+    <!-- 수정 -->
+    <update id="update" parameterType="dev.mvc.survey.SurveyVO">
+        UPDATE survey
+        SET topic = #{topic}, startdate = #{startdate}, enddate = #{enddate}, poster = #{poster},
+            postersaved = #{postersaved}, posterthumb = #{posterthumb}, postersize = #{postersize},
+            continueyn = #{continueyn}
+        WHERE surveyno = #{surveyno}
+    </update>
+
+    <!-- 삭제 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM survey WHERE surveyno = #{surveyno}
+    </delete>
+
+    <!-- 검색 -->
+    <select id="search" parameterType="map" resultType="dev.mvc.survey.SurveyVO">
+        SELECT * FROM survey WHERE topic LIKE '%' || #{keyword} || '%' ORDER BY surveyno DESC
+    </select>
+
+    <!-- 페이징 -->
+    <select id="list_by_page" parameterType="map" resultType="dev.mvc.survey.SurveyVO">
+        SELECT *
+        FROM (SELECT ROW_NUMBER() OVER (ORDER BY surveyno DESC) AS rownum, survey.*
+              FROM survey)
+        WHERE rownum BETWEEN #{startRow} AND #{endRow}
+    </select>
+
+</mapper>
