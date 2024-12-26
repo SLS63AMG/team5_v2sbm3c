@@ -20,6 +20,7 @@ public class SurveyProc implements SurveyProcInter {
     public List<SurveyVO> list() {
         return surveyDAO.list();
     }
+    
 
     @Override
     public SurveyVO read(int surveyno) {

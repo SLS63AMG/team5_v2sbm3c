@@ -10,9 +10,9 @@ public class SurveyVO {
     private String topic;
     private String startdate;
     private String enddate;
-    private String poster;
-    private String postersaved;
-    private String posterthumb;
+    private String poster = "";
+    private String postersaved = "";
+    private String posterthumb = "";
     private int postersize;
     private int cnt;
     private char continueyn;
