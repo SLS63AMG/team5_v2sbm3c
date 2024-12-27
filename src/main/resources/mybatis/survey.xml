@@ -5,16 +5,17 @@
     <!-- 등록 -->
     <insert id="create" parameterType="dev.mvc.survey.SurveyVO">
         INSERT INTO survey (surveyno, topic, startdate, enddate, poster, postersaved, posterthumb, postersize, cnt, continueyn)
-        VALUES (survey_seq.NEXTVAL, #{topic}, #{startdate}, #{enddate}, #{poster,jdbcType=VARCHAR}, #{postersaved,jdbcType=VARCHAR}, #{posterthumb,jdbcType=VARCHAR}, #{postersize,jdbcType=INTEGER}, #{cnt,jdbcType=INTEGER}, #{continueyn,jdbcType=CHAR})
-
+        VALUES (survey_seq.NEXTVAL, #{topic}, #{startdate}, #{enddate}, #{poster}, #{postersaved}, #{posterthumb}, #{postersize}, #{cnt}, #{continueyn})
     </insert>
+
 
       <!-- 목록 -->
     <select id="list" resultType="dev.mvc.survey.SurveyVO">
-      SELECT surveyno, topic, startdate, enddate, posterthumb, postersize, cnt, continueyn
-      FROM survey
-      ORDER BY surveyno DESC
-   </select>
+        SELECT surveyno, topic, startdate, enddate, posterthumb, postersize, cnt, continueyn
+        FROM survey
+        ORDER BY surveyno DESC
+    </select>
+
 
 
     <!-- 조회 -->
@@ -25,11 +26,13 @@
     <!-- 수정 -->
     <update id="update" parameterType="dev.mvc.survey.SurveyVO">
         UPDATE survey
-        SET topic = #{topic}, startdate = #{startdate}, enddate = #{enddate}, poster = #{poster},
-            postersaved = #{postersaved}, posterthumb = #{posterthumb}, postersize = #{postersize},
+        SET topic = #{topic}, startdate = #{startdate}, enddate = #{enddate},
+            poster = #{poster}, postersaved = #{postersaved},
+            posterthumb = #{posterthumb}, postersize = #{postersize},
             continueyn = #{continueyn}
         WHERE surveyno = #{surveyno}
     </update>
+
 
     <!-- 삭제 -->
     <delete id="delete" parameterType="int">

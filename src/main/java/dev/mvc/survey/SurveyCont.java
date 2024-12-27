@@ -6,6 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import dev.mvc.tool.Tool;
+import dev.mvc.tool.Upload;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +50,7 @@ public class SurveyCont {
     }
 
     
-    @GetMapping("/create") // 등록 페이지 이동 처리
+    @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("surveyVO", new SurveyVO());
         return "survey/create";
@@ -53,33 +58,54 @@ public class SurveyCont {
 
     @PostMapping("/create")
     public String create(@ModelAttribute SurveyVO surveyVO) {
-        MultipartFile file = surveyVO.getFile1MF(); // 업로드된 파일 가져오기
-        if (file != null && !file.isEmpty()) {
-            try {
-                // 업로드 경로 설정
-                String uploadPath = "C:/kd/team5/uploads/";
-                String fileName = file.getOriginalFilename(); // 원본 파일 이름
-                File saveFile = new File(uploadPath, fileName);
 
-                // 디렉토리가 없으면 생성
-                if (!saveFile.getParentFile().exists()) {
-                    saveFile.getParentFile().mkdirs();
-                }
+        String poster = "";
+        String postersaved = "";
+        String posterthumb = "";
 
-                // 파일 저장
-                file.transferTo(saveFile);
+        // Survey.java에서 정의한 업로드 경로 사용
+        String upDir = Survey.getUploadDir();
+        System.out.println("-> upDir: " + upDir);
 
-                // VO에 파일 이름 설정
-                surveyVO.setPosterthumb(fileName); // 썸네일 필드에 파일 이름 저장
-            } catch (IOException e) {
-                e.printStackTrace();
+
+        MultipartFile mf = surveyVO.getPosterFile();
+        poster = mf.getOriginalFilename();
+        System.out.println("-> 원본 파일명: " + poster);
+        long postersize= mf.getSize();
+        if (postersize > 0) {
+          if (Tool.checkUploadFile(poster) == true) {
+            postersaved = Upload.saveFileSpring(mf, upDir);
+
+            if (Tool.isImage(postersaved)) {
+              posterthumb = Tool.preview(upDir, postersaved, 200, 150);
             }
-        }
 
-        // 데이터베이스에 저장
-        surveyProc.create(surveyVO);
-        return "redirect:/survey/list";
+            surveyVO.setPoster(poster);
+            surveyVO.setPostersaved(postersaved);
+            surveyVO.setPosterthumb(posterthumb);
+            surveyVO.setPostersize(postersize);
+            
+          } else { 
+            return "redirect:/survey/msg"; 
+          }
+          
+       }
+        
+      
+
+            
+            
+
+
+
+       this.surveyProc.create(surveyVO); // DB에 저장
+            
+
+        return "redirect:/survey/list"; // 파일 처리 후 리스트로 이동
     }
+
+
+
 
     @GetMapping("/read/{surveyno}")
     public String read(@PathVariable int surveyno, Model model) {
@@ -97,41 +123,68 @@ public class SurveyCont {
 
 
     @PostMapping("/update")
-    public String update(SurveyVO surveyVO) {
-        MultipartFile file = surveyVO.getFile1MF(); // 파일 업로드 처리
-        if (file != null && !file.isEmpty()) {
-            try {
-                String uploadPath = "C:/kd/team5/uploads/";
-                String fileName = file.getOriginalFilename();
-                File saveFile = new File(uploadPath, fileName);
+    public String update(@ModelAttribute SurveyVO surveyVO) {
 
-                if (!saveFile.getParentFile().exists()) {
-                    saveFile.getParentFile().mkdirs();
+        String poster = "";
+        String postersaved = "";
+        String posterthumb = "";
+
+        // Survey.java에서 정의한 업로드 경로 사용
+        String upDir = Survey.getUploadDir();
+        System.out.println("-> upDir: " + upDir);
+
+        MultipartFile mf = surveyVO.getPosterFile();
+        poster = mf.getOriginalFilename();
+        System.out.println("-> 원본 파일명: " + poster);
+        long postersize = mf.getSize();
+
+        // 기존 데이터 조회 (기존 파일 삭제를 위해 필요)
+        SurveyVO existingSurvey = surveyProc.read(surveyVO.getSurveyno());
+
+        if (postersize > 0) {
+            if (Tool.checkUploadFile(poster)) {
+                postersaved = Upload.saveFileSpring(mf, upDir);
+
+                if (Tool.isImage(postersaved)) {
+                    posterthumb = Tool.preview(upDir, postersaved, 200, 150);
                 }
 
-                file.transferTo(saveFile);
-                surveyVO.setPosterthumb(fileName); // 썸네일 경로 저장
-            } catch (IOException e) {
-                e.printStackTrace();
+                // 기존 파일 삭제
+                if (existingSurvey.getPostersaved() != null && !existingSurvey.getPostersaved().isEmpty()) {
+                    File savedFile = new File(upDir + existingSurvey.getPostersaved());
+                    if (savedFile.exists() && savedFile.isFile()) {
+                        savedFile.delete();
+                    }
+                }
+
+                if (existingSurvey.getPosterthumb() != null && !existingSurvey.getPosterthumb().isEmpty()) {
+                    File thumbFile = new File(upDir + existingSurvey.getPosterthumb());
+                    if (thumbFile.exists() && thumbFile.isFile()) {
+                        thumbFile.delete();
+                    }
+                }
+
+                surveyVO.setPoster(poster);
+                surveyVO.setPostersaved(postersaved);
+                surveyVO.setPosterthumb(posterthumb);
+                surveyVO.setPostersize(postersize);
+            } else {
+                return "redirect:/survey/msg";
             }
+        } else {
+            // 파일을 업로드하지 않은 경우, 기존 파일 정보를 유지
+            surveyVO.setPoster(existingSurvey.getPoster());
+            surveyVO.setPostersaved(existingSurvey.getPostersaved());
+            surveyVO.setPosterthumb(existingSurvey.getPosterthumb());
+            surveyVO.setPostersize(existingSurvey.getPostersize());
         }
-        surveyProc.update(surveyVO); // 수정된 데이터 저장
-        return "redirect:/survey/list";
+
+        surveyProc.update(surveyVO); // 데이터베이스 업데이트
+
+        return "redirect:/survey/list"; // 파일 처리 후 리스트로 이동
     }
 
-    @GetMapping("/delete/{surveyno}")
-    public String deleteForm(@PathVariable("surveyno") int surveyno, Model model) {
-        SurveyVO surveyVO = surveyProc.read(surveyno); // 설문조사 데이터 읽기
-        model.addAttribute("surveyVO", surveyVO);
-        return "survey/delete"; // delete.html로 이동
-    }
 
-    @PostMapping("/delete")
-    public String delete(@RequestParam("surveyno") int surveyno) {
-        surveyProc.delete(surveyno); // 설문조사 삭제
-        return "redirect:/survey/list";
-    }
-    
     @GetMapping("/search")
     public String search(
             @RequestParam("keyword") String keyword,
@@ -159,6 +212,20 @@ public class SurveyCont {
         model.addAttribute("totalPage", totalPage);
 
         return "survey/list"; // 기존 리스트 페이지 재사용
+    }
+    
+    
+    @GetMapping("/delete/{surveyno}")
+    public String deleteForm(@PathVariable("surveyno") int surveyno, Model model) {
+        SurveyVO surveyVO = surveyProc.read(surveyno); // 설문조사 데이터 읽기
+        model.addAttribute("surveyVO", surveyVO);
+        return "survey/delete"; // delete.html로 이동
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam("surveyno") int surveyno) {
+        surveyProc.delete(surveyno); // 설문조사 삭제
+        return "redirect:/survey/list";
     }
 
 }
