@@ -38,15 +38,58 @@
 
     <!-- 검색 -->
     <select id="search" parameterType="map" resultType="dev.mvc.survey.SurveyVO">
-        SELECT * FROM survey WHERE topic LIKE '%' || #{keyword} || '%' ORDER BY surveyno DESC
+        SELECT surveyno, topic, startdate, enddate, posterthumb, postersize, cnt, continueyn
+        FROM survey
+        WHERE topic LIKE '%' || #{keyword} || '%'
+        ORDER BY surveyno DESC
     </select>
+
 
     <!-- 페이징 -->
     <select id="list_by_page" parameterType="map" resultType="dev.mvc.survey.SurveyVO">
-        SELECT *
-        FROM (SELECT ROW_NUMBER() OVER (ORDER BY surveyno DESC) AS rownum, survey.*
-              FROM survey)
-        WHERE rownum BETWEEN #{startRow} AND #{endRow}
+    SELECT *
+    FROM (
+        SELECT ROW_NUMBER() OVER (ORDER BY surveyno DESC) AS rn,
+               surveyno, topic, startdate, enddate, poster, postersaved, posterthumb, postersize, cnt, continueyn
+        FROM survey
+    ) subquery
+    WHERE rn BETWEEN #{startRow} AND #{endRow}
     </select>
+
+
+    
+    
+    <!-- 전체 설문조사 개수 -->
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM survey
+    </select>
+    
+    <select id="searchCount" parameterType="string" resultType="int">
+      SELECT COUNT(*)
+      FROM survey
+      WHERE topic LIKE '%' || #{keyword} || '%'
+    </select>
+    
+    <select id="searchByPage" parameterType="map" resultType="dev.mvc.survey.SurveyVO">
+        SELECT *
+        FROM (
+            SELECT t.*, ROWNUM AS rn
+            FROM (
+                SELECT surveyno, topic, startdate, enddate, poster, postersaved, posterthumb, postersize, cnt, continueyn
+                FROM survey
+                WHERE topic LIKE '%' || #{keyword} || '%'
+                ORDER BY surveyno DESC
+            ) t
+            WHERE ROWNUM &lt;= #{endRow}
+        )
+        WHERE rn &gt;= #{startRow}
+    </select>
+
+
+
+
+
+
+
 
 </mapper>

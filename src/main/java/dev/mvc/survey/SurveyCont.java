@@ -19,9 +19,28 @@ public class SurveyCont {
     private SurveyProcInter surveyProc;
 
     @GetMapping("/list")
-    public String list(Model model) {
-        List<SurveyVO> list = surveyProc.list();
+    public String list(
+            @RequestParam(value = "nowPage", defaultValue = "1") int nowPage,
+            Model model) {
+        int recordPerPage = 3; // 페이지당 3개 항목
+        int totalRecords = surveyProc.count(); // 전체 설문조사 수
+        int totalPage = (int) Math.ceil((double) totalRecords / recordPerPage);
+
+        // 현재 페이지의 시작과 끝 행 계산
+        int startRow = (nowPage - 1) * recordPerPage + 1;
+        int endRow = nowPage * recordPerPage;
+
+        // 파라미터 설정
+        Map<String, Object> map = new HashMap<>();
+        map.put("startRow", startRow);
+        map.put("endRow", endRow);
+
+        // 데이터 가져오기
+        List<SurveyVO> list = surveyProc.list_by_page(map);
         model.addAttribute("list", list);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("totalPage", totalPage);
+
         return "survey/list";
     }
 
@@ -111,6 +130,35 @@ public class SurveyCont {
     public String delete(@RequestParam("surveyno") int surveyno) {
         surveyProc.delete(surveyno); // 설문조사 삭제
         return "redirect:/survey/list";
+    }
+    
+    @GetMapping("/search")
+    public String search(
+            @RequestParam("keyword") String keyword,
+            @RequestParam(value = "nowPage", defaultValue = "1") int nowPage,
+            Model model) {
+        int recordPerPage = 3; // 페이지당 3개 항목
+        int totalRecords = surveyProc.searchCount(keyword); // 검색 결과 전체 개수
+        int totalPage = (int) Math.ceil((double) totalRecords / recordPerPage);
+
+        // 현재 페이지의 시작과 끝 행 계산
+        int startRow = (nowPage - 1) * recordPerPage + 1;
+        int endRow = nowPage * recordPerPage;
+
+        // 검색 파라미터 설정
+        Map<String, Object> map = new HashMap<>();
+        map.put("keyword", keyword);
+        map.put("startRow", startRow);
+        map.put("endRow", endRow);
+
+        // 검색 결과 가져오기
+        List<SurveyVO> searchResults = surveyProc.searchByPage(map);
+        model.addAttribute("list", searchResults);
+        model.addAttribute("keyword", keyword); // 검색어를 뷰로 전달
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("totalPage", totalPage);
+
+        return "survey/list"; // 기존 리스트 페이지 재사용
     }
 
 }

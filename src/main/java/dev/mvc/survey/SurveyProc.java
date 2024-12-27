@@ -46,4 +46,22 @@ public class SurveyProc implements SurveyProcInter {
     public List<SurveyVO> list_by_page(Map<String, Object> map) {
         return surveyDAO.list_by_page(map);
     }
+
+    @Override
+    public int count() {
+      return surveyDAO.count(); // 전체 설문조사 수를 반환
+    }
+    
+    @Override
+    public int searchCount(String keyword) {
+        return surveyDAO.searchCount(keyword);
+    }
+    
+    @Override
+    public List<SurveyVO> searchByPage(Map<String, Object> map) {
+        return surveyDAO.searchByPage(map);
+    }
+
+    
+    
 }
