@@ -35,16 +35,18 @@
 <div layout:fragment="content">
   <div class="title_line">설문조사 목록</div>
   <aside class="aside_right">
+          <!-- 검색 폼 -->
     <form method="get" action="/survey/search" style="display: inline-block; margin-right: 10px;">
-  <input type="text" name="keyword" th:value="${keyword}" placeholder="검색" 
-         style="padding: 5px; font-size: 12px; border: 1px solid #ccc; border-radius: 3px;">
-  <button type="submit" class="btn btn-secondary btn-sm" style="font-size: 12px;">검색</button>
-  
-    <!-- 검색 취소 버튼: keyword가 있을 때만 표시 -->
-    <a href="/survey/list" class="btn btn-secondary btn-sm" 
-       style="font-size: 12px; text-decoration: none; color: #fff; background-color: #6c757d; border: 1px solid #6c757d; padding: 5px 10px; border-radius: 3px; margin-left: 5px;"
-       th:if="${keyword != null}">검색 취소</a>
-  </form>
+      <input type="text" name="keyword" th:value="${keyword}" placeholder="검색" 
+             style="padding: 5px; font-size: 12px; border: 1px solid #ccc; border-radius: 3px;">
+      <button type="submit" class="btn btn-secondary btn-sm" style="font-size: 12px;">검색</button>
+      
+      <!-- 검색 취소 버튼: keyword가 null이 아니고 빈 문자열이 아닌 경우에만 표시 -->
+      <a href="/survey/list" class="btn btn-secondary btn-sm" 
+         style="font-size: 12px; text-decoration: none; color: #fff; background-color: #6c757d; border: 1px solid #6c757d; padding: 5px 10px; border-radius: 3px; margin-left: 5px;"
+         th:if="${keyword != null && keyword != ''}">검색 취소</a>
+    </form>
+
     <a href="javascript: location.reload();">새로 고침</a>
     <span class="menu_divide">|</span>
     <a href="/survey/create"  style="font-size: 14px;">등록</a>
