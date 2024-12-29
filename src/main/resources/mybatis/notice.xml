@@ -5,14 +5,19 @@
   
   <!-- 공지사항 등록 -->
   <insert id="notice_create" parameterType="dev.mvc.notice.NoticeVO">
-    INSERT INTO notice (noticeno, title, content, cdate, memberno)
-    VALUES (notice_seq.nextval, #{title}, #{content}, SYSDATE, #{memberno})
+    INSERT INTO notice (noticeno, title, content, cdate, memberno, visible, filename)
+    VALUES (notice_seq.nextval, #{title}, #{content}, SYSDATE, #{memberno}, #{visible}, #{filename})
   </insert>
   
   <!-- 공지사항 수정 -->
   <update id="notice_update" parameterType="dev.mvc.notice.NoticeVO">
     UPDATE notice
-    SET title=#{title}, content=#{content}, udate=sysdate, visible=#{visible}, importance=#{importance}
+    SET title=#{title}, 
+        content=#{content, jdbcType=CLOB}, 
+        udate=sysdate, 
+        visible=#{visible}, 
+        importance=#{importance}
+        <if test="filename != 'No'">,filename = #{filename, jdbcType=VARCHAR} </if>
     WHERE noticeno=#{noticeno}
   </update>
   
@@ -45,8 +50,18 @@
     WHERE r &gt;=#{start_num} AND r &lt;=#{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
   </select>
   
-  <!-- 검색된 공지사항 목록 갯수 -->
+  <!-- 유저의 검색된 공지사항 목록 갯수 -->
   <select id="list_search_count" resultType="Integer" parameterType="String">
+    SELECT count(*) as cnt
+    FROM notice
+    WHERE visible = 'Y'
+    <if test="word != null and word != ''"> <!-- 검색 상태라면 WHERE 생성-->
+    AND (UPPER(title) LIKE '%' || UPPER(#{word}) || '%')
+    </if>
+  </select>
+  
+  <!-- 관리자의 검색된 공지사항 목록 갯수 -->
+  <select id="admin_list_search_count" resultType="Integer" parameterType="String">
     SELECT count(*) as cnt
     FROM notice
     <if test="word != null and word != ''"> <!-- 검색 상태라면 WHERE 생성-->
@@ -54,9 +69,10 @@
     </if>
   </select>
   
+  
   <!-- 공지사항 조회 -->
   <select id="notice_read" resultType="dev.mvc.notice.NoticeVO" parameterType="int">
-    SELECT n.noticeno, n.title, n.content, n.cdate, n.udate, n.cnt, n.importance, n.visible, n.memberno, m.name
+    SELECT n.noticeno, n.title, n.content, n.cdate, n.udate, n.cnt, n.importance, n.visible, n.memberno, m.name, n.filename
     FROM notice n INNER JOIN member m
     ON n.memberno = m.memberno
     WHERE n.noticeno = #{noticeno}

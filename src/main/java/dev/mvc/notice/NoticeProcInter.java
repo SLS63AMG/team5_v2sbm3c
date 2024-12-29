@@ -32,9 +32,13 @@ public interface NoticeProcInter {
   public ArrayList<NoticeVO> notice_list_search_paging(String word, int now_page, int record_per_page);
 
   /**
-   * 검색된 공지사항 목록 갯수
+   * 유저의 검색된 공지사항 목록 갯수
    */
   public Integer list_search_count(String word);
+  /**
+   * 관리자의 검색된 공지사항 목록 갯수
+   */
+  public Integer admin_list_search_count(String word);
   
   /**
    * 공지사항 조회

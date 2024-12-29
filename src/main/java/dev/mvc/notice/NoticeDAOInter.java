@@ -33,9 +33,16 @@ public interface NoticeDAOInter {
   public ArrayList<NoticeVO> notice_list_search_paging(HashMap<String, Object> map);
 
   /**
-   * 검색된 공지사항 목록 갯수
+   * 유저의 검색된 공지사항 목록 갯수
    */
   public Integer list_search_count(String word);
+  
+  /**
+   * 관리자의 검색된 공지사항 목록 갯수
+   */
+  public Integer admin_list_search_count(String word);
+  
+  
   
   /**
    * 공지사항 조회

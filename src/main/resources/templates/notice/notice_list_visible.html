@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}"> <!-- layout.html 상속-->
+<div layout:fragment="content">
+  <link href="/css/notice.css" rel="Stylesheet" type="text/css">
+  <script>
+      // 페이지 로드 후에 이벤트 설정
+      window.onload = function() {
+          // 삭제 버튼 클릭 시 모달창을 flex로 보이도록 설정
+          function delete_btn(noticeno) {
+              document.getElementById('deleteModal').style.display = 'flex';
+              // 삭제 확인 버튼에 noticeno 값을 설정
+              document.getElementById('confirmDelete').setAttribute('href', '/notice/delete?noticeno=' + noticeno);
+          }
+
+          // 취소 버튼 클릭 시 모달창 닫기
+          document.getElementById('cancelDelete').onclick = function() {
+              document.getElementById('deleteModal').style.display = 'none';
+          }
+
+          // 삭제 버튼 클릭 시 모달창 표시
+          const deleteButtons = document.querySelectorAll('.delete-btn');
+          deleteButtons.forEach(function(btn) {
+              btn.onclick = function(event) {
+                  event.stopPropagation();  // 상위 tr의 클릭 이벤트를 막음
+                  const noticeno = this.getAttribute('data-noticeno'); // noticeno 가져오기
+                  delete_btn(noticeno);  // 모달창 띄우기
+              };
+          });
+      }
+  </script>
+  
+  <div class='title_line'>공지사항</div>
+
+  <aside class="aside_right">
+    <a href='./list'>공지 목록</a>
+    <span class='menu_divide'>│</span> 
+    <a href='./create' th:if="${grade != null and grade <= 9}">공지 등록</a>
+    <span class='menu_divide' th:if="${grade != null and grade <= 9}">│</span> 
+    <a href="javascript:location.reload();">새로고침</a>
+    <span class='menu_divide' >│</span> 
+    <a href='./list'>목록</a>
+  </aside>  
+  
+  <div th:replace="~{notice/list_search_com::list_search_fragment}"></div>
+  <div class='menu_line'></div>
+  
+  <table class="table table-striped" style='width: 100%;'>
+    <colgroup>
+      <col style='width: 5%;'/>
+      <col style='width: 5%;'/>
+      <col style='width: 40%;'/>
+      <col style='width: 10%;'/>
+      <col style='width: 10%;'/>
+      <col style='width: 5%;'/>
+      <col style='width: 10%;'/>
+    </colgroup>
+    <tr>
+      <th class='th_bs'>번호</TH>
+      <th class='th_bs'>공개</th>
+      <th class='th_bs'>제목</th>
+      <th class='th_bs'>관리자</th>
+      <th class='th_bs'>작성일</th>
+      <th class='th_bs'>조회</th>
+      <th class='th_bs'>수정/삭제</th>
+    </tr>
+    
+    <tr th:each="noticeVO, status:${list}" th:onclick="|location.href='@{/notice/read(noticeno=${noticeVO.noticeno})}'|" style="cursor: pointer;">
+      <td th:text="${search_cnt - status.index}"></td> <!-- 반복 횟수 출력 -->
+      <td th:text="${noticeVO.visible}"></td>
+      <td th:text="${noticeVO.title}"></td>
+      <td th:text="${noticeVO.name}"></td>
+      <td th:text="${noticeVO.cdate}"></td>
+      <td th:text="${noticeVO.cnt}"></td>      
+      <td>
+        <!-- 삭제 버튼에 data-noticeno 속성을 추가하여 noticeno 값을 전달 -->
+        <a href="javascript:void(0);" class="delete-btn" th:data-noticeno="${noticeVO.noticeno}">삭제</a>
+      </td> 
+      <!-- 모달창 HTML -->
+      <div id="deleteModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; text-align: center;">
+        <div style="background-color: white; padding: 20px; border-radius: 5px; width: 300px;">
+          <h3>정말 삭제하시겠습니까?</h3>
+          <div style="margin-top: 20px;">
+            <!-- 삭제 확인 버튼 -->
+            <a href="javascript:void(0);" id="confirmDelete" style="margin-right: 20px; color: red;">삭제</a>
+            <a href="javascript:void(0);" id="cancelDelete">취소</a>
+          </div>
+        </div>
+      </div>
+    </tr>
+  </table>
+
+  <!-- 페이지 버튼 목록 출력 시작 -->
+  <div class="Bottom_menu" th:utext="${paging}"></div>
+  <!-- 페이지 버튼 목록 출력 종료 -->
+
+</div>
+</html>

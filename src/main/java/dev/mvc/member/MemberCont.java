@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import dev.mvc.tool.Contents;
+import dev.mvc.tool.IPTool;
 import dev.mvc.tool.Security;
 import dev.mvc.tool.Tool;
 import dev.mvc.tool.Upload;
@@ -224,6 +225,16 @@ public class MemberCont {
         ck_id.setMaxAge(0);
         response.addCookie(ck_id);
       }
+      
+      // IP와 지역 정보 가져오기
+      String ipAndLocation = IPTool.getUserIPAndLocation(request);
+
+      // 세션에 IP와 지역 정보 저장 (예시)
+      session.setAttribute("userIPAndLocation", ipAndLocation);
+      
+      System.out.println("IP와 지역 정보: " + ipAndLocation);
+      
+      
       // Cookie 종료
       return "redirect:/";
     } else {
@@ -475,6 +486,7 @@ public class MemberCont {
     if(Tool.isMember(session)) {
       String token = (String) session.getAttribute("token");
       MemberVO memberVO = this.memberProc.detail_info(token);
+      memberVO.setBirth(Tool.formatBirth(memberVO.getBirth()));
       model.addAttribute("memberVO", memberVO);
       return "/member/profile";
     }
@@ -509,6 +521,23 @@ public class MemberCont {
     
   }
   // 사용자의 조회(프로필)-------------------------------------------------------------------
+  
+  
+  // 회원 탈퇴-------------------------------------------------------------------
+  @GetMapping(value="leave")
+  public String leave_proc(HttpSession session, Model model,
+      HttpServletRequest request) {
+    
+    if(Tool.isMember(session)) {
+      String token = (String) session.getAttribute("token");
+      this.memberProc.leave_member(token);
+      logout(request, session);
+      return "redirect:/";
+    }
+    
+    return "redirect:/";
+  }
+  // 회원 탈퇴-------------------------------------------------------------------
   
   
   // 삭제-------------------------------------------------------------------

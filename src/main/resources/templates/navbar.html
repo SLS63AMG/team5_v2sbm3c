@@ -29,16 +29,17 @@
               </li>
 
               <li class="nav-item">
-                  <span th:if="${session.token == null}"><a class="nav-link" href="/member/login" th:text="@{|로그인|}"></a></span>
+                <span th:if="${session.token == null}"><a class="nav-link" th:href="@{/member/login}" th:text="'로그인'"></a></span>
+              </li>
+              
+              <li class="nav-item">
+                <span th:if="${session.token == null}"><a class="nav-link" th:href="@{|/member/signup|}">회원가입</a></span>
               </li>
               <li class="nav-item">
-                  <span th:if="${session.token == null}"><a class="nav-link" th:href="@{|/member/signup|}">회원가입</a></span>
+                <span th:if="${session.token != null}"><a class="nav-link" href="/member/profile" th:text="@{|프로필|}"></a></span>
               </li>
               <li class="nav-item">
-                  <span th:if="${session.token != null}"><a class="nav-link" href="/member/profile" th:text="@{|프로필|}"></a></span>
-              </li>
-              <li class="nav-item">
-                  <span th:if="${session.token != null}"><a class="nav-link" href="/member/logout" th:text="@{|${session.id} 로그아웃|}"></a></span>
+                <span th:if="${session.token != null}"><a class="nav-link" href="/member/logout" th:text="@{|${session.id} 로그아웃|}"></a></span>
               </li>
             </ul>
         </div>

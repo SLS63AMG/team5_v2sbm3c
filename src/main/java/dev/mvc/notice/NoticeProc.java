@@ -31,7 +31,13 @@ public class NoticeProc implements NoticeProcInter {
 
   @Override
   public int notice_update(NoticeVO noticeVO) {
-    int cnt = this.notice_update(noticeVO);
+    String content = noticeVO.getContent();
+    if (content != null) {
+        content = content.replace("\n", "<br>"); // 줄바꿈을 <br> 태그로 변환하여 저장해볼 수도 있습니다.
+    }
+    
+    int cnt = this.noticeDAO.notice_update(noticeVO);
+    System.out.println(noticeVO);
     return cnt;
   }
 
@@ -74,6 +80,11 @@ public class NoticeProc implements NoticeProcInter {
     return cnt;
   }
 
+  @Override
+  public Integer admin_list_search_count(String word) {
+    int cnt = this.noticeDAO.admin_list_search_count(word);
+    return cnt;
+  }
   
   @Override
   public NoticeVO notice_read(int noticeno) {

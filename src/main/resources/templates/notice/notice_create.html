@@ -15,11 +15,10 @@
   </div>
 
   <div style="margin: 0px auto;">
-    <form name="frm" id="frm" th:object="${noticeVO}" method="post" action="/notice/update" enctype="multipart/form-data">
-      <input type="hidden" name="noticeno" th:value="${noticeVO.noticeno}">
-
+    <form name="frm" id="frm" method="post" action="/notice/create" enctype="multipart/form-data">
+      
       <div style="width: 100%; background-color:#F4EDD3; border-top: 1px solid #7e7e7e; padding:0 20px;">
-        <input style="width:100%; margin: 20px 0; height: 50px; font-size: 30px;" th:value="${noticeVO.title}" name="title">
+        <input style="width:100%; margin: 20px 0; height: 50px; font-size: 30px;"name="title">
       </div>
       
       <div style="display: flex; justify-content: flex-end; gap: 10px; margin: 0; border-top: 1px solid #d3d3d3;">
@@ -27,7 +26,7 @@
       
       <div style="padding:0 20px;">
         <textarea style="width: 100%; margin: 10px 0; height: 500px; resize: none; font-size: 20px;" 
-        th:text="${noticeVO.content}" rows="50" name="content"></textarea>
+        rows="50" name="content"></textarea>
 
       </div>
       
@@ -45,8 +44,7 @@
     <!-- 파일이 있을 경우 미리보기 이미지가 보이도록 설정 -->
     <img id="preview" 
          alt="미리보기 이미지" 
-         style="max-width: 600px; display: {{noticeVO.filename != null ? 'block' : 'none'}};" 
-         th:src="@{'/images/' + ${noticeVO.filename}}" />
+         style="max-width: 600px; display: none;};" />
   </div>
 </div>
 
@@ -88,18 +86,16 @@
 </script>
 
 
-
-
-      <div style="padding:0 20px; width: 150px;">
+      <div style="padding:0 20px; width: 150px;" >
         <select id="visible" name="visible" style="width: 100%;">
-          <option value="Y" th:selected="${noticeVO.visible == 'Y'}">Y</option>
-          <option value="N" th:selected="${noticeVO.visible == 'N'}">N</option>
+          <option value="Y">Y</option>
+          <option value="N">N</option>
         </select>
       </div>
-
-
+  
+  
       <button type="submit" style="margin:10px 0 10px 20px; padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        수정
+        저장
       </button>
     </form>
   

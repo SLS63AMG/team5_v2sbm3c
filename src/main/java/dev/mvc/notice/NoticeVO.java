@@ -1,5 +1,7 @@
 package dev.mvc.notice;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -46,7 +48,13 @@ public class NoticeVO {
   /** 유저 번호 */
   private int memberno;
   
+  /** 저장할 파일 이름 */
+  private String filename;
   
   /** 관리자 이름 */
   private String name;
+  
+  /** 파일 이름 */
+  private MultipartFile file1MF;
+  
 }
