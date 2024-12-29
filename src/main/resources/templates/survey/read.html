@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+  <div class="title_line">설문조사 조회</div>
+  <aside class="aside_right">
+    <a href="javascript: location.reload();">새로 고침</a>
+  </aside>
+
+  <div class="menu_line"></div>
+  <div style="width: 60%; margin: 0px auto;">
+    <ul class="list-group">
+      <li class="list-group-item">설문번호: <span th:text="${survey.surveyno}"></span></li>
+      <li class="list-group-item">제목: <span th:text="${survey.topic}"></span></li>
+      <li class="list-group-item">시작 날짜: <span th:text="${survey.startdate}"></span></li>
+      <li class="list-group-item">종료 날짜: <span th:text="${survey.enddate}"></span></li>
+      <li class="list-group-item">참여자 수: <span th:text="${survey.cnt}"></span></li>
+    </ul>
+  </div>
+</div>
+</html>

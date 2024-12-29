@@ -391,7 +391,7 @@ public class Tool {
       String path = "";
       if (File.separator.equals("\\")) {
           // Windows 개발시 사용 폴더
-          path = "C:/kd/deploy/resort_v4sbm3c";
+          path = "C:/kd/deploy/team5";
 
       } else {
           // Linux 배포
@@ -448,7 +448,7 @@ public class Tool {
     String path = "";
 
     if (osName.contains("win")) { // Windows
-      path = "C:\\kd\\deploy\\resort\\";
+      path = "C:\\kd\\deploy\\team5\\";
       // System.out.println("Windows: " + path);
     } else if (osName.contains("mac")) { // MacOS
       path = "/Users/yourusername/deploy/resort/";

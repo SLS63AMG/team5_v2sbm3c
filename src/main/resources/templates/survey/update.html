@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+  <div class="title_line">설문조사 수정</div>
+  <aside class="aside_right">
+    <a href="javascript: location.reload();">새로 고침</a>
+  </aside>
+
+  <div class="menu_line"></div>
+  <div style="width: 50%; margin: 0px auto;">
+    <form name="frm" method="post" action="/survey/update" enctype="multipart/form-data" th:object="${surveyVO}">
+      <input type="hidden" name="surveyno" th:value="${surveyVO.surveyno}">
+      <div>
+        <label>설문 제목</label>
+        <input type="text" name="topic" class="form-control" style="width: 100%;" th:field="*{topic}">
+      </div>
+      <div>
+        <label>시작 날짜</label>
+        <input type="date" name="startdate" class="form-control" style="width: 50%;" th:field="*{startdate}">
+      </div>
+      <div>
+        <label>종료 날짜</label>
+        <input type="date" name="enddate" class="form-control" style="width: 50%;" th:field="*{enddate}">
+      </div>
+      <div>
+        <label>포스터</label>
+        <input type="file" name="posterFile" class="form-control">
+      </div>
+      <div class="content_body_bottom">
+        <button type="submit" class="btn btn-secondary btn-sm">수정</button>
+        <button type="button" onclick="location.href='/survey/list'" class="btn btn-secondary btn-sm">취소</button>
+      </div>
+    </form>
+  </div>
+</div>
+</html>
