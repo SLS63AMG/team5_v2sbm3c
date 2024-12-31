@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Controller
-@RequestMapping("/survey")
+@RequestMapping("/th/survey")
 public class SurveyCont {
 
     @Autowired
@@ -110,7 +110,7 @@ public class SurveyCont {
     @GetMapping("/read/{surveyno}")
     public String read(@PathVariable int surveyno, Model model) {
         model.addAttribute("survey", surveyProc.read(surveyno));
-        return "survey/read";
+        return "/th/survey/read";
     }
     
     @GetMapping("/update/{surveyno}")
@@ -181,7 +181,7 @@ public class SurveyCont {
 
         surveyProc.update(surveyVO); // 데이터베이스 업데이트
 
-        return "redirect:/th/survey/list"; // 파일 처리 후 리스트로 이동
+        return "redirect:/survey/list"; // 파일 처리 후 리스트로 이동
     }
 
 
@@ -225,7 +225,7 @@ public class SurveyCont {
     @PostMapping("/delete")
     public String delete(@RequestParam("surveyno") int surveyno) {
         surveyProc.delete(surveyno); // 설문조사 삭제
-        return "redirect:/th/survey/list";
+        return "redirect:/survey/list";
     }
 
 }
