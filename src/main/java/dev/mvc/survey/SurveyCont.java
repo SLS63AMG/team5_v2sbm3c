@@ -46,14 +46,14 @@ public class SurveyCont {
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("totalPage", totalPage);
 
-        return "survey/list";
+        return "/th/survey/list";
     }
 
     
     @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("surveyVO", new SurveyVO());
-        return "survey/create";
+        return "/th/survey/create";
     }
 
     @PostMapping("/create")
@@ -117,7 +117,7 @@ public class SurveyCont {
     public String updateForm(@PathVariable("surveyno") int surveyno, Model model) {
         SurveyVO surveyVO = surveyProc.read(surveyno);
         model.addAttribute("surveyVO", surveyVO);
-        return "survey/update";
+        return "/th/survey/update";
     }
 
 
@@ -181,7 +181,7 @@ public class SurveyCont {
 
         surveyProc.update(surveyVO); // 데이터베이스 업데이트
 
-        return "redirect:/survey/list"; // 파일 처리 후 리스트로 이동
+        return "redirect:/th/survey/list"; // 파일 처리 후 리스트로 이동
     }
 
 
@@ -211,7 +211,7 @@ public class SurveyCont {
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("totalPage", totalPage);
 
-        return "survey/list"; // 기존 리스트 페이지 재사용
+        return "/th/survey/list"; // 기존 리스트 페이지 재사용
     }
     
     
@@ -219,13 +219,13 @@ public class SurveyCont {
     public String deleteForm(@PathVariable("surveyno") int surveyno, Model model) {
         SurveyVO surveyVO = surveyProc.read(surveyno); // 설문조사 데이터 읽기
         model.addAttribute("surveyVO", surveyVO);
-        return "survey/delete"; // delete.html로 이동
+        return "/th/survey/delete"; // delete.html로 이동
     }
 
     @PostMapping("/delete")
     public String delete(@RequestParam("surveyno") int surveyno) {
         surveyProc.delete(surveyno); // 설문조사 삭제
-        return "redirect:/survey/list";
+        return "redirect:/th/survey/list";
     }
 
 }
