@@ -7,7 +7,7 @@ public interface LoginlogProcInter {
   /**
    * 로그인 기록 등록
    */
-    public int log_record(LoginlogVO loginlogVO);
+    public int log_record(String conip, String id, int result);
     
     /**
      * 로그인 기록 삭제
@@ -22,5 +22,5 @@ public interface LoginlogProcInter {
     /**
      * 페이징(검색)
      */
-    public ArrayList<LoginlogVO> log_list_search_paging(HashMap<String, Object> map);
+    public ArrayList<LoginlogVO> log_list_search_paging(HashMap<String, Object> map, int now_page, int record_per_page);
 }

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>메일 쓰기 http://localhost:9091/mail/form</title>
-<link href="/css/style.css" rel="Stylesheet" type="text/css"> <!-- /static 기준 -->
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속 -->
+  <div layout:fragment="content" style="width: 80%; margin: 50px auto; text-align: center;">
+
+
+
 
 <script>
   function send(f){
@@ -15,10 +15,7 @@
 
 </script>
 
-
-</head>
  
-<body>
  
 <div style='width: 40%; margin: 0px auto;'>
 <div class='title_line'>mail 쓰기</div>
@@ -58,6 +55,7 @@
 </form>
 </div>
  
-</body>
+  </div>
 </html>
+ 
 

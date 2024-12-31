@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
+
+<div layout:fragment="content">
+<script>
+var currentOrderState = "id_asc";  // 초기값 설정
+
+// 버튼 클릭 시 order_state 값 변경 및 테이블 업데이트
+function toggleOrderState(orderType) {
+    // order_state 값 변경
+    if (orderType === "id") {
+        if (currentOrderState === "id_asc") {
+            currentOrderState = "id_desc";
+            document.getElementById("orderButton").value = "ID 내림차순 정렬"; // 버튼 텍스트 변경
+        } else {
+            currentOrderState = "id_asc";
+            document.getElementById("orderButton").value = "ID 오름차순 정렬"; // 버튼 텍스트 변경
+        }
+    } else if (orderType === "jdate") {
+        if (currentOrderState === "jdate_asc") {
+            currentOrderState = "jdate_desc";
+            document.getElementById("dateOrderButton").value = "접속 시도일 내림차순 정렬"; // 버튼 텍스트 변경
+        } else {
+            currentOrderState = "jdate_asc";
+            document.getElementById("dateOrderButton").value = "접속 시도일 오름차순 정렬"; // 버튼 텍스트 변경
+        }
+    }
+
+    clearTable();  // 테이블 초기화 후, 데이터 다시 로드
+}
+
+// clearTable 함수 수정
+function clearTable() {
+    // 'log' 클래스를 가진 모든 tr 요소를 삭제
+    var logRows = document.querySelectorAll('tr.log');
+    logRows.forEach(function(row) {
+        row.remove();
+    });
+
+    // 'Bottom_menu' 클래스를 가진 div의 내용을 비움
+    var bottomMenu = document.querySelector('.Bottom_menu');
+    if (bottomMenu) {
+        bottomMenu.innerHTML = ''; // div의 내용 비우기
+    }
+
+    // URL에서 ?뒤의 쿼리 파라미터 출력
+    var currentUrl = window.location.href; // 현재 URL 가져오기
+    var urlParams = new URLSearchParams(window.location.search); // URL의 ? 뒤 부분 가져오기
+
+    // 기존 파라미터에 order_state 추가
+    var paramsJson = {};
+    urlParams.forEach(function(value, key) {
+        paramsJson[key] = value;
+    });
+    paramsJson["order_state"] = currentOrderState;  // 변경된 order_state 추가
+
+    // 서버에 데이터를 보내고 테이블 갱신
+    fetch('./list_update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(paramsJson) // JSON 데이터 전송
+    })
+    .then(response => response.json())
+    .then(data => {
+        // 받은 데이터로 테이블 업데이트
+        const table = document.querySelector('table');
+        const tbody = table.querySelector('tbody') || table; // tbody가 없으면 직접 테이블에 삽입
+
+        data.list.forEach(function(loginlogVO, index) {
+            const tr = document.createElement('tr');
+            tr.classList.add('log');
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${loginlogVO.conip}</td>
+                <td>${loginlogVO.id}</td>
+                <td>${loginlogVO.jdate}</td>
+                <td>${loginlogVO.sw}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // 페이지 버튼 갱신
+        const bottomMenu = document.querySelector('.Bottom_menu');
+        if (data.paging) {
+            bottomMenu.innerHTML = data.paging; // 페이지 버튼 갱신
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+</script>
+
+<link href="/css/notice.css" rel="Stylesheet" type="text/css">
+
+<div class='title_line'>로그인 내역</div>
+
+<aside class="aside_right">
+    <a href="javascript:location.reload();">새로고침</a>
+    <span class='menu_divide'>│</span> 
+    <a href='./list'>목록</a>
+</aside>  
+
+<div th:replace="~{th/loginlog/list_search_com::list_search_fragment}"></div>
+<div class='menu_line'></div>
+
+<table class="table table-striped" style='width: 100%;'>
+  <colgroup>
+    <col style='width: 5%;'/>
+    <col style='width: 40%;'/>
+    <col style='width: 10%;'/>
+    <col style='width: 10%;'/>
+    <col style='width: 10%;'/>
+    <col style='width: 5%;'/>
+  </colgroup>
+  <tr>
+    <th class='th_bs'>번호</th>
+    <th class='th_bs'>아이피</th>
+    <th class='th_bs'>아이디 
+        <input type="button" value="ID 오름차순 정렬" id="orderButton" onclick="toggleOrderState('id')">
+    </th>
+    <th class='th_bs'>
+        접속 시도일 
+        <input type="button" value="접속 시도일 오름차순 정렬" id="dateOrderButton" onclick="toggleOrderState('jdate')">
+    </th>
+    <th class='th_bs'>성공여부</th>
+    <th class='th_bs'>삭제</th>
+  </tr>
+
+  <tr class="log" th:each="loginlogVO, status:${list}">
+    <td th:text="${no - status.index}"></td>
+    <td th:text="${loginlogVO.conip}"></td>
+    <td th:text="${loginlogVO.id}"></td>
+    <td th:text="${loginlogVO.jdate}"></td>
+    <td th:text="${loginlogVO.sw}"></td>
+<td>
+    <a th:href="@{|./delete?logno=${loginlogVO.logno}|}">
+        <img src='/loginlog/images/delete.png' title='삭제' class="icon" style="width: 20px; height: 20px;"/>
+    </a>
+</td>
+
+  </tr>
+</table>
+
+<div class="Bottom_menu" th:utext="${paging}"></div>
+
+</div>
+</html>

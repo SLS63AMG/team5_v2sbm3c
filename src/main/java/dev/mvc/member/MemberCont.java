@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import dev.mvc.loginlog.LoginlogProcInter;
 import dev.mvc.tool.Contents;
 import dev.mvc.tool.IPTool;
 import dev.mvc.tool.Security;
@@ -35,6 +36,10 @@ public class MemberCont {
   @Autowired
   @Qualifier("dev.mvc.member.MemberProc")
   private MemberProcInter memberProc;
+  
+  @Autowired
+  @Qualifier("dev.mvc.loginlog.LoginlogProc")
+  private LoginlogProcInter loginlogProc;
   
   @Autowired
   Security security;
@@ -185,7 +190,9 @@ public class MemberCont {
     map.put("passwd", passwd);
     int cnt = this.memberProc.login(map);
     
+    
     if (cnt == 1) {
+      this.loginlogProc.log_record(IPTool.getIP(request), id, cnt);
       String token;
       int attempts = 0;
       int token_ck;
@@ -225,19 +232,11 @@ public class MemberCont {
         ck_id.setMaxAge(0);
         response.addCookie(ck_id);
       }
-      
-      // IP와 지역 정보 가져오기
-      String ipAndLocation = IPTool.getUserIPAndLocation(request);
 
-      // 세션에 IP와 지역 정보 저장 (예시)
-      session.setAttribute("userIPAndLocation", ipAndLocation);
-      
-      System.out.println("IP와 지역 정보: " + ipAndLocation);
-      
-      
       // Cookie 종료
       return "redirect:/";
     } else {
+      this.loginlogProc.log_record(IPTool.getIP(request), id, cnt);
       return "redirect:/member/login";
     }
   }

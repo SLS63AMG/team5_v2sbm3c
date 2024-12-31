@@ -4,13 +4,19 @@ import java.util.Random;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import oracle.jdbc.proxy.annotation.Post;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping(value = "/sms")
 public class SMSCont {
   public SMSCont() {
     System.out.println("-> SMSCont created.");
@@ -21,11 +27,9 @@ public class SMSCont {
    * 사용자의 전화번호 입력 화면
    * @return
    */
-  @RequestMapping(value = {"/sms/form.do"}, method=RequestMethod.GET)
-  public ModelAndView form() {
-    ModelAndView mav = new ModelAndView();
-    mav.setViewName("sms/form");  // /WEB-INF/views/sms/form.jsp
-    return mav;
+  @GetMapping(value = "/form")
+  public String form() {
+    return "/th/sms/form";
   }
   
   // http://localhost:9091/sms/proc.do
@@ -35,7 +39,7 @@ public class SMSCont {
    * @param request
    * @return
    */
-  @RequestMapping(value = {"/sms/proc.do"}, method=RequestMethod.POST)
+  @PostMapping(value = "/proc")
   public ModelAndView proc(HttpSession session, HttpServletRequest request) {
     ModelAndView mav = new ModelAndView();
     
@@ -78,12 +82,10 @@ public class SMSCont {
    * 사용자가 수신받은 인증번호 입력 화면
    * @return
    */
-  @RequestMapping(value = {"/sms/proc_next.do"}, method=RequestMethod.GET)
-  public ModelAndView proc_next() {
-    ModelAndView mav = new ModelAndView();
-    mav.setViewName("/sms/proc_next");  // /WEB-INF/views/sms/proc_next.jsp
-    
-    return mav;
+  @GetMapping(value = "/proc_next")
+  public String proc_next() {
+
+    return("/th/sms/proc_next");  
   }
   
   // http://localhost:9091/sms/confirm.do
@@ -93,9 +95,9 @@ public class SMSCont {
    * @param auth_no 사용자가 입력한 번호
    * @return
    */
-  @RequestMapping(value = {"/sms/confirm.do"}, method=RequestMethod.POST)
-  public ModelAndView confirm(HttpSession session, String auth_no) {
-    ModelAndView mav = new ModelAndView();
+  @PostMapping(value = "/confirm")
+  public String confirm(HttpSession session, Model model,
+      @RequestParam(name="auth_no") String auth_no) {
     
     String session_auth_no = (String)session.getAttribute("auth_no"); // 사용자에게 전송된 번호 session에서 꺼냄
     
@@ -108,15 +110,15 @@ public class SMSCont {
       
       msg = id + "회원의 패스워드 변경화면으로 이동합니다.<br><br>";
       msg +="패스워드 수정 화면등 출력";
+      model.addAttribute("msg", msg);
     } else {
       msg = "입력된 번호가 일치하지않습니다. 다시 인증 번호를 요청해주세요.";
       msg += "<br><br><A href='./form.do'>인증번호 재요청</A>"; 
+      model.addAttribute("msg", msg);
     }
     
-    mav.addObject("msg", msg); // request.setAttribute("msg")
-    mav.setViewName("/sms/confirm");  // /WEB-INF/views/sms/confirm.jsp
-    
-    return mav;
+
+    return "/th/sms/confirm";
   }
   
   

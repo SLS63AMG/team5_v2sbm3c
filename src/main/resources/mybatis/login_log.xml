@@ -21,30 +21,35 @@
     SELECT count(*) as cnt
     FROM login_log
     <where>
-      <!-- word 검색이 있을 경우 -->
-      <if test="word != null and word != ''"> 
-        (UPPER(id) LIKE '%' || UPPER(#{word}) || '%')
-      </if>
+        1 = 1
+        <!-- 검색어 조건 -->
+        <if test="word != null and word != ''">
+            AND UPPER(id) LIKE '%' || UPPER(#{word}) || '%'
+        </if>
     
-      <!-- 날짜 상태에 따른 필터링 -->
-      <if test="date_state != null">
-        <choose>
-          <when test="date_state == 'eq'">
-            AND jdate = TO_DATE(#{date}, 'YYYY-MM-DD') -- 정확히 같은 날짜
-          </when>
-          <when test="date_state == 'be'">
-            AND jdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD') -- 날짜1과 날짜2 사이
-          </when>
-          <when test="date_state == 'bi'">
-            AND jdate &gt;= TO_DATE(#{date}, 'YYYY-MM-DD') -- 큰 날짜
-          </when>
-          <when test="date_state == 'sm'">
-            AND jdate &lt;= TO_DATE(#{date}, 'YYYY-MM-DD') -- 작은 날짜
-          </when>
-        </choose>
-      </if>
+        <!-- 로그인 상태 조건 -->
+        <if test="login_state != null and login_state != ''">
+            AND sw = #{login_state}
+        </if>
+    
+        <!-- 날짜 상태에 따른 조건 -->
+        <if test="date_state != null">
+          <choose>
+              <when test="date_state == 'eq'">
+                  AND TRUNC(jdate) = TO_DATE(#{date}, 'YYYY-MM-DD')
+              </when>
+              <when test="date_state == 'be'">
+                  AND TRUNC(jdate) BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+              </when>
+              <when test="date_state == 'bi'">
+                  AND TRUNC(jdate) &gt; TO_DATE(#{date}, 'YYYY-MM-DD')
+              </when>
+              <when test="date_state == 'sm'">
+                  AND TRUNC(jdate) &lt; TO_DATE(#{date}, 'YYYY-MM-DD')
+              </when>
+          </choose>
+        </if>
     </where>
-    
   </select>
   
   <!-- 페이징(검색) -->
@@ -93,25 +98,25 @@
               </if>
   
               <!-- 날짜 상태에 따른 조건 -->
-              <if test="date_state != null">
-                  <choose>
-                      <when test="date_state == 'eq'">
-                          AND jdate = TO_DATE(#{date}, 'YYYY-MM-DD')
-                      </when>
-                      <when test="date_state == 'be'">
-                          AND jdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
-                      </when>
-                      <when test="date_state == 'bi'">
-                          AND jdate &gt; TO_DATE(#{date}, 'YYYY-MM-DD')
-                      </when>
-                      <when test="date_state == 'sm'">
-                          AND jdate &lt; TO_DATE(#{date}, 'YYYY-MM-DD')
-                      </when>
-                  </choose>
+              <if test="date_state != null and (date != '' or (startDate != '' and endDate != ''))">
+                <choose>
+                    <when test="date_state == 'eq'">
+                        AND TRUNC(jdate) = TO_DATE(#{date}, 'YYYY-MM-DD')
+                    </when>
+                    <when test="date_state == 'be'">
+                        AND TRUNC(jdate) BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+                    </when>
+                    <when test="date_state == 'bi'">
+                        AND TRUNC(jdate) &gt; TO_DATE(#{date}, 'YYYY-MM-DD')
+                    </when>
+                    <when test="date_state == 'sm'">
+                        AND TRUNC(jdate) &lt; TO_DATE(#{date}, 'YYYY-MM-DD')
+                    </when>
+                </choose>
               </if>
           </where>
       )
-      WHERE r &gt;= #{startRow} AND r &lt;= #{endRow}  -- 페이징 번호 범위 설정 (시작번호, 끝번호)
+      WHERE r &gt;= #{start_num} AND r &lt;= #{end_num}  -- 페이징 번호 범위 설정 (시작번호, 끝번호)
       ORDER BY r ASC
   </select>
 </mapper>

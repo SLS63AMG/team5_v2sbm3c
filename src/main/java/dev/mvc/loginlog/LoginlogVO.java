@@ -5,12 +5,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 //CREATE TABLE login_log (
-//    logno NUMBER(10)  NOT NULL,
-//    conip VARCHAR(40) NOT NULL,
-//    id      VARCHAR2(200) NOT NULL,
-//    jdate DATE  NOT NULL,
-//    sw      CHAR(1) NOT NULL  DEFAULT 'N'
-//  );
+//    logno    NUMBER(10)    NOT NULL,
+//    conip    VARCHAR(40)   NOT NULL,
+//    id       VARCHAR2(200) NOT NULL,
+//    jdate    DATE          NOT NULL,
+//    sw       CHAR(1)       NOT NULL DEFAULT 'N',
+//    CONSTRAINT PK_loginlog_logno PRIMARY KEY (logno)  -- logno를 기본키로 지정
+//);
 
 @Getter @Setter @ToString
 public class LoginlogVO {

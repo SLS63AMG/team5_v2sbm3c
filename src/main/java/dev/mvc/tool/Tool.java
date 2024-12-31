@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -595,7 +596,94 @@ public class Tool {
      
     return str.toString(); 
   }
-    // 페이징 끝
+  // 페이징 끝
+  
+  public static String logBox(
+      int now_page,
+      HashMap<String, Object> params,
+      String list_file_name,
+      int search_count,
+      int record_per_page,
+      int page_per_block
+  ) {
+      int total_page = (int)(Math.ceil((double)search_count / record_per_page));
+      int total_grp = (int)(Math.ceil((double)total_page / page_per_block));
+      int now_grp = (int)(Math.ceil((double)now_page / page_per_block));
+
+      int start_page = ((now_grp - 1) * page_per_block) + 1;
+      int end_page = (now_grp * page_per_block);
+
+      StringBuffer str = new StringBuffer();
+
+      str.append("<style type='text/css'>");
+      str.append("  #paging {text-align: center; margin-top: 5px; font-size: 1em;}");
+      str.append("  #paging A:link {text-decoration:none; color:black; font-size: 1em;}");
+      str.append("  #paging A:hover{text-decoration:none; background-color: #FFFFFF; color:black; font-size: 1em;}");
+      str.append("  #paging A:visited {text-decoration:none;color:black; font-size: 1em;}");
+      str.append("  .span_box_1{");
+      str.append("    text-align: center;");
+      str.append("    font-size: 1em;");
+      str.append("    border: 1px;");
+      str.append("    border-style: solid;");
+      str.append("    border-color: #cccccc;");
+      str.append("    padding:1px 6px 1px 6px;");
+      str.append("    margin:1px 2px 1px 2px;");
+      str.append("  }");
+      str.append("  .span_box_2{");
+      str.append("    text-align: center;");
+      str.append("    background-color: #668db4;");
+      str.append("    color: #FFFFFF;");
+      str.append("    font-size: 1em;");
+      str.append("    border: 1px;");
+      str.append("    border-style: solid;");
+      str.append("    border-color: #cccccc;");
+      str.append("    padding:1px 6px 1px 6px;");
+      str.append("    margin:1px 2px 1px 2px;");
+      str.append("  }");
+      str.append("</style>");
+      str.append("<div id='paging'>");
+
+      int _now_page = (now_grp - 1) * page_per_block;
+      if (now_grp >= 2) {
+          str.append("<span class='span_box_1'><A href='" + buildUrlWithoutPageParams(list_file_name, params, "now_page", _now_page) + "'>이전</A></span>");
+      }
+
+      for (int i = start_page; i <= end_page; i++) {
+          if (i > total_page) {
+              break;
+          }
+
+          if (now_page == i) {
+              str.append("<span class='span_box_2'>" + i + "</span>");
+          } else {
+              str.append("<span class='span_box_1'><A href='" + buildUrlWithoutPageParams(list_file_name, params, "now_page", i) + "'>" + i + "</A></span>");
+          }
+      }
+
+      _now_page = (now_grp * page_per_block) + 1;
+      if (now_grp < total_grp) {
+          str.append("<span class='span_box_1'><A href='" + buildUrlWithoutPageParams(list_file_name, params, "now_page", _now_page) + "'>다음</A></span>");
+      }
+
+      str.append("</div>");
+
+      return str.toString();
+  }
+
+  private static String buildUrlWithoutPageParams(String list_file_name, HashMap<String, Object> params, String key, int value) {
+      StringBuilder url = new StringBuilder(list_file_name + "?");
+      params.forEach((k, v) -> {
+          if (v != null && !v.equals("") && !k.equals("start_num") && !k.equals("end_num")) {
+              url.append(k).append("=").append(v).append("&");
+          }
+      });
+      url.append(key).append("=").append(value);
+      return url.toString();
+  }
+
+
+
+  
 }
 
 
