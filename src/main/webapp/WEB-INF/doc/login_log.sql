@@ -52,66 +52,73 @@ WHERE r &gt;='시작번호' AND r &lt;='끝번호' <!-- WHERE r >= 1 AND r <= 3 
 -- startDate    |   endDate
 -- startRow     |   endRow
 
-SELECT logno, conip, id, jdate, sw, r
-FROM (
-    SELECT logno, conip, id, jdate, sw,
-           ROW_NUMBER() OVER (
-               <choose>
-                    <!-- 정렬 기준에 따른 동적 ORDER BY -->
-                    <when test="order_state == 'id_asc'">
-                        ORDER BY id ASC
+<select id="selectLoginLogs" parameterType="HashMap" resultType="com.example.domain.LoginLogVO">
+    SELECT logno, conip, id, jdate, sw, r
+    FROM (
+        SELECT logno, conip, id, jdate, sw,
+               ROW_NUMBER() OVER (
+                   <choose>
+                       <!-- 정렬 기준에 따른 동적 ORDER BY -->
+                       <when test="order_state == 'id_asc'">
+                           ORDER BY id ASC
+                       </when>
+                       <when test="order_state == 'id_desc'">
+                           ORDER BY id DESC
+                       </when>
+                       <when test="order_state == 'jdate_asc'">
+                           ORDER BY jdate ASC
+                       </when>
+                       <when test="order_state == 'jdate_desc'">
+                           ORDER BY jdate DESC
+                       </when>
+                       <when test="order_state == 'sw_asc'">
+                           ORDER BY sw ASC
+                       </when>
+                       <when test="order_state == 'sw_desc'">
+                           ORDER BY sw DESC
+                       </when>
+                       <!-- 기본값으로 logno 오름차순 정렬 -->
+                       <otherwise>
+                           ORDER BY logno ASC
+                       </otherwise>
+                   </choose>
+               ) AS r
+        FROM login_log
+        <where>
+            1 = 1
+            <!-- 검색어 조건 -->
+            <if test="word != null and word != ''">
+                AND UPPER(id) LIKE '%' || UPPER(#{word}) || '%'
+            </if>
+
+            <!-- 로그인 상태 조건 -->
+            <if test="login_state != null and login_state != ''">
+                AND sw = #{login_state}
+            </if>
+
+            <!-- 날짜 상태에 따른 조건 -->
+            <if test="date_state != null">
+                <choose>
+                    <when test="date_state == 'eq'">
+                        AND jdate = TO_DATE(#{date}, 'YYYY-MM-DD')
                     </when>
-                    <when test="order_state == 'id_desc'">
-                        ORDER BY id DESC
+                    <when test="date_state == 'be'">
+                        AND jdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
                     </when>
-                    <when test="order_state == 'jdate_asc'">
-                        ORDER BY jdate ASC
+                    <when test="date_state == 'bi'">
+                        AND jdate &gt; TO_DATE(#{date}, 'YYYY-MM-DD')
                     </when>
-                    <when test="order_state == 'jdate_desc'">
-                        ORDER BY jdate DESC
+                    <when test="date_state == 'sm'">
+                        AND jdate &lt; TO_DATE(#{date}, 'YYYY-MM-DD')
                     </when>
-                    <when test="order_state == 'sw_asc'">
-                        ORDER BY sw ASC
-                    </when>
-                    <when test="order_state == 'sw_desc'">
-                        ORDER BY sw DESC
-                    </when>
-                    <!-- 기본값으로 logno 오름차순 정렬 -->
-                    <otherwise>
-                        ORDER BY logno ASC
-                    </otherwise>
                 </choose>
-           ) AS r
-    FROM login_log
-    <where>
-        <!-- 검색어 조건 -->
-        <if test="word != null and word != ''">
-            AND (UPPER(conip) LIKE '%' || UPPER(#{word}) || '%')
-            OR (UPPER(id) LIKE '%' || UPPER(#{word}) || '%')
-        </if>
+            </if>
+        </where>
+    )
+    WHERE r &gt;= #{startRow} AND r &lt;= #{endRow}  -- 페이징 번호 범위 설정 (시작번호, 끝번호)
+    ORDER BY r ASC
+</select>
 
-        <!-- 날짜 상태에 따른 조건 -->
-        <if test="date_state != null">
-            <choose>
-                <when test="date_state == 'eq'">
-                    AND jdate = TO_DATE(#{date}, 'YYYY-MM-DD')
-                </when>
-                <when test="date_state == 'be'">
-                    AND jdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
-                </when>
-                <when test="date_state == 'bi'">
-                    AND jdate > TO_DATE(#{date}, 'YYYY-MM-DD')
-                </when>
-                <when test="date_state == 'sm'">
-                    AND jdate < TO_DATE(#{date}, 'YYYY-MM-DD')
-                </when>
-            </choose>
-        </if>
-
-    </where>
-)
-WHERE r >= #{startRow} AND r <= #{endRow}  -- 페이징 번호 범위 설정 (시작번호, 끝번호)
-ORDER BY r ASC
 
 
 

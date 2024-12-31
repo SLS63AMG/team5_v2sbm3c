@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html layout:decorate="~{layout}"> <!-- layout.html 상속-->
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
 
 <div layout:fragment="content">
   <script>
@@ -13,22 +13,11 @@
   
       document.querySelector('#passwd').addEventListener('keypress', (event) => {
         if(event.key === 'Enter') {
-          document.getElementById('passwd2').focus();
+          document.getElementById('name').focus();
         }
       }); 
   
-      document.querySelector('#passwd2').addEventListener('keypress', (event) => {
-        if(event.key === 'Enter') {
-          document.getElementById('email').focus();
-        }
-      }); 
-      
-      document.querySelector('#email').addEventListener('keypress', (event) => {
-          if(event.key === 'Enter') {
-            document.getElementById('name').focus();
-          }
-      }); 
-          
+  
       document.querySelector('#name').addEventListener('keypress', (event) => {
         if(event.key === 'Enter') {
           document.getElementById('tel').focus();
@@ -37,10 +26,15 @@
       
       document.querySelector('#tel').addEventListener('keypress', (event) => {
         if(event.key === 'Enter') {
-          document.getElementById('btn_DaumPostcode').focus();
+          document.getElementById('email').focus();
         }
       });
 
+      document.querySelector('#email').addEventListener('keypress', (event) => {
+          if(event.key === 'Enter') {
+            document.getElementById('btn_DaumPostcode').focus();
+          }
+      }); 
       
     }
     
@@ -109,17 +103,6 @@
         return false;  // 회원 가입 진행 중지
       } 
   
-      // 패스워드를 정상적으로 2번 입력했는지 확인
-      let passwd = document.getElementById('passwd');
-      let passwd2 = document.getElementById('passwd2');
-      let passwd2_msg = document.getElementById('passwd2_msg');
-  
-      if (passwd.value != passwd2.value) {
-        passwd2_msg.innerHTML= '입력된 패스워드가 일치하지 않습니다.';
-        passwd2_msg.classList.add('span_warning');    // class 적용
-  
-        return false;  // 회원 가입 진행 중지
-      }
   
       let name = document.getElementById('name');
       let name_msg = document.getElementById('name_msg');
@@ -131,18 +114,16 @@
         return false;  // 회원 가입 진행 중지
       }
       
-      
+      console.log('submit() called');
       document.getElementById('frm').submit(); // required="required" 작동 안됨.
     }    
   </script>
   
   <link href="/css/member.css" rel="Stylesheet" type="text/css">
   
-  <div class="title_line">회원 가입(*: 필수)</div>
+  <div class="title_line">회원 정보 수정</div>
   <aside class="aside_right">
     <a href="javascript:location.reload();">새로고침</a>
-    <span class='menu_divide' >│</span> 
-    <a href='./signup'>회원 가입</a>
     <span class='menu_divide' >│</span> 
     <a href='./list'>목록</a>
   </aside> 
@@ -150,58 +131,59 @@
   <div class='menu_line'></div>
           
   <div style="width: 450px; margin: 0px auto ">
-    <h4>필수 입력</h4>
-    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/signup" enctype="multipart/form-data">
-      
+
+    <h4>기본 정보</h4>
+    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/admin_update">
+      <input type="hidden" name="memberno" th:value="*{memberno}">
       <div style="margin-top:15px; margin-bottom:15px;">
         <div class="form-group">
-          <input type="text" name="id" id="id" 
-                   placeholder="아이디" class="form-control-sm input_form input_form_top" 
+          <input type="text" name="id" id="id"
+                   placeholder="아이디" class="form-control-sm input_form input_form_top" th:field="*{id}" 
                    onblur="checkID()">
-      </div>
+        </div>
+        <div class="form-group">
+          <input type='text' name='name' id='name' required="required"  th:field="*{name}"
+                     placeholder="이름" class="form-control-sm input_form ">
+        </div>
+
+        <div class="passwd_div">
+          <!-- 비밀번호 변경 텍스트 -->
+          <span class="passwd_span">비밀번호</span>
+          
+          <!-- 버튼 -->
+          <a th:href="@{|./admin_passwd_update?memberno=${memberVO.memberno}|}" class="passwd_button">변경</a>
+        </div>
+
+
+<div class="form-group form_group_btn">
+  <ul class="user_status" id="user_status">
+      <li class="radio_item">
+          <input type="radio" id="admin" name="grade" value="1" th:checked="*{grade == 1}" class="blind">
+          <label for="admin" class="radio_box">관리자</label>
+      </li>
+      <li class="radio_item">
+          <input type="radio" id="user" name="grade" value="10" th:checked="*{grade == 10}" class="blind">
+          <label for="user" class="radio_box">유저</label>
+      </li>
+      <li class="radio_item">
+          <input type="radio" id="suspended" name="grade" value="30" th:checked="*{grade == 30}" class="blind">
+          <label for="suspended" class="radio_box">정지</label>
+      </li>
+      <li class="radio_item">
+          <input type="radio" id="withdrawn" name="grade" value="50" th:checked="*{grade == 50}" class="blind">
+          <label for="withdrawn" class="radio_box">탈퇴</label>
+      </li>
+  </ul>
+</div>
+
+
+        <div class="form-group">
+          <input type='email' name='email' id='email' required="required"  th:field="*{email}"
+                    placeholder="이메일" class="form-control-sm input_form input_form_bottom">
+        </div>
         
-      <div class="form-group" style="position: relative;">
-        <input type="password" name="passwd" id="passwd" required="required" 
-               placeholder="비밀번호" class="form-control-sm input_form">
-        
-        <!-- 비밀번호 보이기/숨기기 버튼 (아이콘 사용) -->
-        <button type="button" id="togglePassword" class="btn btn-outline-secondary" 
-                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: none; background: transparent;">
-          <img src="/member/images/hide.png" id="passwordIcon" alt="아이콘" style="width: 20px; height: 20px;">
-        </button>
+
       </div>
-      <script>
-        // 비밀번호 보이기/숨기기 기능을 구현하는 JavaScript
-        document.getElementById("togglePassword").addEventListener("click", function() {
-          var passwordField = document.getElementById("passwd");
-          var passwordIcon = document.getElementById("passwordIcon");
-          var type = passwordField.type === "password" ? "text" : "password"; // 비밀번호 타입을 바꿔줌
-          passwordField.type = type;
-      
-          // 아이콘 변경
-          if (type === "password") {
-            passwordIcon.src = "/member/images/hide.png"; // 비밀번호 숨기기 아이콘
-          } else {
-            passwordIcon.src = "/member/images/show.png"; // 비밀번호 보이기 아이콘
-          }
-        });
-      </script>
-      
-      <div class="form-group">
-        <input type='password' name='passwd2' id='passwd2' required="required" 
-                 placeholder="비밀번호 확인" class="form-control-sm input_form">
-      </div>
-        
-      <div class="form-group">
-        <input type='email' name='email' id='email' required="required" 
-                  placeholder="이메일" class="form-control-sm input_form ">
-      </div>
-        
-      <div class="form-group">
-        <input type='text' name='name' id='name' required="required" 
-                   placeholder="이름" class="form-control-sm input_form input_form_bottom">
-      </div>
-    </div>
 
       
       <span id="id_msg" style="margin-top: 4px; display: block;"></span>
@@ -209,48 +191,36 @@
       <span id='name_msg'></span>
 
       <div style="margin-top:15px; margin-bottom:15px;">
-        <h4>선택 입력</h4>
-        
-        <!-- /* 
-        <span>
-          <div style="text-align: center; margin-top: 20px;">
-            <label for="profileMF" class="btn_model" style="cursor: pointer;">
-              <span id="btnChangeProfile" class="btn2">사진 업로드</span>
-            </label>
-            <input type="file" id="profileMF" name="profileMF" style="display: none;" accept=".jpg,.png">
-          </div>
-        </span>
-        */ -->
-
+        <h4>상세 정보</h4>
         <div class="form-group">
-          <input type='text' name='tel' id='tel' required="required" 
-                    placeholder="전화번호" class="form-control-sm input_form">
+          <input type='text' name='tel' id='tel' required="required" th:field="*{tel}"
+                    placeholder="전화번호" class="form-control-sm input_form input_form_top">
         </div>
   
-
         <div class="form-group form_group_btn">
           <ul class="gender" id="gender">
               <li class="radio_item">
-                  <input type="radio" id="male" name="gender" value="M" class="blind">
+                  <input type="radio" id="male" name="gender" value="M" th:checked="*{gender == 'M'}" class="blind">
                   <label for="male" class="radio_box">남자</label>
               </li>
               <li class="radio_item">
-                  <input type="radio" id="female" name="gender" value="F" class="blind">
+                  <input type="radio" id="female" name="gender" value="F" th:checked="*{gender == 'F'}" class="blind">
                   <label for="female" class="radio_box">여자</label>
               </li>
           </ul>
         </div>
-
+        
         <div class="form-group">
-          <input type='date' name='birth' id='birth' value='' placeholder="출생일"
+          <input type='date' name='birth' id='birth' value='' placeholder="출생일" th:field="*{birth}"
                     class="form-control-sm input_form input_form_bottom">
         </div>   
+
       </div>
       
       <div style="margin-top:15px; margin-bottom:15px;">
         <div class="form-group">
             <div class="input-container">
-                <input type="text" name="zipcode" id="zipcode" value="" placeholder="우편번호"
+                <input type="text" name="zipcode" id="zipcode" value="" placeholder="우편번호" th:field="*{zipcode}"
                        class="form-control-sm input_form input_form_top">
                 <button type="button" id="btn_DaumPostcode" onclick="DaumPostcode()" 
                         class="radio_box btn-inside">우편번호 찾기</button>
@@ -258,12 +228,12 @@
         </div>
     
         <div class="form-group">
-          <input type='text' name='address1' id='address1' value='' placeholder="주소"
+          <input type='text' name='address1' id='address1' value='' placeholder="주소" th:field="*{address1}"
                      class="form-control-sm input_form">
         </div>   
     
         <div class="form-group">
-          <input type='text' name='address2' id='address2' value='' placeholder="상세 주소"
+          <input type='text' name='address2' id='address2' value='' placeholder="상세 주소" th:field="*{address2}"
                     class="form-control-sm input_form input_form_bottom">
         </div>
 
@@ -363,109 +333,9 @@
 
     </div>
 <!-- ------------------------------ DAUM 우편번호 API 종료 ------------------------------ -->
-      
-<!--/* 이용약관 시작 */-->
-<div>
-  <!--/* 이용약관1 */-->
-  <div id="signup_terms">
-    <div> 
-      <input type="checkbox" id="terms1" name="terms" required>
-      <label for="terms1">회원가입 이용 약관</label>
-    </div>
-    <div style="width: 100%; height: 150px; overflow-y: scroll; 
-                border: 2px solid #ccc; 
-                border-radius: 10px; 
-                padding: 10px;
-                box-sizing: border-box;">
-      <h3>회원가입 이용약관</h3>
-      <p>본 약관은 서비스명의 이용과 관련하여 회사와 회원 간의 권리, 의무 및 책임 사항, 기타 필요한 사항을 규정함을 목적으로 합니다. 회원으로 가입하기 전, 본 약관의 모든 내용을 주의 깊게 읽어주시고 동의해 주시기 바랍니다.<br><br>
-      
-      회사가 제공하는 서비스는 회원으로 가입하지 않더라도 일부 이용이 가능하나, 회원으로 가입한 경우에만 제공되는 추가 서비스가 존재합니다. 회원가입은 본 약관에 동의하고 회사가 정한 절차에 따라 가입을 완료하는 즉시 효력이 발생합니다.<br><br>
-      
-      회원은 회원가입 시 반드시 본인의 정보를 제공하여야 하며, 타인의 정보를 도용하거나 허위 정보를 입력할 경우 회원 자격이 상실될 수 있으며 이에 따른 법적 책임은 회원 본인에게 있습니다.<br><br>
-      
-      회사는 서비스의 안정적인 제공을 위하여 필요한 경우 서비스의 일부 또는 전부를 수정하거나 중단할 수 있으며, 이 경우 사전에 회원에게 공지합니다. 단, 긴급 상황이 발생할 경우 사전 공지가 어려울 수 있음을 양해 바랍니다.</p>
-    
-    </div>
-  </div>
-  
-  <!--/* 이용약관2 */-->
-  <div id="personal_terms">
-    <div>
-      <input type="checkbox" id="terms2" name="terms" required>
-      <label for="terms2">개인정보 수집 및 이용</label>
-    </div>
-    <div style="width: 100%; height: 150px; overflow-y: scroll; 
-                border: 2px solid #ccc; 
-                border-radius: 10px; 
-                padding: 10px;
-                box-sizing: border-box;">
-      <h4>개인정보 수집 및 이용</h4>
-      <p>[서비스명]은 개인정보보호법에 따라 회원님의 개인정보를 수집·이용하며, 그 목적과 범위를 아래와 같이 명확히 알려드립니다.<br><br>
-      
-      수집하는 개인정보의 항목<br>
-      회원가입 및 서비스 이용 과정에서 아래와 같은 정보를 수집합니다.<br><br>
-      
-      ● 필수정보: 이름, 이메일, 비밀번호<br>
-      ● 선택정보: 휴대전화번호, 생년월일<br>
-      이 외에 서비스 이용 과정에서 자동으로 생성되는 접속 로그, 쿠키, IP 주소와 같은 정보가 수집될 수 있습니다.<br><br>
-      
-      개인정보 수집 및 이용 목적<br>
-      회사는 회원님의 개인정보를 다음의 목적을 위해 이용합니다.<br><br>
-      
-      1. 회원 관리: 본인 인증, 회원 가입 및 탈퇴 처리<br>
-      2. 서비스 제공: 맞춤형 콘텐츠 추천, 서비스 개선 및 사용자 문의 응대<br>
-      3. 마케팅 및 광고: 이벤트 참여 기회 제공, 광고성 정보 제공<br><br>
-      
-      개인정보의 보유 및 이용 기간<br>
-      회원님의 개인정보는 원칙적으로 수집 및 이용 목적이 달성된 후 지체 없이 파기됩니다. 다만, 관계 법령에서 보존의무를 규정한 경우 해당 기간 동안 정보를 안전하게 보관합니다. 예를 들어, 전자상거래법에 따른 계약 및 결제 관련 기록은 5년간 보관됩니다.<br><br>
-      
-      회원님은 언제든지 개인정보의 제공에 대한 동의를 철회할 수 있으며, 동의 철회 시 일부 서비스 이용이 제한될 수 있습니다.</p>
-    
-    </div>
-  </div>
-  
-  <!--/* 이용약관3 */-->
-  <div id="location_terms">
-    <div>
-      <input type="checkbox" id="terms3" name="terms" required>
-      <label for="terms3">위치기반서비스 이용 약관</label>
-    </div>
-    <div style="width: 100%; height: 150px; overflow-y: scroll; 
-                border: 2px solid #ccc; 
-                border-radius: 10px; 
-                padding: 10px;
-                box-sizing: border-box;">
-      <h4>위치기반서비스 이용 약관</h4>
-      <p>본 약관은 회사가 제공하는 위치기반서비스(이하 "서비스")의 이용과 관련하여 회사와 회원 간의 권리, 의무 및 책임 사항을 규정함을 목적으로 합니다.<br><br>
-      
-      제1조 (서비스 내용)<br>
-      1. 회사는 회원의 위치정보를 활용하여 다음과 같은 서비스를 제공합니다.<br>
-      ● 위치 기반 맞춤형 정보 제공<br>
-      ● 주변 검색 서비스<br><br>
-      
-      제2조 (위치정보의 수집 및 이용)<br>
-      1. 회사는 회원의 동의를 받아 위치정보를 수집하며, 수집된 정보는 아래와 같은 목적으로 사용됩니다.<br><br>
-      
-      2. 개인화된 콘텐츠 제공<br>
-      ● 서비스 품질 향상<br>
-      ● 위치정보는 회원의 동의 없이 제3자에게 제공되지 않습니다.<br><br>
-      
-      제3조 (회원의 권리 및 의무)<br>
-      1. 회원은 언제든지 위치정보 제공 동의를 철회할 수 있습니다.<br>
-      2. 위치정보 이용과 관련하여 불편 사항이 있을 경우 고객센터를 통해 문의할 수 있습니다.<br><br>
-      
-      제4조 (위치정보 보유기간)<br>
-      수집된 위치정보는 서비스 제공 목적 달성 후 즉시 파기합니다.</p>
-    
-    </div>
-  </div>
-</div>
-
-<!--/* 이용약관 끝 */-->
 
       <div class="content_body_bottom">
-        <button id="btn_send" type="button" onclick="send();" class="btn btn-secondary btn-sm">가입</button>
+        <button id="btn_send" type="button" onclick="send();" class="btn btn-secondary btn-sm">수정</button>
         <button type="button" onclick="history.back();" class="btn btn-secondary btn-sm">취소</button>
       </div>
 

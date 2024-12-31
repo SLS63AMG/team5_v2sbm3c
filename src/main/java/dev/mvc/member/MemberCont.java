@@ -46,7 +46,7 @@ public class MemberCont {
   public int page_per_block = 5;
   
   /** 페이징 목록 주소 */
-  private String list_file_name = "/member/list";
+  private String list_file_name = "/th/member/list";
   // Cont 준비
   
   
@@ -71,7 +71,7 @@ public class MemberCont {
   public String signup_form(Model model,
                                    @ ModelAttribute("memberVO") MemberVO memberVO) {
     
-    return "/member/signup";
+    return "/th/member/signup";
   }
   
   /**
@@ -95,7 +95,7 @@ public class MemberCont {
       model.addAttribute("code", "create_success");
       model.addAttribute("name", memberVO.getName());
       model.addAttribute("id", memberVO.getId());
-      return "/member/msg";
+      return "/th/member/msg";
       
 //      // 파일 업로드 공사중
 //      String upDir = Contents.getUpProfile();
@@ -164,7 +164,7 @@ public class MemberCont {
       model.addAttribute("ck_id_save", "Y");
     }
     
-    return "/member/login_cookie";
+    return "/th/member/login_cookie";
   }
   
   /**
@@ -271,7 +271,7 @@ public class MemberCont {
     if(Tool.isMember(session)) {
       
       
-      return "/member/passwd_update";
+      return "/th/member/passwd_update";
     }
     return "redirect:/member/login";
   }
@@ -313,7 +313,7 @@ public class MemberCont {
       }
       
       // 비밀번호 변경 성공/실패 후 결과 페이지로 이동
-      return "/member/msg"; // **이곳에 추가된 }**
+      return "/th/member/msg"; // **이곳에 추가된 }**
     } else {
       // 회원이 아니면 로그인 페이지로 리다이렉트
       return "redirect:/member/login";
@@ -364,7 +364,7 @@ public class MemberCont {
 
       model.addAttribute("memberno", memberno);  // 모델에 추가
 
-      return "/member/admin_passwd";  // 패스워드 업데이트 화면으로 이동
+      return "/th/member/admin_passwd";  // 패스워드 업데이트 화면으로 이동
     } else {
       return "redirect:/";  // 관리자 권한이 없으면 홈으로 리다이렉트
     }
@@ -394,7 +394,7 @@ public class MemberCont {
       }
         
       
-      return "/member/msg";
+      return "/th/member/msg";
     } else {
       return "redirect:/";
     }
@@ -430,7 +430,7 @@ public class MemberCont {
       int no = search_cnt - ((now_page - 1) * this.record_per_page);
       model.addAttribute("no", no);
       // -----------------------------------------------------------------
-      return"/member/list";
+      return"/th/member/list";
     }
     return "redirect:/";
   }
@@ -447,7 +447,7 @@ public class MemberCont {
       
 
       model.addAttribute("memberVO", memberVO);
-      return "/member/read";
+      return "/th/member/read";
     } else {
       return "redirect:/";      
     }
@@ -473,7 +473,7 @@ public class MemberCont {
         model.addAttribute("code", "update_fail");
       }
       model.addAttribute("cnt", cnt);
-      return "/member/msg";
+      return "/th/member/msg";
     } 
     return "redirect:/";
   }
@@ -488,7 +488,7 @@ public class MemberCont {
       MemberVO memberVO = this.memberProc.detail_info(token);
       memberVO.setBirth(Tool.formatBirth(memberVO.getBirth()));
       model.addAttribute("memberVO", memberVO);
-      return "/member/profile";
+      return "/th/member/profile";
     }
     
     return "redirect:/member/login";
@@ -514,7 +514,7 @@ public class MemberCont {
         model.addAttribute("code", "update_fail");
       }
       model.addAttribute("cnt", cnt);
-      return "/member/msg";
+      return "/th/member/msg";
     } else {
       return "redirect:/";      
     }
@@ -549,7 +549,7 @@ public class MemberCont {
       MemberVO memberVO = this.memberProc.member_read(memberno);
       model.addAttribute("memberVO", memberVO);
       
-      return "/member/delete";
+      return "/th/member/delete";
     } else {
       
       return "redirect:/";
@@ -565,7 +565,7 @@ public class MemberCont {
         return "redirect:/member/list";
       } else {
         model.addAttribute("code", "delete_fail");
-        return "/member/msg";
+        return "/th/member/msg";
       }
     }
     
@@ -573,9 +573,5 @@ public class MemberCont {
   }
   // 삭제-------------------------------------------------------------------
 
-  /**
-   * 추가 예정
-   * 마이페이지
-   */
 
 }

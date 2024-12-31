@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html layout:decorate="~{layout}"> <!-- layout.html 상속-->
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
 <div layout:fragment="content">
 
   <div class='title_line'>회원(관리자 전용)</div>
@@ -8,12 +8,12 @@
   <aside class="aside_right">
     <a href="javascript:location.reload();">새로고침</a>
     <span class='menu_divide' >│</span> 
-    <a href='./create'>회원 가입</a>
+    <a href='./signup'>회원 가입</a>
     <span class='menu_divide' >│</span> 
     <a href='./list'>목록</a>
   </aside> 
   
-  <div th:replace="~{member/list_search_com::list_search_fragment}"></div>
+  <div th:replace="~{th/member/list_search_com::list_search_fragment}"></div>
   <div class='menu_line'></div>
        
   <table class="table table-striped" style='width: 100%;'>

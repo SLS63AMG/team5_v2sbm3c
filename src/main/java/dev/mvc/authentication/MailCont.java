@@ -27,7 +27,7 @@ public class MailCont {
     @GetMapping(value = "/form")
     public String form(Model model) {
 
-      return "/authentication/form"; // /templates/mail/form.html
+      return "/th/authentication/form"; // /templates/mail/form.html
     }
     
     // http://localhost:9091/mail/send.do
@@ -43,7 +43,7 @@ public class MailCont {
                        @RequestParam("content") String content) {
         MailTool mailTool = new MailTool();
         mailTool.send(receiver, from, title, content); // 메일 전송
-        return "/authentication/sended"; // /templates/mail/sended.html
+        return "/th/authentication/sended"; // /templates/mail/sended.html
     }
 
     
@@ -55,7 +55,7 @@ public class MailCont {
     @GetMapping(value = "/form_file")
     public String form_file() {
 
-      return "/authentication/form_file"; // /templates/mail/form_file.html
+      return "/th/authentication/form_file"; // /templates/mail/form_file.html
     }
     
 //    // http://localhost:9091/mail/send_file.do
@@ -90,7 +90,7 @@ public class MailCont {
       MailTool mailTool = new MailTool();
       mailTool.send_file(receiver, from, title, content, file1MF, "C:/kd/deploy/mvc_sms_mail/mail/storage/"); // 메일 전송
       
-      return "/authentication/sended"; // /templates/mail/sended.html
+      return "/th/authentication/sended"; // /templates/mail/sended.html
     }
     
 

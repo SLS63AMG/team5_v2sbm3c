@@ -57,7 +57,7 @@ public class NoticeCont {
   public String create_form(Model model,  HttpSession session) {
     
     if(Tool.isAdmin(session)) {
-      return "/notice/notice_create";      
+      return "/th/notice/notice_create";      
     }
 
     return "redirect:/notice/list";
@@ -78,7 +78,6 @@ public class NoticeCont {
       if(image_state.equals("images")) {
         String file1 = ""; // 원본 파일명 image
         String file1saved = ""; // 저장된 파일명, image
-        System.out.println("흠 -> " + noticeVO.getFile1MF());
 
         String upDir = Contents.getUploadDir_notice(); // 파일을 업로드할 폴더 준비
         // upDir = upDir + "/" + 한글을 제외한 카테고리 이름
@@ -159,9 +158,7 @@ public class NoticeCont {
       model.addAttribute("grade", (int) session.getAttribute("grade"));
     }
     
-    
-    
-    return "/notice/notice_list";
+    return "/th/notice/notice_list";
   }
   
   @GetMapping(value="/admin_list")
@@ -192,10 +189,10 @@ public class NoticeCont {
       
       
       
-      return "/notice/notice_list_visible";
+      return "/th/notice/notice_list_visible";
     }
     
-    return "/notice/notice_list";
+    return "/th/notice/notice_list";
 
   }
   // 공지사항 목록-------------------------------------------------------------------
@@ -222,7 +219,7 @@ public class NoticeCont {
      if(Tool.isAdmin(session)) {
          model.addAttribute("grade", (int) session.getAttribute("grade"));
      }
-     return "/notice/notice_read";
+     return "/th/notice/notice_read";
      
      
      
@@ -241,7 +238,7 @@ public class NoticeCont {
     if(Tool.isAdmin(session)) {
       NoticeVO noticeVO = this.noticeProc.notice_read(noticeno);
       model.addAttribute("noticeVO", noticeVO);
-      return "/notice/notice_update";
+      return "/th/notice/notice_update";
     }
     
     return "redirect:/notice/list";
@@ -325,7 +322,6 @@ public class NoticeCont {
   public String delete_proc(HttpSession session, Model model,
       @RequestParam(name="noticeno") int noticeno, HttpServletRequest request) {
     
-    System.out.println("흠?");
     if (Tool.isAdmin(session)) {
 
       // 파일 삭제 시작
