@@ -1,0 +1,16 @@
+<!-- /th/surveyitem/vote_confirmation.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>설문 완료</title>
+</head>
+<body>
+<div style="text-align: center; margin-top: 50px;">
+    <h1>설문에 응해 주셔서 감사합니다!</h1>
+  <a th:href="@{/th/surveyitem/results/{surveyno}(surveyno=${surveyno})}" 
+     style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">
+     설문 결과 조회
+  </a>
+</div>
+</body>
+</html>

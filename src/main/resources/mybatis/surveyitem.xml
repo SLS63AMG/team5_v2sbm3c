@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.mvc.surveyitem.SurveyitemDAOInter">
+
+    <insert id="create" parameterType="dev.mvc.surveyitem.SurveyitemVO">
+        INSERT INTO surveyitem (surveyitemno, surveyno, itemseq, item, itemcnt)
+        VALUES (surveyitem_seq.NEXTVAL, #{surveyno}, #{itemseq}, #{item}, #{itemcnt})
+    </insert>
+
+    <select id="list" parameterType="int" resultType="dev.mvc.surveyitem.SurveyitemVO">
+        SELECT * FROM surveyitem
+        WHERE surveyno = #{surveyno}
+        ORDER BY itemseq ASC
+    </select>
+    
+    
+    <update id="update" parameterType="dev.mvc.surveyitem.SurveyitemVO">
+        UPDATE surveyitem
+        SET item = #{item}, itemseq = #{itemseq}
+        WHERE surveyitemno = #{surveyitemno}
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        DELETE FROM surveyitem WHERE surveyitemno = #{surveyitemno}
+    </delete>
+    
+    <select id="read" parameterType="int" resultType="dev.mvc.surveyitem.SurveyitemVO">
+        SELECT * FROM surveyitem WHERE surveyitemno = #{surveyitemno}
+    </select>
+    
+    <update id="vote" parameterType="int">
+        UPDATE surveyitem
+        SET itemcnt = itemcnt + 1
+        WHERE surveyitemno = #{surveyitemno}
+    </update>
+</mapper>
