@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
+
+<div layout:fragment="content">
+  <link href="/css/notice.css" rel="Stylesheet" type="text/css">
+
+  <div class='title_line'>공지사항</div>
+
+  <aside class="aside_right">
+    <a href='./create' th:if="${grade != null and grade <= 9}">공지 등록</a>
+    <span class='menu_divide' th:if="${grade != null and grade <= 9}">│</span> 
+    <a href='./admin_list' th:if="${grade != null and grade <= 9}">비공개 공지</a>
+    <span class='menu_divide' th:if="${grade != null and grade <= 9}">│</span> 
+    <a href="javascript:location.reload();">새로고침</a>
+    <span class='menu_divide' >│</span> 
+    <a href='./list'>목록</a>
+  </aside>  
+  
+  <div th:replace="~{th/notice/list_search_com::list_search_fragment}"></div>
+  <div class='menu_line'></div>
+       
+  <table class="table table-striped" style='width: 100%;'>
+    <colgroup>
+      <col style='width: 5%;'/>
+      <col style='width: 40%;'/>
+      <col style='width: 10%;'/>
+      <col style='width: 10%;'/>
+      <col style='width: 10%;'/>
+    </colgroup>
+    <tr>
+      <th class='th_bs'>번호</TH>
+      <th class='th_bs'>제목</th>
+      <th class='th_bs'>관리자</th>
+      <th class='th_bs'>작성일</th>
+      <th class='th_bs'>조회</th>
+    </tr>
+    
+    <tr th:each="noticeVO, status:${list}" th:onclick="|location.href='@{/notice/read(noticeno=${noticeVO.noticeno})}'|" 
+    th:if="${noticeVO.visible == 'Y'}" style="cursor: pointer;">
+      <td th:text="${search_cnt - status.index}"></td> <!-- 반복 횟수 출력 -->
+      <td th:text="${noticeVO.title}"></td>
+      <td th:text="${noticeVO.name}"></td>
+      <td th:text="${noticeVO.cdate}"></td>
+      <td th:text="${noticeVO.cnt}"></td>
+    </tr>
+
+  </table>
+  
+  <!-- 페이지 버튼 목록 출력 시작 -->
+   <div class="Bottom_menu" th:utext="${paging}"></div>
+  <!-- 페이지 버튼 목록 출력 종료 -->
+  
+
+</div>
+</html>

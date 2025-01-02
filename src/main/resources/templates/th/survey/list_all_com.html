@@ -1,0 +1,48 @@
+<div th:fragment="list_all_fragment">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>설문번호</th>
+        <th>제목</th>
+        <th>포스터</th>
+        <th>시작 날짜</th>
+        <th>종료 날짜</th>
+        <th>참여자 수</th>
+        <th>작업</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="survey : ${list}">
+        <td th:text="${survey.surveyno}"></td>
+        <td><a th:href="@{/survey/read/{surveyno}(surveyno=${survey.surveyno})}" th:text="${survey.topic}"></a></td>
+        <td>
+          <img th:if="${survey.posterthumb != null}" th:src="@{|/survey/storage/${survey.posterthumb}|}" alt="포스터 이미지" style="width: 100px; height: auto;">
+          <span th:if="${survey.posterthumb == null}">이미지 없음</span>
+        </td>
+        <td th:text="${survey.startdate}"></td>
+        <td th:text="${survey.enddate}"></td>
+        <td th:text="${survey.cnt}"></td>
+        <td>
+          <a th:href="@{/th/survey/update/{surveyno}(surveyno=${survey.surveyno})}">수정</a> |
+          <a th:href="@{/th/survey/delete/{surveyno}(surveyno=${survey.surveyno})}">삭제</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- 페이지 네비게이션 -->
+  <div style="text-align: center; margin-top: 20px;">
+    <ul>
+      <li th:if="${nowPage > 1}">
+        <a th:href="@{/survey/search(keyword=${keyword}, nowPage=${nowPage - 1})}">이전</a>
+      </li>
+      <li th:each="page : ${#numbers.sequence(1, totalPage)}">
+        <a th:href="@{/survey/search(keyword=${keyword}, nowPage=${page})}" th:text="${page}" 
+           th:classappend="${page == nowPage} ? 'active' : ''"></a>
+      </li>
+      <li th:if="${nowPage < totalPage}">
+        <a th:href="@{/survey/search(keyword=${keyword}, nowPage=${nowPage + 1})}">다음</a>
+      </li>
+    </ul>
+  </div> 
+</div>

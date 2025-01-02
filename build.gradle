@@ -25,21 +25,21 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
-	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
-	annotationProcessor 'org.projectlombok:lombok'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	
-
   // https://mvnrepository.com/artifact/commons-codec/commons-codec
   implementation 'commons-codec:commons-codec:1.16.0'
   // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
@@ -50,6 +50,15 @@ dependencies {
   implementation 'commons-fileupload:commons-fileupload:1.5'
   // https://mvnrepository.com/artifact/org.json/json
   implementation 'org.json:json:20240303'
+  
+  
+  
+  // sms, email - gradle
+  implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+  // https://mvnrepository.com/artifact/com.sun.mail/javax.mail
+  implementation 'com.sun.mail:javax.mail:1.6.2'
+  // https://mvnrepository.com/artifact/javax.activation/activation
+  implementation 'javax.activation:activation:1.1.1'  
 }
 
 tasks.named('test') {

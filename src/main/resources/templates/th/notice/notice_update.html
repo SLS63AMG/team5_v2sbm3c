@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
+
+<div layout:fragment="content">
+  <link href="/css/notice.css" rel="Stylesheet" type="text/css">
+
+  <div style="height: 50px; display: flex; justify-content: space-between; align-items: center;">
+    <h1 style="margin: 0;">공지사항</h1>
+    
+    <div style="display: flex; align-items: center; gap: 10px; justify-content: flex-end;">
+      <a href='./list' style="margin-right: 20px;">목록</a>
+    </div>
+    
+  </div>
+
+  <div style="margin: 0px auto;">
+    <form name="frm" id="frm" th:object="${noticeVO}" method="post" action="/notice/update" enctype="multipart/form-data">
+      <input type="hidden" name="noticeno" th:value="${noticeVO.noticeno}">
+
+      <div style="width: 100%; background-color:#F4EDD3; border-top: 1px solid #7e7e7e; padding:0 20px;">
+        <input style="width:100%; margin: 20px 0; height: 50px; font-size: 30px;" th:value="${noticeVO.title}" name="title">
+      </div>
+      
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin: 0; border-top: 1px solid #d3d3d3;">
+      </div>
+      
+      <div style="padding:0 20px;">
+        <textarea style="width: 100%; margin: 10px 0; height: 500px; resize: none; font-size: 20px;" 
+        th:text="${noticeVO.content}" rows="50" name="content"></textarea>
+
+      </div>
+      
+<div style="padding:0 20px;">
+  <label for="file1MF" class="btn_model" style="cursor: pointer;">
+    <span id="btnChangeProfile" class="btn2">사진 업로드</span>
+  </label>
+  <input type='file' class="form-control" name='file1MF' id='file1MF' placeholder="파일 선택" accept=".jpg,.png,.gif" onchange="previewImage(event)">
+  <input type="hidden" name="image_state" id="image_state" value="default">
+  <!-- X 버튼 추가 -->
+  <span id="clearFile" style="cursor: pointer; margin-left: 10px;">&#10006;</span>
+
+  <!-- 이미지 미리보기 영역 -->
+  <div id="imagePreview" style="margin-top: 20px;">
+    <!-- 파일이 있을 경우 미리보기 이미지가 보이도록 설정 -->
+    <img id="preview" 
+         alt="미리보기 이미지" 
+         style="max-width: 600px; display: {{noticeVO.filename != null ? 'block' : 'none'}};" 
+         th:src="@{'/images/' + ${noticeVO.filename}}" />
+  </div>
+</div>
+
+<script>
+  // X 버튼 클릭 시 파일 입력값과 이미지 미리보기를 비우고 히든 input의 값을 "no images"로 설정하는 함수
+  document.getElementById('clearFile').addEventListener('click', function() {
+    const fileInput = document.getElementById('file1MF');
+    const imgPreview = document.getElementById('preview');
+    const hiddenInput = document.getElementById('image_state');  // 히든 input의 id를 "image_state"로 수정
+
+    fileInput.value = '';  // 파일 값을 빈 값으로 설정
+    imgPreview.src = '';   // 이미지 소스를 빈 값으로 설정
+    imgPreview.style.display = 'none'; // 이미지 미리보기를 숨깁니다
+
+    hiddenInput.value = 'no images';  // 히든 input의 값을 "no images"로 설정
+  });
+  
+  function previewImage(event) {
+    const file = event.target.files[0]; // 선택된 파일을 가져옵니다
+    const reader = new FileReader(); // FileReader 객체를 생성합니다
+    
+    reader.onload = function(e) {
+      // 이미지 미리보기 요소를 가져옵니다
+      const img = document.getElementById('preview');
+      
+      // 미리보기 이미지 소스 설정
+      img.src = e.target.result;
+      img.style.display = 'block'; // 이미지를 표시합니다
+      
+      // 히든 input의 값을 "images"로 설정
+      const hiddenInput = document.getElementById('image_state');
+      hiddenInput.value = 'images';  // 선택된 파일이 있을 때 "images"로 변경
+    }
+    
+    if (file) {
+      reader.readAsDataURL(file); // 파일을 읽어 데이터 URL로 변환합니다
+    }
+  }
+</script>
+
+
+
+
+      <div style="padding:0 20px; width: 150px;">
+        <select id="visible" name="visible" style="width: 100%;">
+          <option value="Y" th:selected="${noticeVO.visible == 'Y'}">Y</option>
+          <option value="N" th:selected="${noticeVO.visible == 'N'}">N</option>
+        </select>
+      </div>
+
+
+      <button type="submit" style="margin:10px 0 10px 20px; padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        수정
+      </button>
+    </form>
+  
+  </div>
+  
+    
+</div>
+</html>

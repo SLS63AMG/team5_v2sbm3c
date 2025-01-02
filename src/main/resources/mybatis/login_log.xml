@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.mvc.loginlog.LoginlogDAOInter">
+  
+  
+  <!-- 로그인 기록 등록 -->
+  <insert id="log_record" parameterType="dev.mvc.loginlog.LoginlogVO">
+    INSERT INTO login_log (logno, conip, id, jdate, sw)
+    VALUES (log_seq.nextval, #{conip}, #{id}, SYSDATE, #{sw})
+  </insert>
+  
+  <!-- 로그인 기록 삭제 -->
+  <delete id="log_del" parameterType="int">
+    DELETE FROM login_log
+    WHERE logno=#{logno}
+  </delete>
+  
+  <!-- 검색된 기록의 갯수 -->
+  <select id="list_search_count" resultType="Integer" parameterType="HashMap">
+    SELECT count(*) as cnt
+    FROM login_log
+    <where>
+        1 = 1
+        <!-- 검색어 조건 -->
+        <if test="word != null and word != ''">
+            AND UPPER(id) LIKE '%' || UPPER(#{word}) || '%'
+        </if>
+    
+        <!-- 로그인 상태 조건 -->
+        <if test="login_state != null and login_state != ''">
+            AND sw = #{login_state}
+        </if>
+    
+        <!-- 날짜 상태에 따른 조건 -->
+        <if test="date_state != null">
+          <choose>
+              <when test="date_state == 'eq'">
+                  AND TRUNC(jdate) = TO_DATE(#{date}, 'YYYY-MM-DD')
+              </when>
+              <when test="date_state == 'be'">
+                  AND TRUNC(jdate) BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+              </when>
+              <when test="date_state == 'bi'">
+                  AND TRUNC(jdate) &gt; TO_DATE(#{date}, 'YYYY-MM-DD')
+              </when>
+              <when test="date_state == 'sm'">
+                  AND TRUNC(jdate) &lt; TO_DATE(#{date}, 'YYYY-MM-DD')
+              </when>
+          </choose>
+        </if>
+    </where>
+  </select>
+  
+  <!-- 페이징(검색) -->
+  <select id="log_list_search_paging" resultType="dev.mvc.loginlog.LoginlogVO" parameterType="HashMap">
+      SELECT logno, conip, id, jdate, sw, r
+      FROM (
+          SELECT logno, conip, id, jdate, sw,
+                 ROW_NUMBER() OVER (
+                     <choose>
+                         <!-- 정렬 기준에 따른 동적 ORDER BY -->
+                         <when test="order_state == 'id_asc'">
+                             ORDER BY id ASC
+                         </when>
+                         <when test="order_state == 'id_desc'">
+                             ORDER BY id DESC
+                         </when>
+                         <when test="order_state == 'jdate_asc'">
+                             ORDER BY jdate ASC
+                         </when>
+                         <when test="order_state == 'jdate_desc'">
+                             ORDER BY jdate DESC
+                         </when>
+                         <when test="order_state == 'sw_asc'">
+                             ORDER BY sw ASC
+                         </when>
+                         <when test="order_state == 'sw_desc'">
+                             ORDER BY sw DESC
+                         </when>
+                         <!-- 기본값으로 logno 오름차순 정렬 -->
+                         <otherwise>
+                             ORDER BY logno ASC
+                         </otherwise>
+                     </choose>
+                 ) AS r
+          FROM login_log
+          <where>
+              1 = 1
+              <!-- 검색어 조건 -->
+              <if test="word != null and word != ''">
+                  AND UPPER(id) LIKE '%' || UPPER(#{word}) || '%'
+              </if>
+  
+              <!-- 로그인 상태 조건 -->
+              <if test="login_state != null and login_state != ''">
+                  AND sw = #{login_state}
+              </if>
+  
+              <!-- 날짜 상태에 따른 조건 -->
+              <if test="date_state != null and (date != '' or (startDate != '' and endDate != ''))">
+                <choose>
+                    <when test="date_state == 'eq'">
+                        AND TRUNC(jdate) = TO_DATE(#{date}, 'YYYY-MM-DD')
+                    </when>
+                    <when test="date_state == 'be'">
+                        AND TRUNC(jdate) BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+                    </when>
+                    <when test="date_state == 'bi'">
+                        AND TRUNC(jdate) &gt; TO_DATE(#{date}, 'YYYY-MM-DD')
+                    </when>
+                    <when test="date_state == 'sm'">
+                        AND TRUNC(jdate) &lt; TO_DATE(#{date}, 'YYYY-MM-DD')
+                    </when>
+                </choose>
+              </if>
+          </where>
+      )
+      WHERE r &gt;= #{start_num} AND r &lt;= #{end_num}  -- 페이징 번호 범위 설정 (시작번호, 끝번호)
+      ORDER BY r ASC
+  </select>
+</mapper>

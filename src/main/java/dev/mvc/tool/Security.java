@@ -71,7 +71,7 @@ public class Security {
   }
  
   // 토큰 생성
-  public static String createToken() {
+  public String createToken() {
     // 가능한 문자들의 집합
     String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
                         "abcdefghijklmnopqrstuvwxyz" +

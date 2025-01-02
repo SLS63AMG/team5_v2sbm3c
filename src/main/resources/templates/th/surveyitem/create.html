@@ -1,0 +1,53 @@
+<!-- src/main/resources/templates/th/surveyitem/create.html -->
+<!DOCTYPE html>
+<html layout:decorate="~{th/layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>항목 추가</title>
+            <style>
+        table {
+            width: 100%; /* 테이블 전체 너비 */
+            border-collapse: collapse; /* 테두리 중복 제거 */
+            margin-top: 20px; /* 제목과 테이블 간격 */
+        }
+
+        th, td {
+            padding: 15px; /* 셀 내부 여백 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            font-size: 16px; /* 글씨 크기 */
+        }
+
+        th {
+            background-color: #f2f2f2; /* 헤더 배경색 */
+            font-weight: bold; /* 헤더 글씨 굵게 */
+        }
+
+        td {
+            border: 1px solid #ddd; /* 셀 테두리 */
+        }
+
+        button {
+            padding: 10px 20px; /* 버튼 크기 조정 */
+            font-size: 14px; /* 버튼 글씨 크기 */
+            background-color: #4CAF50; /* 버튼 배경색 */
+            color: white; /* 버튼 글씨색 */
+            border: none; /* 버튼 테두리 제거 */
+            border-radius: 5px; /* 버튼 모서리 둥글게 */
+            cursor: pointer; /* 마우스 커서 변경 */
+        }
+
+        button:hover {
+            background-color: #45a049; /* 버튼 호버 색상 */
+        }
+    </style>
+</head>
+<div layout:fragment="content">
+<h1>항목 추가</h1>
+<form th:action="@{/th/surveyitem/create}" method="post">
+    <input type="hidden" name="surveyno" th:value="${surveyno}"/>
+    <label for="item">항목:</label>
+    <input type="text" id="item" name="item" required/>
+    <button type="submit">등록</button>
+</form>
+<a th:href="@{/th/surveyitem/list/{surveyno}(surveyno=${surveyno})}">목록으로</a>
+</div>
+</html>
