@@ -99,4 +99,10 @@ public interface MemberDAOInter {
    * 특정 회원 정보 수정
    */
   public int update_member(MemberVO memberVO);
+  
+  /**
+   * 계정 찾기
+   */
+  public ArrayList<MemberVO> find_id(String email);
+  
 }

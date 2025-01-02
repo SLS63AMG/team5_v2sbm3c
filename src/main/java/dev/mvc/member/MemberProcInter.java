@@ -102,5 +102,10 @@ public interface MemberProcInter {
    */
   public int update_member(MemberVO memberVO);
   
+  /**
+   * 계정 찾기
+   */
+  public ArrayList<MemberVO> find_id(String email);
+  
 
 }

@@ -98,7 +98,7 @@
         
       }
     }
-    
+
     function send() { // 회원 가입 처리
       let id = document.getElementById('id');
       let id_msg = document.getElementById('id_msg');
@@ -108,7 +108,7 @@
         id_msg.classList.add('span_warning');    // class 적용
         return false;  // 회원 가입 진행 중지
       } 
-  
+      
       // 패스워드를 정상적으로 2번 입력했는지 확인
       let passwd = document.getElementById('passwd');
       let passwd2 = document.getElementById('passwd2');
@@ -131,6 +131,27 @@
         return false;  // 회원 가입 진행 중지
       }
       
+      let email = document.getElementById('email');
+      let email_msg = document.getElementById('email_msg');
+  
+      if (email.value.length == 0) {
+        email_msg.innerHTML= '이메일 입력은 필수 입니다.';
+        email_msg.classList.add('span_warning');    // class 적용
+  
+        return false;  // 회원 가입 진행 중지
+      }
+      
+      let tel = document.getElementById('tel');
+      let tel_msg = document.getElementById('tel_msg');
+  
+      if (tel.value.length == 0) {
+        tel_msg.innerHTML= '전화번호 입력은 필수 입니다.';
+        tel_msg.classList.add('span_warning');    // class 적용
+  
+        return false;  // 회원 가입 진행 중지
+      }
+      
+      
       
       document.getElementById('frm').submit(); // required="required" 작동 안됨.
     }    
@@ -151,7 +172,7 @@
           
   <div style="width: 450px; margin: 0px auto ">
     <h4>필수 입력</h4>
-    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/signup" enctype="multipart/form-data">
+    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/signup" enctype="multipart/form-data" autocomplete="off">
       
       <div style="margin-top:15px; margin-bottom:15px;">
         <div class="form-group">
@@ -196,7 +217,15 @@
         <input type='email' name='email' id='email' required="required" 
                   placeholder="이메일" class="form-control-sm input_form ">
       </div>
+      
+      <div class="form-group" style="position: relative;">
+        <input type="text" name="tel" id="tel" required="required" 
+               placeholder="전화번호" class="form-control-sm input_form" 
+               style="padding-right: 50px;">
         
+      </div>
+
+      
       <div class="form-group">
         <input type='text' name='name' id='name' required="required" 
                    placeholder="이름" class="form-control-sm input_form input_form_bottom">
@@ -205,9 +234,10 @@
 
       
       <span id="id_msg" style="margin-top: 4px; display: block;"></span>
-      <span id='passwd2_msg'></span>
-      <span id='name_msg'></span>
-
+      <span id='passwd2_msg' style="margin-top: 4px; display: block;"></span>
+      <span id='name_msg' style="margin-top: 4px; display: block;"></span>
+      <span id='tel_msg' style="margin-top: 4px; display: block;"></span>
+      
       <div style="margin-top:15px; margin-bottom:15px;">
         <h4>선택 입력</h4>
         
@@ -222,10 +252,7 @@
         </span>
         */ -->
 
-        <div class="form-group">
-          <input type='text' name='tel' id='tel' required="required" 
-                    placeholder="전화번호" class="form-control-sm input_form">
-        </div>
+
   
 
         <div class="form-group form_group_btn">
