@@ -49,6 +49,15 @@
         DELETE FROM store WHERE storeno = #{storeno}
     </delete>
     
+    <!-- 음식점 검색 -->
+    <select id="search" parameterType="map" resultType="dev.mvc.store.StoreVO">
+        SELECT storeno, name, distinction, reviewcnt, address1, tel, busihours, rating
+        FROM store
+        WHERE name LIKE '%' || #{keyword} || '%'
+        ORDER BY storeno DESC
+    </select>
+
+    
 
 
 </mapper>

@@ -3,7 +3,10 @@ package dev.mvc.store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dev.mvc.survey.SurveyVO;
+
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StoreProc implements StoreProcInter {
@@ -40,4 +43,11 @@ public class StoreProc implements StoreProcInter {
         // StoreDAO의 delete 메서드를 호출하여 특정 음식점을 삭제
         return storeDAO.delete(storeno);
     }
+    
+    @Override
+    public List<StoreVO> search(Map<String, Object> map) {
+        return storeDAO.search(map);
+    }
+
+    
 }

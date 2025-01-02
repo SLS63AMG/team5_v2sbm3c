@@ -1,6 +1,7 @@
 package dev.mvc.store;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StoreDAOInter {
 
@@ -18,4 +19,6 @@ public interface StoreDAOInter {
 
     // Delete: 특정 음식점 삭제
     public int delete(int storeno);
+
+    public List<StoreVO> search(Map<String, Object> map);
 }

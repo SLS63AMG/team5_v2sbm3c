@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/th/store") // "/th/store" URL을 처리하는 컨트롤러
@@ -78,7 +79,6 @@ public class StoreCont {
         return "/th/store/update"; // update.html로 이동
     }
 
-
     /**
      * 음식점 정보 수정을 처리하는 메서드 (POST 방식)
      */
@@ -102,7 +102,6 @@ public class StoreCont {
         return "/th/store/delete"; // delete.html로 이동
     }
 
-
     /**
      * 음식점을 삭제하는 메서드 (POST 방식)
      */
@@ -112,5 +111,13 @@ public class StoreCont {
         storeProc.delete(storeno);
         return "redirect:/th/store/list"; // 리스트 페이지로 리다이렉트
     }
-
+    
+    // 검색 메서드 추가
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String search(@RequestParam(value = "keyword", defaultValue = "") String keyword, Model model) {
+        // 검색된 결과를 storeList에 담아서 페이지로 전달
+        List<StoreVO> storeList = storeProc.search(Map.of("keyword", "%" + keyword + "%"));
+        model.addAttribute("storeList", storeList);
+        return "/th/store/list";  // 검색결과를 보여주는 list 페이지로 리턴
+    }
 }
