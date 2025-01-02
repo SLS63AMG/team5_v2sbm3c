@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{th/layout}">
+<head>
+    <style>
+        /* 전체 제목 스타일 */
+        .title_line {
+            text-align: center;
+            font-size: 26px;  /* 글자 크기 키움 */
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        /* 테이블 상단 추가 버튼 컨테이너 */
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            margin: 0 auto;
+            margin-bottom: 10px;
+        }
+
+        .table-header .add-text {
+            font-size: 18px;  /* 글자 크기 키움 */
+            font-weight: bold;
+            color: #007BFF;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .table-header .add-text:hover {
+            text-decoration: underline;
+        }
+
+        /* 테이블 스타일 */
+        table {
+            width: 90%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            font-size: 16px;  /* 글자 크기 키움 */
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;  /* 글자 크기 키움에 맞춰 padding 조정 */
+            text-align: center;
+            font-weight: bold;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* 수정 버튼 스타일 */
+        .action-btn-edit {
+            padding: 12px 20px;
+            font-size: 14px;  /* 글자 크기 키움 */
+            font-weight: bold;
+            border: 1px solid #FFC107;
+            background-color: #FFC107;
+            color: black;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .action-btn-edit:hover {
+            background-color: #E0A800;
+            transform: scale(1.05);
+        }
+
+        /* 삭제 버튼 스타일 */
+        .action-btn-delete {
+            padding: 12px 20px;
+            font-size: 14px;  /* 글자 크기 키움 */
+            font-weight: bold;
+            border: 1px solid #DC3545;
+            background-color: #DC3545;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .action-btn-delete:hover {
+            background-color: #C82333;
+            transform: scale(1.05);
+        }
+
+        /* 버튼 사이 구분선 */
+        .action-divider {
+            margin: 0 5px;
+            font-weight: bold;
+        }
+
+        /* 페이지네이션 스타일 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 12px 18px;
+            margin: 0 8px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+
+        .pagination .active {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        /* 수정 및 삭제 버튼 크기 키우기 */
+        td .btn {
+          font-size: 16px;  /* 글자 크기 키움 */
+          padding: 12px 25px;  /* 버튼 크기 조정 */
+          min-width: 120px;  /* 최소 너비 설정 */
+          text-align: center;  /* 버튼 텍스트 가운데 정렬 */
+        }
+
+        /* 영업시간 열 크기 줄이기 */
+        td:nth-child(8) {
+            width: 180px;  /* 영업시간 칸 너비 줄임 */
+        }
+
+    </style>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="title_line">음식점 리스트</div>
+
+    <!-- 테이블 상단에 "음식점 추가" 링크 -->
+    <div class="table-header">
+        <div></div> <!-- 왼쪽 빈 공간 -->
+        <a th:href="@{/th/store/create}" class="add-text">음식점 추가</a>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>식당 번호</th>
+            <th>식당 이름</th>
+            <th>업종</th>
+            <th>리뷰 수</th>
+            <th>도로명 주소</th>
+            <th>전화번호</th>
+            <th>평점</th>
+            <th>영업시간</th> <!-- 영업시간 열 -->
+            <th>작업</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="store : ${storeList}">
+            <td th:text="${store.storeno}"></td>
+            <td th:text="${store.name}"></td>
+            <td th:text="${store.distinction}"></td>
+            <td th:text="${store.reviewcnt}"></td>
+            <td th:text="${store.address1}"></td>
+            <td th:text="${store.tel}"></td>
+            <td th:text="${store.rating}"></td>
+            <td th:text="${store.busihours}"></td> <!-- 영업시간 출력 -->
+            <td>
+                <a th:href="@{/th/store/update/{storeno}(storeno=${store.storeno})}" class="action-btn-edit">수정</a>
+                <span class="action-divider">|</span>
+                <a th:href="@{/th/store/delete/{storeno}(storeno=${store.storeno})}" class="action-btn-delete">삭제</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <a th:each="page, iterStat : ${#numbers.sequence(0, totalPages - 1)}"
+           th:href="@{/th/store/list(nowpage=${page})}"
+           th:text="${page + 1}"
+           th:classappend="${page == nowpage} ? 'active' : ''"></a>
+    </div>
+</main>
+</body>
+</html>

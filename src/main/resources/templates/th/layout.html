@@ -1,25 +1,68 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="user-scalable=yes, initial-scale=1.0, minimum-scale=1.0, maximum-scale=10.0, width=device-width" />
-<title>http://localhost:9093/</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, minimum-scale=1.0, maximum-scale=10.0, width=device-width" />
+    <title>http://localhost:9093/</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 
-<link href="/css/style.css" rel="Stylesheet" type="text/css"> <!-- /static 기준 -->
+    <link href="/css/style.css" rel="Stylesheet" type="text/css"> <!-- /static 기준 -->
+    <style>
+        /* 랜덤 음식점 카드 스타일 */
+        .store-card {
+            display: inline-block;
+            width: 30%;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .store-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .store-card .store-info {
+            padding: 10px;
+        }
+        .store-card .store-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .store-card .store-rating {
+            font-size: 18px;
+            color: #ff8c00;
+        }
+    </style>
 </head>
 <body>
-<div class='container_main'>
+<div class="container_main">
 
   <nav th:replace="~{th/navbar::navbarFragment}"></nav>
   
-  <div class='content_body'> <!-- width: 90% -->
+  <div class="content_body"> <!-- width: 90% -->
     <th:block layout:fragment="content"></th:block> <!-- 내용이 들어갈 부분 -->
+    
+    <!-- 랜덤 음식점 3개 출력 -->
+    <div class="store-container" style="display: flex; justify-content: space-around; margin-top: 20px;">
+        <div th:each="store : ${randomStores}" class="store-card">
+            <img th:src="@{${store.image}}" alt="Food Image">
+            <div class="store-info">
+                <div class="store-name" th:text="${store.name}"></div>
+                <div class="store-rating" th:text="'Rating: ' + ${store.rating}"></div>
+                <div th:text="${store.description}"></div>  <!-- 추가 설명 -->
+            </div>
+        </div>
+    </div>
+
   </div> <!-- content_body 종료 --> 
-  
-  <div class='bottom_menu'>
+
+  <div class="bottom_menu">
     <hr>
     Copyright K Digital All rights reserved.
   </div>
