@@ -86,7 +86,7 @@ public class SurveyCont {
             surveyVO.setPostersize(postersize);
             
           } else { 
-            return "redirect:/survey/msg"; 
+            return "redirect:/th/survey/msg"; 
           }
           
        }
@@ -101,7 +101,7 @@ public class SurveyCont {
        this.surveyProc.create(surveyVO); // DB에 저장
             
 
-        return "redirect:/survey/list"; // 파일 처리 후 리스트로 이동
+        return "redirect:/th/survey/list"; // 파일 처리 후 리스트로 이동
     }
 
 
@@ -169,7 +169,7 @@ public class SurveyCont {
                 surveyVO.setPosterthumb(posterthumb);
                 surveyVO.setPostersize(postersize);
             } else {
-                return "redirect:/survey/msg";
+                return "redirect:/th/survey/msg";
             }
         } else {
             // 파일을 업로드하지 않은 경우, 기존 파일 정보를 유지
@@ -181,7 +181,7 @@ public class SurveyCont {
 
         surveyProc.update(surveyVO); // 데이터베이스 업데이트
 
-        return "redirect:/survey/list"; // 파일 처리 후 리스트로 이동
+        return "redirect:/th/survey/list"; // 파일 처리 후 리스트로 이동
     }
 
 

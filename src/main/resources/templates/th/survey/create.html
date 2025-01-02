@@ -8,7 +8,7 @@
 
   <div class="menu_line"></div>
   <div style="width: 50%; margin: 0px auto;">
-    <form name="frm" method="post" action="/survey/create" enctype="multipart/form-data" th:object="${surveyVO}">
+    <form name="frm" method="post" action="/th/survey/create" enctype="multipart/form-data" th:object="${surveyVO}">
       <div>
         <label>설문 제목</label>
         <input type="text" name="topic" autofocus="autofocus" class="form-control" style="width: 100%;" th:field="*{topic}">
@@ -30,7 +30,7 @@
       </div>
       <div class="content_body_bottom">
         <button type="submit" class="btn btn-secondary btn-sm">등록</button>
-        <button type="button" onclick="location.href='/survey/list'" class="btn btn-secondary btn-sm">목록</button>
+        <button type="button" onclick="location.href='/th/survey/list'" class="btn btn-secondary btn-sm">목록</button>
       </div>
     </form>
   </div>
