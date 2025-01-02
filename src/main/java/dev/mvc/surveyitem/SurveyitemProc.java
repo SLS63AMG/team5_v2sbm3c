@@ -41,4 +41,15 @@ public class SurveyitemProc implements SurveyitemProcInter {
     public int vote(int surveyitemno) {
         return surveyitemDAO.vote(surveyitemno);
     }
+    
+    @Override
+    public int moveUp(int surveyitemno) {
+        return surveyitemDAO.moveUp(surveyitemno);
+    }
+
+    @Override
+    public int moveDown(int surveyitemno) {
+        return surveyitemDAO.moveDown(surveyitemno);
+    }
+
 }

@@ -10,5 +10,7 @@ public interface SurveyitemProcInter {
     public int delete(int surveyitemno);
     public SurveyitemVO read(int surveyitemno);
     public int vote(int surveyitemno);
+    public int moveUp(int surveyitemno);
+    public int moveDown(int surveyitemno);
 
 }

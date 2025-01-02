@@ -42,7 +42,7 @@
 </head>
 
 <div layout:fragment="content">
-    <div class="title_line">설문조사 항목</div>
+    <div class="title_line" th:text="${survey.topic}"></div>
     <table border="1">
         <thead>
             <tr>
@@ -54,7 +54,19 @@
         </thead>
         <tbody>
             <tr th:each="item : ${items}">
-                <td th:text="${item.itemseq}"></td>
+                <td>
+                    <div th:text="${item.itemseq}"></div>
+                    <form th:action="@{/th/surveyitem/moveUp}" method="post" style="display:inline;">
+                        <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
+                        <input type="hidden" name="surveyno" th:value="${surveyno}" />
+                        <button type="submit">⬆</button>
+                    </form>
+                    <form th:action="@{/th/surveyitem/moveDown}" method="post" style="display:inline;">
+                        <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
+                        <input type="hidden" name="surveyno" th:value="${surveyno}" />
+                        <button type="submit">⬇</button>
+                    </form>
+                </td>
                 <td th:text="${item.item}"></td>
                 <td th:text="${item.itemcnt}"></td>
                 <td>

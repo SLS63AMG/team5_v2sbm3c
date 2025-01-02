@@ -14,7 +14,7 @@
     <tbody>
       <tr th:each="survey : ${list}">
         <td th:text="${survey.surveyno}"></td>
-        <td><a th:href="@{/survey/read/{surveyno}(surveyno=${survey.surveyno})}" th:text="${survey.topic}"></a></td>
+        <td><a th:href="@{/th/surveyitem/list/{surveyno}(surveyno=${survey.surveyno})}" th:text="${survey.topic}"></a></td>
         <td>
           <img th:if="${survey.posterthumb != null}" th:src="@{|/survey/storage/${survey.posterthumb}|}" alt="포스터 이미지" style="width: 100px; height: auto;">
           <span th:if="${survey.posterthumb == null}">이미지 없음</span>
