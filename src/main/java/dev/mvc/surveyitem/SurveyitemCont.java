@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import dev.mvc.survey.SurveyProcInter;
 import dev.mvc.survey.SurveyVO;
+import dev.mvc.surveymember.SurveymemberService;
 
 
 import java.util.List;
@@ -19,6 +20,9 @@ public class SurveyitemCont {
   
   private final SurveyProcInter surveyProc;
   private final SurveyitemProcInter surveyitemProc;
+  
+  @Autowired
+  private SurveymemberService surveymemberService;
   
 
     // surveyProc와 surveyitemProc에 각각 @Qualifier를 사용
@@ -83,9 +87,26 @@ public class SurveyitemCont {
     }
     
     @PostMapping("/vote")
-    public String vote(@RequestParam("surveyitemno") int surveyitemno, @RequestParam("surveyno") int surveyno) {
-        surveyitemProc.vote(surveyitemno);
-        return "redirect:/th/surveyitem/vote_confirmation?surveyno=" + surveyno;
+    public String vote(@RequestParam("surveyitemno") int surveyitemno,
+                       @RequestParam("surveyno") int surveyno,
+                       @RequestParam("memberno") int memberno,
+                       Model model) {
+        // 설문 참여 데이터 추가 및 메시지 반환
+        String message = surveymemberService.addSurveyParticipation(surveyitemno, memberno);
+        
+        if ("Vote registered successfully".equals(message)) {
+            // 투표가 성공적으로 등록된 경우에만 투표 수 증가
+            surveyitemProc.vote(surveyitemno);
+            
+            // 상위 설문조사의 참여자 수 갱신
+            surveyitemProc.updateSurveyCnt(surveyno);
+        }
+        
+        // 메시지와 설문 번호를 모델에 추가
+        model.addAttribute("message", message);
+        model.addAttribute("surveyno", surveyno);
+        
+        return "/th/surveyitem/vote_confirmation";
     }
 
     @GetMapping("/vote_confirmation")

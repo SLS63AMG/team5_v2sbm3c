@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html layout:decorate="~{th/layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>설문 참여 회원 리스트</title>
+    <style>
+        /* 테이블 스타일 */
+        table {
+            width: 80%; /* 테이블 전체 너비 조정 */
+            margin: 20px auto; /* 테이블을 중앙에 배치 */
+            border-collapse: collapse; /* 중복 테두리 제거 */
+        }
+
+        th, td {
+            padding: 10px; /* 셀 내부 여백 추가 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            border: 1px solid #ddd; /* 테두리 스타일 */
+        }
+
+        th {
+            background-color: #f4f4f4; /* 헤더 배경색 */
+            font-weight: bold; /* 헤더 글씨 굵게 */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* 짝수 행 배경색 */
+        }
+
+        tr:hover {
+            background-color: #f1f1f1; /* 마우스 오버 시 배경색 */
+        }
+    </style>
+</head>
+<div layout:fragment="content">
+    <h1>설문 참여 회원 리스트</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>참여 날짜</th>
+                <th>설문 항목 번호</th>
+                <th>회원 번호</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="member : ${surveymemberList}">
+                <td th:text="${member.surveymemberno}"></td>
+                <td th:text="${member.rdate}"></td>
+                <td th:text="${member.surveyitemno}"></td>
+                <td th:text="${member.memberno}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</html>

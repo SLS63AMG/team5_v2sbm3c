@@ -51,5 +51,10 @@ public class SurveyitemProc implements SurveyitemProcInter {
     public int moveDown(int surveyitemno) {
         return surveyitemDAO.moveDown(surveyitemno);
     }
-
+    
+    @Override
+    public void updateSurveyCnt(int surveyno) {
+        surveyitemDAO.updateSurveyCnt(surveyno);
+    }
 }
+

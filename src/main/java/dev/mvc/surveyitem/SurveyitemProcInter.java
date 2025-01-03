@@ -12,5 +12,8 @@ public interface SurveyitemProcInter {
     public int vote(int surveyitemno);
     public int moveUp(int surveyitemno);
     public int moveDown(int surveyitemno);
+    void updateSurveyCnt(int surveyno);
+
+    
 
 }

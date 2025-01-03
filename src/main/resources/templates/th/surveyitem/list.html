@@ -75,6 +75,7 @@
                     <form th:action="@{/th/surveyitem/vote}" method="post" style="display:inline;">
                         <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
                         <input type="hidden" name="surveyno" th:value="${surveyno}" />
+                        <input type="hidden" name="memberno" th:value="${session.memberno}" />
                         <button type="submit">투표</button>
                     </form>
                 </td>

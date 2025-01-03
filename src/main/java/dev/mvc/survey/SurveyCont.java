@@ -225,7 +225,7 @@ public class SurveyCont {
     @PostMapping("/delete")
     public String delete(@RequestParam("surveyno") int surveyno) {
         surveyProc.delete(surveyno); // 설문조사 삭제
-        return "redirect:/survey/list";
+        return "redirect:/th/survey/list";
     }
 
 }

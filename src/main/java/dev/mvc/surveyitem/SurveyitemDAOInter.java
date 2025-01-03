@@ -4,6 +4,8 @@ package dev.mvc.surveyitem;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 public interface SurveyitemDAOInter {
     public int create(SurveyitemVO surveyitemVO);
     public List<SurveyitemVO> list(int surveyno);
@@ -14,6 +16,9 @@ public interface SurveyitemDAOInter {
     
     public int moveUp(int surveyitemno);
     public int moveDown(int surveyitemno);
+    void updateSurveyCnt(@Param("surveyno") int surveyno);
+
+    
 
 
 }
