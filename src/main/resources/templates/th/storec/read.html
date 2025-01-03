@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
+<div layout:fragment="content">
+  <div class='title_line'>
+    <span th:text="${storecVO.category}" class="title_line_text"></span> 
+    > <span th:text="${storecVO.storename}" class="title_line_text"></span> 
+    > 음식점 조회
+  </div>
+  
+  <aside class="aside_right" th:if="${session.grade == 'admin'}">
+    <a href="javascript:location.reload();">새로고침</a>
+    <span class='menu_divide' >│</span>    
+    <a th:href="@{|./list_by_category?itemno=${storecVO.itemno }|}">목록형</a>    
+    <span class='menu_divide' >│</span>
+    <a th:href="@{|./list_by_category_grid?itemno=${storecVO.itemno }|}">갤러리형</a>
+    <span class='menu_divide' >│</span>
+    <a th:href="@{|/storec/update?storecno=${storecVO.storecno}|}">수정</a>
+    <span class='menu_divide' >│</span>
+    <a th:href="@{|/storec/delete?storecno=${storecVO.storecno}|}">삭제</a>  
+  </aside> 
+
+  <aside class="aside_right" th:if="${session.grade != 'admin'}">
+    <a href="javascript:location.reload();">새로고침</a>
+    <span class='menu_divide' >│</span>    
+    <a th:href="@{|./list_by_category?itemno=${storecVO.itemno }|}">목록형</a>    
+    <span class='menu_divide' >│</span>
+    <a th:href="@{|./list_by_category_grid?itemno=${storecVO.itemno }|}">갤러리형</a>
+  </aside> 
+
+  <div class='menu_line'></div>
+
+  <fieldset class="fieldset_basic">
+    <ul>
+      <li class="li_none">
+        <div style="width: 100%; word-break: break-all;">
+        
+          <!-- 이미지가 존재할 경우 표시 -->
+          <div th:if="${storecVO.image != null and storecVO.image.length() > 0}">
+            <img th:src="@{|/storec/storage/${storecVO.image}|}" style="width: 50%; float: left; margin-top: 0.5%; margin-right: 1%;">
+          </div>
+
+          <span style="font-size: 1.5em; font-weight: bold;" th:text="${storecVO.storename}"></span>
+          <span style="font-size: 1em;" th:text="${storecVO.address}"></span><br><br>
+          <div style="white-space: pre-wrap;"><span th:text="${storecVO.businesshours}"></span></div><br>
+          <div style="white-space: pre-wrap;"><span th:text="${storecVO.phone}"></span></div><br>
+          <div style="white-space: pre-wrap;"><span th:text="${storecVO.rating}"></span></div><br>
+          <div style="white-space: pre-wrap;"><span th:text="${storecVO.reviewcount} 리뷰"></span></div>
+        </div>
+      </li>
+
+      <li class="li_none" th:text="|검색어(키워드): ${storecVO.word}|">
+      </li>
+      
+      <li class="li_none" th:if="${storecVO.size1 > 0}">
+        <div >
+          <!-- 파일 다운로드 링크 -->
+          첨부 파일: <a th:href='@{|/download?dir=/storec/storage&filename=${storecVO.image}&downname=${storecVO.image}|}'
+                             th:text='|${storecVO.image}|'></a> 
+                             <a th:href='@{|/download?dir=/storec/storage&filename=${storecVO.image}&downname=${storecVO.image}|}'>
+                             <img src="/storec/images/download.png"></a> 
+        </div>
+      </li>   
+    </ul>
+  </fieldset>
+
+</div>
+
+</html>

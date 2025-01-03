@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.mvc.storec.StorecDAOInter">
+
+  <!-- 음식점 등록 -->
+  <insert id="create" parameterType="dev.mvc.storec.StorecVO">
+    INSERT INTO storec (storecno, storename, distinction, address1, address2, tel, busihours, description, imagePath)
+    VALUES (storec_seq.nextval, #{storename}, #{distinction}, #{address1}, #{address2}, #{tel}, #{busihours}, #{description}, #{imagePath})
+  </insert>
+
+  <!-- 음식점 리스트 조회 -->
+  <select id="listAll" resultType="dev.mvc.storec.StorecVO">
+    SELECT storecno, storename, distinction, address1, address2, tel, busihours, description, imagePath
+    FROM storec
+    ORDER BY storecno DESC
+  </select>
+
+  <!-- 특정 음식점 상세 조회 -->
+  <select id="read" resultType="dev.mvc.storec.StorecVO" parameterType="int">
+    SELECT storecno, storename, distinction, address1, address2, tel, busihours, description, imagePath
+    FROM storec
+    WHERE storecno = #{storecno}
+  </select>
+
+  <!-- 음식점 정보 수정 -->
+  <update id="update" parameterType="dev.mvc.storec.StorecVO">
+    UPDATE storec
+    SET storename = #{storename}, distinction = #{distinction}, address1 = #{address1},
+        address2 = #{address2}, tel = #{tel}, busihours = #{busihours},
+        description = #{description}, imagePath = #{imagePath}
+    WHERE storecno = #{storecno}
+  </update>
+
+  <!-- 음식점 삭제 -->
+  <delete id="delete" parameterType="int">
+    DELETE FROM storec
+    WHERE storecno = #{storecno}
+  </delete>
+</mapper>

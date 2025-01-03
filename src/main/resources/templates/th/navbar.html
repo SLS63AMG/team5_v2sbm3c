@@ -35,10 +35,28 @@
               
               </li>
               
+              
+              
               <li class="nav-item">
                 <a class="nav-link" th:href="@{/th/store/list}">음식점 리스트</a>
               </li>
                
+               
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="storeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                음식점 컨텐츠
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="storeDropdown">
+                <li>
+                  <a class="dropdown-item" th:href="@{/th/storec/list}">음식점 추천 목록</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/th/storec/create}">음식점 추천 등록</a>
+                </li>
+              </ul>
+            </li>
+
+
               <li class="nav-item">
                 <a class="nav-link" th:href="@{/th/ranking/list_all}">음식점 랭킹 </a>
               </li>
