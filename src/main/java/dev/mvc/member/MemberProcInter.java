@@ -107,5 +107,9 @@ public interface MemberProcInter {
    */
   public ArrayList<MemberVO> find_id(String email);
   
-
+  /**
+   * 비밀번호 변경
+   */
+  public MemberVO find_passwd(String id, String tel);
+  
 }

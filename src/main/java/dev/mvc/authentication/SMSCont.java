@@ -40,8 +40,17 @@ public class SMSCont {
    * @return
    */
   @PostMapping(value = "/proc")
-  public ModelAndView proc(HttpSession session, HttpServletRequest request) {
+  public ModelAndView proc(HttpSession session, HttpServletRequest request,
+      @RequestParam(name="name") String name,
+      @RequestParam(name="id") String id,
+      @RequestParam(name="rphone") String rphone) {
     ModelAndView mav = new ModelAndView();
+    
+    // 아이디, 이름 확인 로직 예정
+    
+    
+    // 아이디, 이름 확인 로직 예정
+    
     
     // 아이디 확인
     // ------------------------------------------------------------------------------------------------------
