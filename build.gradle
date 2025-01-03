@@ -50,8 +50,9 @@ dependencies {
   implementation 'commons-fileupload:commons-fileupload:1.5'
   // https://mvnrepository.com/artifact/org.json/json
   implementation 'org.json:json:20240303'
-  
-  
+  implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+  implementation 'org.hibernate.validator:hibernate-validator:7.0.5.Final'
+  implementation 'org.glassfish:jakarta.el:4.0.2'
   
   // sms, email - gradle
   implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'

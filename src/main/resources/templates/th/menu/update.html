@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html layout:decorate="~{th/layout}">
+
+<div layout:fragment="content">
+  <div class="title_line">메뉴 수정</div>
+  <aside class="aside_right">
+    <a th:href="@{|/th/menu/list_all?word=${word}|}">목록</a>
+    <span class="menu_divide">|</span>
+    <a th:href="@{|/th/menu/delete/${menuVO.menuno}|}">삭제</a>
+    <span class="menu_divide">|</span>
+    <a th:href="@{|/th/menu/create|}">등록</a>
+    <span class="menu_divide">|</span>
+    <a href="javascript: location.reload();">새로 고침</a>
+  </aside>
+  
+  <div class="menu_line"></div>
+  
+  <div style="width: 50%; margin: 0 auto;">
+    <form name="frm" method="post" action="/th/menu/update" th:object="${menuVO}">
+      <!-- 메뉴 PK (menuno) -->
+      <div style="margin-right: 2px; width: 13%; float: left;">
+        <input type="number" name="menuno" 
+               class="form-control" style="width: 100%;" 
+               th:field="*{menuno}" placeholder="메뉴 번호" readonly="readonly">
+      </div>
+      
+      <!-- 메뉴 이름 -->
+      <div>
+        <label>메뉴 이름</label>
+        <input type="text"
+               name="name"
+               class="form-control fom-control-sm"
+               style="width: 100%;"
+               th:field="*{name}"
+               autofocus="autofocus" />
+      </div>
+
+      <!-- 메뉴 설명 -->
+      <div style="margin-top:10px;">
+        <label>메뉴 설명</label>
+        <textarea name="explanation"
+                  rows="5"
+                  class="form-control fom-control-sm"
+                  style="width: 100%;"
+                  th:field="*{explanation}"></textarea>
+      </div>
+
+      <!-- 가격 -->
+      <div style="margin-top:10px;">
+        <label>가격</label>
+        <input type="number"
+               name="price"
+               min="0"
+               step="1000"
+               class="form-control fom-control-sm"
+               style="width: 50%;"
+               th:field="*{price}" />
+      </div>
+
+      <!-- 사진 경로 -->
+      <div style="margin-top:10px;">
+        <label>사진 경로</label>
+        <input type="text"
+               name="photo"
+               class="form-control fom-control-sm"
+               style="width:100%;"
+               th:field="*{photo}" />
+      </div>
+
+      <!-- 식당 번호 -->
+      <div style="margin-top:10px;">
+        <label>식당 번호</label>
+        <input type="number"
+               name="storeno"
+               min="0"
+               class="form-control fom-control-sm"
+               style="width:50%;"
+               th:field="*{storeno}" />
+      </div>
+
+      <div class="content_body_bottom" style="margin-top:20px;">
+        <button type="submit" class="btn btn-secondary btn-sm">저장</button>
+        <button type="button"
+                onclick="location.href='/menu/list'"
+                class="btn btn-secondary btn-sm">
+          취소
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 필요한 경우, 공통 목록 프래그먼트 등 삽입 가능 -->
+  <div th:replace="~{th/menu/list_all_com::list_all_fragment}"></div>
+</div>
+</html>
