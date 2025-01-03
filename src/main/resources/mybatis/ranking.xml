@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.mvc.ranking.RankingDAOInter">
+
+    <!-- 랭킹 목록 조회 -->
+    <select id="list_ranking" resultType="dev.mvc.ranking.RankingVO">
+       SELECT 
+          RANK() OVER (ORDER BY COALESCE(s.rating, 0) DESC) AS rank,  <!-- COALESCE로 NULL을 0으로 처리 -->
+          s.storeno, 
+          s.name AS storeName, 
+          s.distinction, 
+          s.rating 
+      FROM 
+          store s
+      WHERE 
+          s.rating IS NOT NULL  <!-- rating이 NULL이 아닌 데이터만 조회 -->
+      ORDER BY 
+          rank
+    </select>
+
+    <!-- 특정 음식점 상세 조회 -->
+    <select id="read_store_by_storeno" resultType="dev.mvc.store.StoreVO">
+        SELECT 
+            storeno,
+            name,
+            distinction,
+            reviewcnt,
+            address1,
+            address2,
+            busihours,
+            tel,
+            reservation,
+            msite,
+            rating
+        FROM 
+            store
+        WHERE 
+            storeno = #{storeno}
+    </select>
+
+    <!-- 랭킹 추가 -->
+    <insert id="insert_ranking" parameterType="dev.mvc.ranking.RankingVO">
+        INSERT INTO ranking (rankno, rank, rankdate, storeno)
+        VALUES (#{rankno}, #{rank}, SYSDATE, #{storeno})
+    </insert>
+
+    <!-- 랭킹 수정 -->
+    <update id="update_ranking" parameterType="dev.mvc.ranking.RankingVO">
+        UPDATE ranking
+        SET 
+            rank = #{rank}, 
+            storeno = #{storeno}
+        WHERE 
+            rankno = #{rankno}
+    </update>
+
+    <!-- 랭킹 삭제 -->
+    <delete id="delete_ranking" parameterType="int">
+        DELETE FROM ranking
+        WHERE rankno = #{rankno}
+    </delete>
+</mapper>
