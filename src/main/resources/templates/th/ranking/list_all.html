@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html layout:decorate="~{th/layout}">
+<div layout:fragment="content">
+  <div class="title_line">평점 랭킹 TOP10</div>
+  
+  <aside class="aside_right">
+    <a href="javascript: location.reload();">새로 고침</a>
+  </aside>
+  
+  <div class="menu_line"></div>
+  
+  <div class="flex_div_center" style="width: 90%; margin: 0px auto;">
+    <table class="table table-hover" style="width: 100%;">
+      <thead>
+        <tr>
+          <th style="width: 10%;">순위</th>
+          <th style="width: 30%;">이름</th>
+          <th style="width: 25%;">업종</th>
+          <th style="width: 15%;">평점</th>
+          <th style="width: 20%;">상세보기</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Thymeleaf 반복문 -->
+        <tr th:each="ranking : ${list}">
+          <td style="padding: 10px; text-align: left;" th:text="${ranking.rank}"></td>
+          <td style="padding: 10px; text-align: left;" th:text="${ranking.storeName}"></td>
+          <td style="padding: 10px; text-align: left;" th:text="${ranking.distinction}"></td>
+          <td style="padding: 10px; text-align: left;" th:text="${ranking.rating}"></td>
+          <td>
+            <a th:href="@{/th/ranking/read/{storeno}(storeno=${ranking.storeno})}" class="btn btn-primary btn-sm">상세 보기</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</html>

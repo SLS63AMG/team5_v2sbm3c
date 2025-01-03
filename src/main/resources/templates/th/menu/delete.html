@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html layout:decorate="~{th/layout}">
+
+<div layout:fragment="content">
+  <div class="title_line">메뉴 삭제</div>
+  <aside class="aside_right">
+    <a th:href="@{|/th/menu/list_search?word=${word}|}">목록</a>
+    <span class="menu_divide">|</span>
+    <a th:href="@{/th/menu/update/{menuno}(menuno=${menuVO.menuno})}">수정</a>
+    <span class="menu_divide">|</span>
+    <a th:href="@{/th/menu/create}">등록</a>
+    <span class="menu_divide">|</span>
+    <a href="javascript: location.reload();">새로 고침</a>
+  </aside>
+
+  <div th:replace="~{th/menu/list_search_com::list_search_fragment}"></div>
+
+  <div class="menu_line"></div>
+  
+  <div th:replace="~{th/menu/list_all_com::list_all_fragment}"></div>
+
+  <div style="width: 50%; margin: 0 auto;">
+    <form name="frm" method="post" action="/th/menu/delete" th:object="${menuVO}">
+      <!-- PK -->
+      <input type="hidden" name="menuno" th:value="${menuVO.menuno}" />
+
+      <!-- 메뉴 정보 표시 -->
+      <div class="msg_warning">
+        <div class="alert alert-warning">
+          <p>메뉴를 삭제하면 복구할 수 없습니다.</p>
+          <p>메뉴 이름: <strong th:text="${menuVO.name}"></strong></p>
+          <div class="content_body_bottom">
+            <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
+            <button type="button" onclick="location.href='/th/menu/list_search'" class="btn btn-secondary btn-sm">취소</button>
+          </div>
+        </div>
+      </div>
+      
+    </form>
+  </div>
+
+</div>
+</html>

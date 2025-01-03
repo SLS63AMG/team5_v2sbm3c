@@ -24,6 +24,10 @@ import com.zaxxer.hikari.HikariDataSource;
                                        "dev.mvc.wishlist",
                                        "dev.mvc.survey",
                                        "dev.mvc.surveyitem",
+                                       "dev.mvc.menu",
+                                       "dev.mvc.ranking",
+                                       "dev.mvc.order",
+                                       "dev.mvc.cart",
                                        "dev.mvc.store", // DAO interface를 찾는 위치
                                        "dev.mvc.surveymember"})
 
