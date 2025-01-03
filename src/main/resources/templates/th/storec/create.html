@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속 -->
+<head>
+    <title>음식점 등록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 24px;
+            text-align: center;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        .form-group .hint {
+            font-size: 12px;
+            color: #666666;
+            margin-top: 5px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .button-container .btn-submit {
+            background-color: #007BFF;
+            color: #ffffff;
+        }
+
+        .button-container .btn-reset {
+            background-color: #6c757d;
+            color: #ffffff;
+        }
+
+        .button-container .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .button-container .btn-reset:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<div layout:fragment="content">
+
+    <div class="container">
+        <h2>음식점 등록</h2>
+        <form action="/th/storec/create" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="storename">음식점 이름:</label>
+                <input type="text" id="storename" name="storename" th:value="${storecVO.storename}" placeholder="음식점 이름을 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="distinction">업종:</label>
+                <select id="distinction" name="distinction" required>
+                    <option value="">업종 선택</option>
+                    <option value="한식">한식</option>
+                    <option value="중식">중식</option>
+                    <option value="일식">일식</option>
+                    <option value="양식">양식</option>
+                    <option value="양식">카페</option>
+                    <option value="양식">기타</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="address1">도로명 주소:</label>
+                <input type="text" id="address1" name="address1" th:value="${storecVO.address1}" placeholder="도로명 주소를 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address2">상세 주소:</label>
+                <input type="text" id="address2" name="address2" th:value="${storecVO.address2}" placeholder="상세 주소를 입력하세요">
+            </div>
+
+            <div class="form-group">
+                <label for="tel">전화번호:</label>
+                <input type="text" id="tel" name="tel" th:value="${storecVO.tel}" placeholder="전화번호를 입력하세요">
+            </div>
+
+            <div class="form-group">
+                <label for="busihours">영업 시간:</label>
+                <input type="text" id="busihours" name="busihours" th:value="${storecVO.busihours}" placeholder="예: 09:00 - 21:00">
+            </div>
+
+            <div class="form-group">
+                <label for="reservation">예약 여부:</label>
+                <select id="reservation" name="reservation">
+                    <option value="Y">예</option>
+                    <option value="N">아니오</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">음식점 설명:</label>
+                <textarea id="description" name="description" th:text="${storecVO.description}" placeholder="음식점에 대한 설명을 입력하세요"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="image">이미지 업로드:</label>
+                <input type="file" id="image" name="image" accept="image/jpeg, image/png">
+                <p class="hint">JPG, PNG 형식만 허용됩니다.</p>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="btn-submit">등록</button>
+                <button type="reset" class="btn-reset">초기화</button>
+            </div>
+        </form>
+    </div>
+</div>
+</html>

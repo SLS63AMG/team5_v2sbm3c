@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
+<div layout:fragment="content">
+
+  <div class='title_line'>
+    <span th:text="${storecVO.category}" class="title_line_text"></span>
+    > <span th:text="${storecVO.storename}" class="title_line_text"></span>
+  </div>
+
+  <aside class="aside_right">
+    <span th:if="${session.grade == 'admin'}">
+      <a th:href="@{|/storec/create?itemno=${storecVO.itemno}|}">등록</a>
+      <span class="menu_divide">│</span>    
+    </span>
+    <a href="javascript:location.reload();">새로고침</a>
+  </aside>
+
+  <!-- list_search_com.html의 검색 폼을 포함 -->
+  <div th:replace="~{storec/list_search_com::list_search_fragment}"></div>
+  
+  <div class='menu_line'></div>
+       
+  <table class="table table-striped" style='width: 100%;'>
+    <colgroup>
+      <col style='width: 10%;'/>
+      <col style='width: 90%;'/>
+    </colgroup>
+    <tr>
+      <th class='th_bs'>이미지</th>
+      <th class='th_bs'>제목</th>
+    </tr>
+   
+    <tr th:each="storecVO, status:${list}" 
+         th:attr="onclick=|location.href='/storec/read?storecno=${storecVO.storecno}&word=${word}'|"
+         style="cursor: pointer; height: 90px;">
+      <td class='td_basic' style="vertical-align: middle; text-align: center;">
+        <div th:if="${storecVO.image != null and (storecVO.image.endsWith('jpg') or storecVO.image.endsWith('png') or storecVO.image.endsWith('gif'))}">
+          <img th:src="@{|/storec/storage/${storecVO.thumb1}|}" style="width: 120px; height: 90px;">
+        </div>
+
+        <div th:if="${((storecVO.image == null) or (storecVO.image != null and (storecVO.image.endsWith('jpg') or storecVO.image.endsWith('png') or storecVO.image.endsWith('gif')))) == false}" 
+             class="display_table" style="float: left; width: 50%;">
+          <div class="display_table_cell">
+            <span th:text="${storecVO.image}">파일 없음</span>
+          </div>
+        </div>
+
+        <div th:if="${storecVO.image == null}" style="text-align: center; width: 50%; float: left;">
+          <img src="/storec/images/none1.png" style="width: 120px; height: 90px;">
+        </div>
+      </td>
+      <td class='td_left'>
+        <span th:text="${storecVO.storename}" style="font-weight: bold;"></span><br>
+        <span th:if="${storecVO.description.length() > 160 }" 
+              th:text="|${storecVO.description.substring(0, 160)}...|"></span>
+        <span th:if="${storecVO.description.length() <= 160 }" 
+              th:text="|${storecVO.description}|"></span>
+      </td>
+    </tr>
+  </table>
+   
+  <div class='bottom_menu'>
+    <button type='button' onclick="location.reload();" class="btn btn-primary btn-sm">새로 고침</button>
+  </div>
+
+</div>
+</html>
