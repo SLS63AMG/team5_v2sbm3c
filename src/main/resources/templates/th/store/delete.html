@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{th/layout}">
+<head>
+    <style>
+        /* 삭제 버튼 스타일 */
+        .action-btn-delete {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #DC3545;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .action-btn-delete:hover {
+            background-color: #C82333;
+            transform: scale(1.05);
+        }
+
+        /* 취소 버튼 스타일 */
+        .action-btn-cancel {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #6c757d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .action-btn-cancel:hover {
+            background-color: #5a6268;
+            transform: scale(1.05);
+        }
+
+        /* 버튼을 가로로 배치 */
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button-container form {
+            display: inline;
+        }
+
+        .button-container button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="title_line">음식점 삭제</div>
+  <aside class="aside_right">
+    <a href="javascript: location.reload();">새로고침</a>
+  </aside>
+
+  <div class="menu_line"></div>
+  <div style="width: 60%; margin: 0px auto;">
+    <div class="msg_warning">
+      음식점 정보를 삭제하면 복구할 수 없습니다.<br>
+      정말로 삭제하시겠습니까?
+    </div>
+
+    <!-- 음식점 정보 표시 -->
+    <ul class="list-group" style="margin: 20px 0;">
+      <li class="list-group-item">식당 번호: <span th:text="${store.storeno}"></span></li>
+      <li class="list-group-item">식당 이름: <span th:text="${store.name}"></span></li>
+      <li class="list-group-item">업종: <span th:text="${store.distinction}"></span></li>
+      <li class="list-group-item">리뷰 수: <span th:text="${store.reviewcnt}"></span></li>
+      <li class="list-group-item">도로명 주소: <span th:text="${store.address1}"></span></li>
+      <li class="list-group-item">전화번호: <span th:text="${store.tel}"></span></li>
+    </ul>
+
+    <!-- 삭제 | 취소 버튼을 일직선으로 배치 -->
+    <div class="button-container">
+      <form th:action="@{/th/store/list}" method="get" style="display: inline;">
+        <button type="submit" class="action-btn-cancel">삭제취소</button>
+      </form>
+      <form th:action="@{/th/store/delete}" method="post" style="display: inline;">
+        <input type="hidden" name="storeno" th:value="${store.storeno}">
+        <button type="submit" class="action-btn-delete">삭제</button>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

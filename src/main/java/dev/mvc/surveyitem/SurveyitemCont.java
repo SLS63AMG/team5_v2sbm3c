@@ -7,15 +7,31 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import dev.mvc.survey.SurveyProcInter;
+import dev.mvc.survey.SurveyVO;
+
+
 import java.util.List;
 
 @Controller
 @RequestMapping("/th/surveyitem")
 public class SurveyitemCont {
+  
+  private final SurveyProcInter surveyProc;
+  private final SurveyitemProcInter surveyitemProc;
+  
 
+    // surveyProc와 surveyitemProc에 각각 @Qualifier를 사용
     @Autowired
-    @Qualifier("dev.mvc.surveyitem.SurveyitemProc")
-    private SurveyitemProcInter surveyitemProc;
+    public SurveyitemCont(
+        @Qualifier("surveyProc") SurveyProcInter surveyProc,  // surveyProc 빈을 명시적으로 지정
+        @Qualifier("dev.mvc.surveyitem.SurveyitemProc") SurveyitemProcInter surveyitemProc) {
+        this.surveyProc = surveyProc;
+        this.surveyitemProc = surveyitemProc;
+    }
+
+
+
 
     @GetMapping("/create/{surveyno}")
     public String createForm(@PathVariable("surveyno") int surveyno, Model model) {
@@ -32,8 +48,10 @@ public class SurveyitemCont {
     @GetMapping("/list/{surveyno}")
     public String list(@PathVariable("surveyno") int surveyno, Model model) {
         List<SurveyitemVO> items = surveyitemProc.list(surveyno);
+        SurveyVO survey = surveyProc.read(surveyno);  // surveyProc를 통해 해당 surveyno에 맞는 SurveyVO 객체를 가져옴
         model.addAttribute("items", items);
         model.addAttribute("surveyno", surveyno);
+        model.addAttribute("survey", survey);  // SurveyVO 객체를 모델에 추가하여 topic을 사용 가능하도록 함
         return "/th/surveyitem/list";
     }
      
@@ -81,6 +99,18 @@ public class SurveyitemCont {
         List<SurveyitemVO> items = surveyitemProc.list(surveyno);
         model.addAttribute("items", items);
         return "/th/surveyitem/results";
+    }
+    
+    @PostMapping("/moveUp")
+    public String moveUp(@RequestParam("surveyitemno") int surveyitemno, @RequestParam("surveyno") int surveyno) {
+        surveyitemProc.moveUp(surveyitemno);
+        return "redirect:/th/surveyitem/list/" + surveyno;
+    }
+
+    @PostMapping("/moveDown")
+    public String moveDown(@RequestParam("surveyitemno") int surveyitemno, @RequestParam("surveyno") int surveyno) {
+        surveyitemProc.moveDown(surveyitemno);
+        return "redirect:/th/surveyitem/list/" + surveyno;
     }
 
 }

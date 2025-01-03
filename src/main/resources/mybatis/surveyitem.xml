@@ -33,4 +33,20 @@
         SET itemcnt = itemcnt + 1
         WHERE surveyitemno = #{surveyitemno}
     </update>
+    
+    
+      <!-- 순번 올리기 -->
+  <update id="moveUp" parameterType="int">
+      UPDATE surveyitem
+      SET itemseq = itemseq - 1
+      WHERE surveyitemno = #{surveyitemno} AND itemseq > 1
+  </update>
+  
+  <!-- 순번 내리기 -->
+  <update id="moveDown" parameterType="int">
+      UPDATE surveyitem
+      SET itemseq = itemseq + 1
+      WHERE surveyitemno = #{surveyitemno}
+  </update>
+
 </mapper>

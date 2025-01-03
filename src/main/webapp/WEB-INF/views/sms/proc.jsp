@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*, java.util.Base64.*, java.security.*, java.io.*, java.net.*" %>
 <%!
+
 /**==============================================================
   Description        :  사용 함수 선언
 ==============================================================**/
@@ -88,6 +89,7 @@ if(action.equals("go")) {
     msg = base64Encode(nullcheck(msg, ""));
             
     // System.out.println(" ->msg: " + msg);
+    System.out.println("이 메시지는 서버 콘솔에 출력됩니다.");
     String rphone = base64Encode(nullcheck(request.getParameter("rphone"), ""));
     // System.out.println(" ->rphone: " + rphone);
     String sphone1 = base64Encode(nullcheck(request.getParameter("sphone1"), ""));
@@ -220,4 +222,5 @@ if(action.equals("go")) {
        out.println("<script>location.href='"+returnurl+"';</script>");
     }
 }
+
 %>

@@ -8,7 +8,7 @@
 
   <div class="menu_line"></div>
   <div style="width: 50%; margin: 0px auto;">
-    <form name="frm" method="post" action="/survey/update" enctype="multipart/form-data" th:object="${surveyVO}">
+    <form name="frm" method="post" action="/th/survey/update" enctype="multipart/form-data" th:object="${surveyVO}">
       <input type="hidden" name="surveyno" th:value="${surveyVO.surveyno}">
       <div>
         <label>설문 제목</label>
@@ -28,7 +28,7 @@
       </div>
       <div class="content_body_bottom">
         <button type="submit" class="btn btn-secondary btn-sm">수정</button>
-        <button type="button" onclick="location.href='/survey/list'" class="btn btn-secondary btn-sm">취소</button>
+        <button type="button" onclick="location.href='/th/survey/list'" class="btn btn-secondary btn-sm">취소</button>
       </div>
     </form>
   </div>

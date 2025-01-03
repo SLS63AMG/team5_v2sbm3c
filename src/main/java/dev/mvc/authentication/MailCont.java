@@ -19,6 +19,7 @@ public class MailCont {
         System.out.println("-> MailCont created.");
       }
     
+    // 메일 보내기 ------------------------------------------------------
     // http://localhost:9091/mail/form
     /**
      * 메일 입력 화면
@@ -45,8 +46,14 @@ public class MailCont {
         mailTool.send(receiver, from, title, content); // 메일 전송
         return "/th/authentication/sended"; // /templates/mail/sended.html
     }
+    // 메일 보내기 ------------------------------------------------------
 
     
+    
+    
+    
+    
+    // 파일 보내기 ------------------------------------------------------
     // http://localhost:9091/mail/form_file.do
     /**
      * 파일 첨부 메일 입력폼
@@ -58,22 +65,6 @@ public class MailCont {
       return "/th/authentication/form_file"; // /templates/mail/form_file.html
     }
     
-//    // http://localhost:9091/mail/send_file.do
-//    /**
-//     * 메일 전송
-//     * @return
-//     */
-//    @RequestMapping(value = {"/mail/send_file.do"}, method=RequestMethod.POST)
-//    public ModelAndView send_file(String receiver, String from, String title, String content,
-//                                             MultipartFile file1MF) {
-//      ModelAndView mav = new ModelAndView();
-//      mav.setViewName("/mail/sended");  // /WEB-INF/views/mail/sended.jsp
-//
-//      MailTool mailTool = new MailTool();
-//      mailTool.send_file(receiver, from, title, content, file1MF, "C:/kd/deploy/mail/images/"); // 메일 전송
-//      
-//      return mav;
-//    }
     
     // http://localhost:9091/mail/send_file
     /**
@@ -92,7 +83,8 @@ public class MailCont {
       
       return "/th/authentication/sended"; // /templates/mail/sended.html
     }
-    
+    // 파일 보내기 ------------------------------------------------------
+
 
 }
 

@@ -174,5 +174,12 @@
       WHERE memberno = #{memberno}
   </update>
   
+  <!-- 계정 찾기 -->
+  <select id="find_id" resultType="dev.mvc.member.MemberVO" parameterType="String">
+      SELECT id, email
+      FROM member
+      WHERE email = #{email}
+  </select>
+  
   
 </mapper>

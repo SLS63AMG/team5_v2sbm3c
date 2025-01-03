@@ -57,5 +57,10 @@
         <td th:text="${item.itemcnt}"></td>
     </tr>
 </table>
+<div class="center">
+    <a th:href="@{/th/surveyitem/list/{surveyno}(surveyno=${surveyno})}">
+        <button>투표 페이지로 돌아가기</button>
+    </a>
+</div>
 </div>
 </html>

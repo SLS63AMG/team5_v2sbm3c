@@ -2,6 +2,7 @@ package dev.mvc.member;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import dev.mvc.loginlog.LoginlogProcInter;
 import dev.mvc.tool.Contents;
 import dev.mvc.tool.IPTool;
+import dev.mvc.tool.MailTool;
 import dev.mvc.tool.Security;
 import dev.mvc.tool.Tool;
 import dev.mvc.tool.Upload;
@@ -571,6 +574,53 @@ public class MemberCont {
     return "redirect:/";
   }
   // 삭제-------------------------------------------------------------------
+  
 
+  
+  // 아이디 찾기, 비밀번호 찾기
+  @GetMapping(value = "/id_find")
+  public String id_form(Model model) {
+
+    return "/th/member/id_find_form"; // /templates/mail/form.html
+  }
+  
+  @PostMapping(value = "/send")
+  public String send(Model model,
+                     @RequestParam("receiver") String receiver) {
+      MailTool mailTool = new MailTool();
+      String from ="wogns00814@naver.com";
+      String title = "[계정 찾기]";
+      String content = "";
+      ArrayList<MemberVO> list = this.memberProc.find_id(receiver);
+      
+      if(list.size() > 0) {
+        content = "고객님"+ receiver +"의 계정은 [" + list.size() + "]개 입니다.";
+        
+        int index = 1;
+        for (MemberVO item : list) {
+          content += index + "번 계정    " + item.getId() + ".";
+          index++;
+        }
+        mailTool.send(receiver, from, title, content); // 메일 전송
+        model.addAttribute("code", "success_find_id");
+        model.addAttribute("cnt", 1);
+      } else {
+        model.addAttribute("cnt", 0);
+        model.addAttribute("code", "fail_find_id");
+      }
+
+      return "/th/authentication/sended"; // /templates/mail/sended.html        
+      
+  }
+  
+  @GetMapping(value = "/passwd_find")
+  public String passwd_form(Model model) {
+
+    return "/th/member/passwd_find_form"; // /templates/mail/form.html
+  }
+  
+  // 아이디 찾기, 비밀번호 찾기
+  
+  
 
 }

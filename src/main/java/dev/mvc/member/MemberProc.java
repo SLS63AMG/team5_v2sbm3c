@@ -164,6 +164,11 @@ public class MemberProc implements MemberProcInter {
     int cnt = this.memberDAO.update_member(memberVO);
     return cnt;
   }
-
+  
+  @Override
+  public ArrayList<MemberVO> find_id(String email) {
+    ArrayList<MemberVO> list = this.memberDAO.find_id(email);
+    return list;
+  }
 
 }

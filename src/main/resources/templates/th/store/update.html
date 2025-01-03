@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html layout:decorate="~{th/layout}">
+<head>
+    <style>
+        /* 수정 버튼 스타일 */
+        .action-btn-update {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #DC3545;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .action-btn-update:hover {
+            background-color: #C82333;
+            transform: scale(1.05);
+        }
+
+        /* 수정취소 버튼 스타일 */
+        .action-btn-cancel {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #6c757d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .action-btn-cancel:hover {
+            background-color: #5a6268;
+            transform: scale(1.05);
+        }
+
+        /* 버튼을 가로로 배치 */
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button-container form {
+            display: inline;
+        }
+
+        .button-container button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="title_line">음식점 수정</div>
+  <div class="menu_line"></div>
+
+  <div style="width: 60%; margin: 0px auto;">
+    <form th:action="@{/th/store/update}" method="post">
+      <ul class="list-group">
+        <input type="hidden" id="storeno" name="storeno" th:value="${store.storeno}">
+        <li class="list-group-item">
+          <label for="name">식당 이름:</label>
+          <input type="text" id="name" name="name" th:value="${store.name}" required>
+        </li>
+
+        <li class="list-group-item">
+          <label for="distinction">업종:</label>
+          <input type="text" id="distinction" name="distinction" th:value="${store.distinction}" required>
+        </li>
+
+        <li class="list-group-item">
+          <label for="reviewcnt">리뷰 수:</label>
+          <input type="number" id="reviewcnt" name="reviewcnt" th:value="${store.reviewcnt}" required>
+        </li>
+        <li class="list-group-item">
+          <label for="address1">도로명 주소:</label>
+          <input type="text" id="address1" name="address1" th:value="${store.address1}" required>
+        </li>
+        <li class="list-group-item">
+          <label for="busihours">영업 시간:</label>
+          <input type="text" id="busihours" name="busihours">
+        </li>
+
+        <li class="list-group-item">
+          <label for="tel">전화번호:</label>
+          <input type="text" id="tel" name="tel" th:value="${store.tel}">
+        </li>
+
+        <li class="list-group-item">
+          <label for="reservation">예약 여부 (Y/N):</label>
+          <input type="text" id="reservation" name="reservation" maxlength="1" th:value="${store.reservation}">
+        </li>
+
+        <li class="list-group-item">
+          <label for="msite">지도 페이지 주소:</label>
+          <input type="text" id="msite" name="msite" required>
+        </li>
+
+        <li class="list-group-item">
+          <label for="rating">평점:</label>
+          <input type="number" id="rating" name="rating" step="0.01" value="0.0">
+        </li>
+      </ul>
+
+      <!-- 수정 버튼과 수정취소 버튼을 일직선으로 배치 -->
+      <div class="button-container">
+        <form th:action="@{/th/store/list}" method="get">
+          <button type="submit" class="action-btn-cancel">수정취소</button>
+        </form>
+        <button type="submit" class="action-btn-update">수정</button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>
