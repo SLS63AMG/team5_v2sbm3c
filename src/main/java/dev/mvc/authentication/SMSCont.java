@@ -130,7 +130,7 @@ public class SMSCont {
     }
     
 
-    return "/th/sms/confirm";
+    return "/th/member/passwd_re";
   }
   
   

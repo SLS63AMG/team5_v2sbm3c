@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
+
+<div layout:fragment="content">
+  <script>
+    window.onload = () => {
+      document.getElementById('btn_send').addEventListener('click', send);
+            
+      document.querySelector('#passwd').addEventListener('keypress', (event) => {
+      // document.getElementById('passwd').addEventListener('keypress', (event) => {
+        if(event.key === 'Enter') {
+          document.getElementById('passwd2').focus();
+        }
+      }); 
+      
+      document.querySelector('#passwd2').addEventListener('keypress', (event) => {
+      // document.getElementById('passwd').addEventListener('keypress', (event) => {
+        if(event.key === 'Enter') {
+          document.getElementById('btn_send').focus();
+        }
+      }); 
+      
+    }
+    
+    function send() {
+      // 새로운 패스워드 입력 확인
+      // 패스워드를 정상적으로 2번 입력했는지 확인
+      let passwd = document.getElementById('passwd');
+      let passwd2 = document.getElementById('passwd2');
+      let passwd2_msg = document.getElementById('passwd2_msg');
+  
+      if (passwd.value != passwd2.value) {
+        passwd2_msg.innerHTML= '입력된 패스워드가 일치하지 않습니다.';
+        passwd2_msg.classList.add('span_warning');    // class 적용
+        passwd.focus();  // 첫번째 패스워드로 focus 설정
+  
+        return false;  // 회원 가입 진행 중지
+      }
+      
+      document.getElementById('frm').submit();    
+    }    
+  </script>
+
+  
+  <div style="width: 30%; margin: 0px auto; ">
+    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/passwd_re">
+      
+      <div class="form-group">
+        <label for="passwd">새로운 패스워드*</label> 
+        <input type='password' name='passwd' id='passwd' required="required" 
+                  placeholder="패스워드" class="form-control form-control-sm" style="width: 100%;">
+      </div>
+
+      <div class="form-group">
+        <label for="passwd2">새로운 패스워드 확인*</label>
+        <input type='password' name='passwd2' id='passwd2' required="required" 
+                  placeholder="패스워드 확인" class="form-control form-control-sm" style="width: 100%;">
+        <span id='passwd2_msg'></span>
+      </div>
+      
+      <div class="content_body_bottom">
+        <button type="button" id='btn_send' class="btn btn-secondary btn-sm">저장</button>
+      </div>
+
+
+    </form>
+  </div>
+    
+</div>
+</html>

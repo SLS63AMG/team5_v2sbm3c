@@ -472,7 +472,7 @@ public class Tool {
     boolean sw = false;
     Integer grade = (Integer)session.getAttribute("grade");
     
-    if(grade != null && (grade >= 1 || grade <= 99)) {
+    if(grade != null && (grade >= 1 && grade <= 99)) {
       sw = true;
     }
     return sw;
