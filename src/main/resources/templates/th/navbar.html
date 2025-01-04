@@ -65,6 +65,14 @@
                 <a class="nav-link" th:href="@{/th/survey/list}">설문조사</a>
                </li>
 
+            </ul>
+            
+            
+        <div class="dropdown text-end">
+          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="/images/unknown.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu text-small">
               <li class="nav-item">
                 <span th:if="${session.token == null}"><a class="nav-link" th:href="@{/member/login}" th:text="'로그인'"></a></span>
               </li>
@@ -78,7 +86,12 @@
               <li class="nav-item">
                 <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/member/logout" th:text="@{|${session.id} 로그아웃|}"></a></span>
               </li>
-            </ul>
+          </ul>
+        </div>
+            
+            
+            
+            
         </div>
     </div>  
   </nav>

@@ -235,7 +235,6 @@ public class MemberCont {
         ck_id.setMaxAge(0);
         response.addCookie(ck_id);
       }
-
       // Cookie 종료
       return "redirect:/";
     } else {

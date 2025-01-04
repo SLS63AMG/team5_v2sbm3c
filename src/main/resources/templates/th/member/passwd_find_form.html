@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html layout:decorate="~{th/layout}"> <!-- layout.html 상속 -->
-  <div layout:fragment="content" style="width: 80%; margin: 50px auto; text-align: center;">
+  
 
+  <div layout:fragment="content" style="width: 80%; margin: 50px auto; text-align: center;">
+  <link href="/css/member_find.css" rel="Stylesheet" type="text/css">
   <div style='margin: 50px;'>
     <form name="smsForm" action="/member/proc" method="post">
       <input type="hidden" name="action" value="go"> 
@@ -11,18 +13,29 @@
       <!-- 정상적으로 문자가 전송되고 나서 이동할 주소 -->
       <input type="hidden" name="returnurl" maxlength="64" value="/sms/proc_next" size="80">
       
-      <input type="text" name="id" id="id">
-      <br>
-      전화 번호 입력: <input type="text" name="rphone" value="010-" autofocus="autofocus"> 예) 010-0112-1112 , '-' 포함해서 입력. <br>
-       <!-- 보내는 번호, SMS 서비스를 가입한 기업의 관리자 전화번호 -->
-      <div th:if="${error}" class="error" th:text="${error}"></div>
+      <div class="form-container">
+        <div class="input-field">
+          <input type="text" name="id" id="id" class="input-field" required autocomplete="off">
+          <label for="id">아이디</label>
+          <span></span>
+        </div>
       
+        <div class="input-field">
+          <input type="text" name="rphone" class="input-field" required autocomplete="off"> 
+          <label for="rphone">전화번호</label>
+          <span></span>
+        </div>
+        <span> 예) 010-0112-1112 , '-' 포함해서 입력.</span>
+      
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+      </div>
+      <span class="policy-text">이통사 정책에 따라 발신번호와 수신번호가 같은 경우 발송되지 않습니다.</span>
+      
+      <input type="submit" value="전송" class="submit-button">
       
       <input type="hidden" name="sphone1" value="010"> <!-- 전화번호 첫째자리 -->
       <input type="hidden" name="sphone2" value="2722"> <!-- 전화번호 둘째자리 -->
       <input type="hidden" name="sphone3" value="9751"> <!-- 전화번호 셋째자리 -->
-      <br><br>
-      <input type="submit" value="전송">이통사 정책에 따라 발신번호와 수신번호가 같은 경우 발송되지 않습니다.
     
     </form>
   </div>

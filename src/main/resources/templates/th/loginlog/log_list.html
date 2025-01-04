@@ -77,6 +77,11 @@ function clearTable() {
                 <td>${loginlogVO.id}</td>
                 <td>${loginlogVO.jdate}</td>
                 <td>${loginlogVO.sw}</td>
+                <td>
+                    <a href="./delete?logno=${loginlogVO.logno}">
+                        <img src='/loginlog/images/delete.png' title='삭제' class="icon" style="width: 20px; height: 20px;"/>
+                    </a>
+                </td>
             `;
             tbody.appendChild(tr);
         });
@@ -134,11 +139,11 @@ function clearTable() {
     <td th:text="${loginlogVO.id}"></td>
     <td th:text="${loginlogVO.jdate}"></td>
     <td th:text="${loginlogVO.sw}"></td>
-<td>
-    <a th:href="@{|./delete?logno=${loginlogVO.logno}|}">
-        <img src='/loginlog/images/delete.png' title='삭제' class="icon" style="width: 20px; height: 20px;"/>
-    </a>
-</td>
+    <td>
+        <a th:href="@{|./delete?logno=${loginlogVO.logno}|}">
+            <img src='/loginlog/images/delete.png' title='삭제' class="icon" style="width: 20px; height: 20px;"/>
+        </a>
+    </td>
 
   </tr>
 </table>
@@ -147,3 +152,6 @@ function clearTable() {
 
 </div>
 </html>
+
+
+
