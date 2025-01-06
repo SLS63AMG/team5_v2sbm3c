@@ -50,7 +50,7 @@
       let id = document.getElementById('id');
       let id_msg = document.getElementById('id_msg');
   
-      if (id.value.trim().length <= 5) {
+      if (id.value.trim().length < 5) {
         id_msg.innerHTML= '아이디 입력은 필수 입니다. ID는 5자이상 권장합니다.';
         id_msg.classList.add('span_warning');
   

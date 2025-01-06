@@ -68,26 +68,27 @@
             </ul>
             
             
-        <div class="dropdown text-start">
-          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="/th/images/unknown.png" alt="mdo" width="32" height="32" class="rounded-circle">
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end text-small">
-              <li class="nav-item">
-                <span th:if="${session.token == null}"><a class="nav-link" th:href="@{/member/login}" th:text="'로그인'"></a></span>
-              </li>
-              
-              <li class="nav-item">
-                <span th:if="${session.token == null}"><a class="nav-link" th:href="@{|/member/signup|}">회원가입</a></span>
-              </li>
-              <li class="nav-item">
-                <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/member/profile" th:text="@{|프로필|}"></a></span>
-              </li>
-              <li class="nav-item">
-                <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/member/logout" th:text="@{|${session.id} 로그아웃|}"></a></span>
-              </li>
-          </ul>
-        </div>
+<div class="dropdown text-start d-flex justify-content-end align-items-center">
+  <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    <img th:if="${session.token == null}" src="/th/images/login.png" alt="mdo" width="32" height="32" class="rounded-circle">
+    <img th:if="${session.token != null}" src="/th/images/unknown.png" alt="mdo" width="32" height="32" class="rounded-circle">
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end text-small">
+      <li class="nav-item">
+        <span th:if="${session.token == null}"><a class="nav-link" th:href="@{/member/login}" th:text="'로그인'"></a></span>
+      </li>
+      <li class="nav-item">
+        <span th:if="${session.token == null}"><a class="nav-link" th:href="@{|/member/signup|}">회원가입</a></span>
+      </li>
+      <li class="nav-item">
+        <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/member/profile" th:text="@{|프로필|}"></a></span>
+      </li>
+      <li class="nav-item">
+        <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/member/logout" th:text="@{|${session.id} 로그아웃|}"></a></span>
+      </li>
+  </ul>
+</div>
+
             
             
             

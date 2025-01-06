@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- SB가 자동으로 구현하여 연동하는 interface -->
+<mapper namespace="dev.mvc.inquiry.InquiryDAOInter"> <!-- SB가 자동으로 구현하여 연동하는 interface -->
+  
+  <insert id="inquiry_create" parameterType="dev.mvc.inquiry.InquiryVO">
+    INSERT INTO inquiry(inquiryno, title, content, filename, memberno)
+    VALUES(inquiry_seq.nextval, #{title}, #{content}, #{filename}, memberno)
+  </insert>
+
+  <update id="inquiry_update" parameterType="dev.mvc.inquiry.InquiryVO">
+    SET title=#{title}, content=#{content}, rdate=sysdate, filename=#{filename}
+    WHERE inquiryno = #{inquiryno} AND memberno = #{memberno}
+  </update>
+  
+  <delete id="inquiry_delete" parameterType="dev.mvc.inquiry.InquiryVO">
+    DELETE inquiry
+    WHERE inquiryno = #{inquiryno} AND memberno = #{memberno}
+  </delete>
+  
+  <select id="inquiry_user_list_search_paging" resultType="dev.mvc.inquiry.InquiryVO" parameterType="HashMap">
+    SELECT inquiryno, title, content, rdate, state, filename, memberno, name, r
+    FROM (
+        SELECT inquiryno, title, content, rdate, state, filename, memberno, name, rownum as r
+        FROM (
+            SELECT i.inquiryno, i.title, i.content, i.rdate, i.state, i.filename, i.memberno, m.name
+            FROM inquiry i INNER JOIN member m
+            ON i.memberno = m.memberno
+            WHERE (UPPER(i.title) LIKE '%' || UPPER(#{word}) || '%')
+            AND i.memberno = #{memberno}
+            ORDER BY i.rdate ASC
+        )
+    )
+    WHERE r &gt;=#{start_num} AND r &lt;=#{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
+  </select>
+  
+  <select id="inquiry_admin_list_search_paging" resultType="dev.mvc.inquiry.InquiryVO" parameterType="HashMap">
+    SELECT inquiryno, title, content, rdate, state, filename, memberno, name, r
+    FROM (
+        SELECT inquiryno, title, content, rdate, state, filename, memberno, name, rownum as r
+        FROM (
+            SELECT i.inquiryno, i.title, i.content, i.rdate, i.state, i.filename, i.memberno, m.name
+            FROM inquiry i INNER JOIN member m
+            ON i.memberno = m.memberno
+            WHERE (UPPER(i.title) LIKE '%' || UPPER(#{word}) || '%') OR (UPPER(m.name) LIKE '%' || UPPER(#{word}) || '%')
+    
+            <if test="state != null">
+                AND i.state = #{state}
+            </if>
+            
+            ORDER BY i.rdate ASC
+        )
+    )
+    WHERE r &gt;=#{start_num} AND r &lt;=#{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
+  </select>
+  
+  <select id="list_search_count" resultType="Integer" parameterType="HashMap">
+    SELECT count(*) as cnt
+    FROM inquiry i
+    INNER JOIN member m
+    ON i.memberno = m.memberno
+    
+    <!-- 조건에 따라 선택적으로 WHERE 절을 추가 -->
+    <choose>
+        <!-- order가 2인 경우 title만 검색 -->
+        <when test="order == 2">
+            WHERE UPPER(i.title) LIKE '%' || UPPER(#{word}) || '%'
+        </when>
+    
+        <!-- order가 1인 경우 title과 name을 검색하고 state 조건도 추가 -->
+        <when test="order == 1">
+            WHERE (UPPER(i.title) LIKE '%' || UPPER(#{word}) || '%') 
+               OR (UPPER(m.name) LIKE '%' || UPPER(#{word}) || '%')
+            
+            <!-- state가 존재하면 state 조건 추가 -->
+            <if test="state != null">
+                AND i.state = #{state}
+            </if>
+        </when>
+        <!-- order가 1, 2가 아니면 기본적으로 WHERE를 사용하지 않음 -->
+        <otherwise>
+            WHERE 1 = 1
+        </otherwise>
+    </choose>
+  </select>
+  
+  
+</mapper>
+
+
+
