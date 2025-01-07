@@ -19,4 +19,7 @@ public interface SurveymemberMapper {
 
     // surveyitemno로 surveyno 조회
     int getSurveynoBySurveyitemno(@Param("surveyitemno") int surveyitemno);
+    
+    // 설문 참여자 삭제
+    void deleteSurveymember(@Param("surveymemberno") int surveymemberno);
 }

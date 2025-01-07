@@ -47,6 +47,11 @@
                 <td th:text="${member.rdate}"></td>
                 <td th:text="${member.surveyitemno}"></td>
                 <td th:text="${member.memberno}"></td>
+                <td>
+                    <a th:href="@{/th/surveymember/delete/{surveymemberno}(surveymemberno=${member.surveymemberno})}">
+                        삭제
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>

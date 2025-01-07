@@ -38,4 +38,9 @@ public class SurveymemberService {
     public List<SurveymemberVO> getSurveymemberList() {
         return surveymemberMapper.listSurveymembers();
     }
+    
+    // 설문 참여자 삭제
+    public void deleteSurveymember(int surveymemberno) {
+        surveymemberMapper.deleteSurveymember(surveymemberno);
+    }
 }
