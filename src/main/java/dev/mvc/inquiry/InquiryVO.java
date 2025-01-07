@@ -2,6 +2,10 @@ package dev.mvc.inquiry;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 //CREATE TABLE inquiry (
 //    inquiryno NUMBER(10) NOT NULL,
 //    title VARCHAR2(500) NOT NULL,
@@ -15,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 //        REFERENCES member(memberno) 
 //        ON DELETE CASCADE
 //);
-
+@Getter @Setter @ToString
 public class InquiryVO {
   /** 문의 사항 번호 */
   private int inquiryno;

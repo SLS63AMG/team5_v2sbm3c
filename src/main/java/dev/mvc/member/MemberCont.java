@@ -419,7 +419,6 @@ public class MemberCont {
 
       // -----------------------------------------------------------------
       int search_cnt = this.memberProc.list_search_count(word);
-      model.addAttribute("search_cnt", search_cnt);
       model.addAttribute("word", word);
       
 //      String paging = this.memberProc.pagingBox(now_page, word, list_file_name, search_cnt, this.record_per_page, this.page_per_block);

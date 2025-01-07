@@ -3,18 +3,17 @@ package dev.mvc.inquiry;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public interface InquiryDAOInter {
-  
+public interface InquiryProcInter {
   /**
    * 문의 사항 생성
    */
   public int inquiry_create(InquiryVO inquiryVO);
-
+  
   /**
    * 문의 사항 읽기
    */
-  public InquiryVO inquiry_read(HashMap<String, Object> map);
-  
+  public InquiryVO inquiry_read(int inquiryno, int memberno);
+
   /**
    * 문의 사항 수정
    */

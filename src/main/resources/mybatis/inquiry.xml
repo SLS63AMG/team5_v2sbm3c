@@ -3,21 +3,38 @@
 <!-- SB가 자동으로 구현하여 연동하는 interface -->
 <mapper namespace="dev.mvc.inquiry.InquiryDAOInter"> <!-- SB가 자동으로 구현하여 연동하는 interface -->
   
+  <!-- 문의 사항 생성 -->
   <insert id="inquiry_create" parameterType="dev.mvc.inquiry.InquiryVO">
-    INSERT INTO inquiry(inquiryno, title, content, filename, memberno)
-    VALUES(inquiry_seq.nextval, #{title}, #{content}, #{filename}, memberno)
+    INSERT INTO inquiry (inquiryno, title, content, filename, memberno)
+    VALUES (inquiry_seq.nextval, #{title}, #{content}, #{filename, jdbcType=VARCHAR}, #{memberno})
   </insert>
 
-  <update id="inquiry_update" parameterType="dev.mvc.inquiry.InquiryVO">
-    SET title=#{title}, content=#{content}, rdate=sysdate, filename=#{filename}
+  <!-- 문의 사항 읽기 -->
+  <select id="inquiry_read" resultType="dev.mvc.inquiry.InquiryVO" parameterType="HashMap">
+    SELECT inquiryno, title, content, rdate, state, filename, memberno
+    FROM inquiry
     WHERE inquiryno = #{inquiryno} AND memberno = #{memberno}
-  </update>
+  </select>
   
+  <!-- 문의 사항 수정 -->
+<update id="inquiry_update" parameterType="dev.mvc.inquiry.InquiryVO">
+    UPDATE inquiry
+    SET 
+        title = #{title},
+        content = #{content},
+        rdate = sysdate
+        <if test="filename != 'No'">,filename = #{filename, jdbcType=VARCHAR} </if>
+    WHERE inquiryno = #{inquiryno} AND memberno = #{memberno}
+</update>
+
+  
+  <!-- 문의 사항 삭제/취소 -->
   <delete id="inquiry_delete" parameterType="dev.mvc.inquiry.InquiryVO">
     DELETE inquiry
     WHERE inquiryno = #{inquiryno} AND memberno = #{memberno}
   </delete>
   
+  <!-- 문의 사항 사용자 페이지 -->
   <select id="inquiry_user_list_search_paging" resultType="dev.mvc.inquiry.InquiryVO" parameterType="HashMap">
     SELECT inquiryno, title, content, rdate, state, filename, memberno, name, r
     FROM (
@@ -34,6 +51,7 @@
     WHERE r &gt;=#{start_num} AND r &lt;=#{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
   </select>
   
+  <!-- 문의 사항 관리자 페이지 -->
   <select id="inquiry_admin_list_search_paging" resultType="dev.mvc.inquiry.InquiryVO" parameterType="HashMap">
     SELECT inquiryno, title, content, rdate, state, filename, memberno, name, r
     FROM (
@@ -54,6 +72,7 @@
     WHERE r &gt;=#{start_num} AND r &lt;=#{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
   </select>
   
+  <!-- 문의 사항 페이지 갯수 -->
   <select id="list_search_count" resultType="Integer" parameterType="HashMap">
     SELECT count(*) as cnt
     FROM inquiry i
@@ -65,6 +84,7 @@
         <!-- order가 2인 경우 title만 검색 -->
         <when test="order == 2">
             WHERE UPPER(i.title) LIKE '%' || UPPER(#{word}) || '%'
+            AND i.memberno = #{memberno}
         </when>
     
         <!-- order가 1인 경우 title과 name을 검색하고 state 조건도 추가 -->
@@ -86,6 +106,3 @@
   
   
 </mapper>
-
-
-

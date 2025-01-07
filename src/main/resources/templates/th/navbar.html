@@ -84,6 +84,9 @@
         <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/member/profile" th:text="@{|프로필|}"></a></span>
       </li>
       <li class="nav-item">
+        <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/inquiry/list" th:text="@{|문의 사항|}"></a></span>
+      </li>
+      <li class="nav-item">
         <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/member/logout" th:text="@{|${session.id} 로그아웃|}"></a></span>
       </li>
   </ul>

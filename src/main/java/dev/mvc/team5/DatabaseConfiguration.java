@@ -21,7 +21,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @MapperScan(basePackages= {"dev.mvc.member", 
                                        "dev.mvc.notice",
                                        "dev.mvc.loginlog",
-                                       "dev.mvc.wishlist",
+                                       "dev.mvc.inquiry",
                                        "dev.mvc.survey",
                                        "dev.mvc.surveyitem",
                                        "dev.mvc.menu",

@@ -290,7 +290,7 @@ public class NoticeCont {
             ra.addFlashAttribute("code", "check_upload_file_fail"); // 업로드 할 수 없는 파일
             ra.addFlashAttribute("cnt", 0); // 업로드 실패
             ra.addFlashAttribute("url", "/review/msg"); // msg.html, redirect parameter 적용
-            return "redirect:/review/msg"; // Post -> Get - param...
+            return "redirect:/"; // Post -> Get - param...
           }
         } else { // 글만 등록하는 경우
           System.out.println("-> 글만 등록");

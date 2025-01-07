@@ -13,9 +13,9 @@ public class Contents {
         if (osName.contains("win")) { // Windows
             path = "C:\\kd\\team5\\notice\\images\\";
         } else if (osName.contains("mac")) { // MacOS
-            path = "/Users/yourusername/team5/member/profile/images/";
+            path = "/Users/yourusername/team5/notice/images/";
         } else { // Linux
-            path = "/home/ubuntu/team5/member/profile/images/";
+            path = "/home/ubuntu/team5/notice/images/";
         }
 
         // 폴더가 없으면 생성
@@ -23,7 +23,28 @@ public class Contents {
 
         return path;
     }
+    /**
+     * 공지사항 이미지 경로
+     */
+    public static String getUploadDir_inquiry() {
+        String osName = System.getProperty("os.name").toLowerCase();
+        String path = "";
 
+        if (osName.contains("win")) { // Windows
+            path = "C:\\kd\\team5\\inquiry\\images\\";
+        } else if (osName.contains("mac")) { // MacOS
+            path = "/Users/yourusername/team5/inquiry/images/";
+        } else { // Linux
+            path = "/home/ubuntu/team5/inquiry/images/";
+        }
+
+        // 폴더가 없으면 생성
+        createDirectoryIfNotExists(path);
+
+        return path;
+    }
+    
+    
     /**
      * 지정된 경로에 디렉토리가 없으면 생성하는 메서드
      */
