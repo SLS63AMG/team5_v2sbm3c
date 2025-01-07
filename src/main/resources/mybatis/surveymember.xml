@@ -37,5 +37,9 @@
         FROM surveyitem
         WHERE surveyitemno = #{surveyitemno}
     </select>
+    
+    <delete id="deleteSurveymember" parameterType="int">
+        DELETE FROM surveymember WHERE surveymemberno = #{surveymemberno}
+    </delete>
 
 </mapper>

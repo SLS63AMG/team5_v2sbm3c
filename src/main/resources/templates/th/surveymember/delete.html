@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html layout:decorate="~{th/layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>삭제 확인</title>
+</head>
+<div layout:fragment="content">
+    <h1>정말 삭제하시겠습니까?</h1>
+    <form th:action="@{/th/surveymember/delete}" method="post">
+        <input type="hidden" th:value="${surveymemberno}" name="surveymemberno"/>
+        <button type="submit">확인</button>
+        <a th:href="@{/th/surveymember/list}">목록</a>
+    </form>
+</div>
+</html>

@@ -32,4 +32,18 @@ public class SurveymemberCont {
         model.addAttribute("surveymemberList", surveymemberList);
         return "/th/surveymember/list";
     }
+    
+    // 설문 참여자 삭제 확인 페이지로 이동
+    @GetMapping("/delete/{surveymemberno}")
+    public String deleteForm(@PathVariable("surveymemberno") int surveymemberno, Model model) {
+        model.addAttribute("surveymemberno", surveymemberno);
+        return "/th/surveymember/delete";
+    }
+
+    // 설문 참여자 삭제 처리
+    @PostMapping("/delete")
+    public String delete(@RequestParam("surveymemberno") int surveymemberno) {
+        surveymemberService.deleteSurveymember(surveymemberno);
+        return "redirect:/th/surveymember/list";
+    }
 }

@@ -16,6 +16,8 @@ public class SurveyVO {
     private long postersize =0;            // 파일 크기
     private int cnt;                   // 참여자 수
     private char continueyn;           // 계속 진행 여부 ('Y', 'N')
+    private int goodcnt;                 // 추천 수 추가
+
 
     // 파일 업로드 처리용
     private MultipartFile posterFile = null;  // 업로드된 파일
