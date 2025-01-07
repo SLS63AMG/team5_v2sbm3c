@@ -8,14 +8,14 @@
 
   <div class="menu_line"></div>
   <div style="width: 50%; margin: 0px auto;">
-    <form name="frm" method="post" action="/survey/delete" th:object="${surveyVO}">
+    <form name="frm" method="post" action="/th/survey/delete" th:object="${surveyVO}">
       <input type="hidden" name="surveyno" th:value="${surveyVO.surveyno}">
       <div class="msg_warning">
         <span>삭제하시려면 [삭제] 버튼을 클릭하세요. 이 작업은 되돌릴 수 없습니다.</span>
       </div>
       <div class="content_body_bottom">
         <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
-        <button type="button" onclick="location.href='/survey/list'" class="btn btn-secondary btn-sm">취소</button>
+        <button type="button" onclick="location.href='/th/survey/list'" class="btn btn-secondary btn-sm">취소</button>
       </div>
     </form>
   </div>
