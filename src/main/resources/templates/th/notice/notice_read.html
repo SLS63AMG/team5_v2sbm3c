@@ -52,7 +52,7 @@
 
       <div th:if="${noticeVO.filename != null and (noticeVO.filename.toLowerCase().endsWith('jpg') or noticeVO.filename.toLowerCase().endsWith('png') or noticeVO.filename.toLowerCase().endsWith('gif'))}">
 
-        <img th:src="@{'/notice/images/' + ${noticeVO.filename}}"
+        <img th:src="@{'/notice/storage/' + ${noticeVO.filename}}"
              style="width: 100%; max-width: 450px; margin-top: 20px; display: block; margin-bottom: 20px; border-radius: 8px;">
       </div>
       

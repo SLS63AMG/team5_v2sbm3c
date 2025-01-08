@@ -11,11 +11,11 @@ public class Contents {
         String path = "";
 
         if (osName.contains("win")) { // Windows
-            path = "C:\\kd\\team5\\notice\\images\\";
+            path = "C:\\kd\\deploy\\team5\\notice\\storage\\";
         } else if (osName.contains("mac")) { // MacOS
-            path = "/Users/yourusername/team5/notice/images/";
+            path = "/Users/yourusername/deploy/team5/notice/storage/";
         } else { // Linux
-            path = "/home/ubuntu/team5/notice/images/";
+            path = "/home/ubuntu/deploy/team5/notice/storage/";
         }
 
         // 폴더가 없으면 생성
@@ -31,11 +31,11 @@ public class Contents {
         String path = "";
 
         if (osName.contains("win")) { // Windows
-            path = "C:\\kd\\team5\\inquiry\\images\\";
+            path = "C:\\kd\\deploy\\team5\\inquiry\\storage\\";
         } else if (osName.contains("mac")) { // MacOS
-            path = "/Users/yourusername/team5/inquiry/images/";
+            path = "/Users/yourusername/deploy/team5/inquiry/storage/";
         } else { // Linux
-            path = "/home/ubuntu/team5/inquiry/images/";
+            path = "/home/ubuntu/deploy/team5/inquiry/storage/";
         }
 
         // 폴더가 없으면 생성
