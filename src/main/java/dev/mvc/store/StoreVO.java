@@ -1,20 +1,28 @@
 package dev.mvc.store;
 
+import org.springframework.web.multipart.MultipartFile;
 import lombok.Data;
 
 @Data
 public class StoreVO {
-    private int storeno;          // 고유 식별자
-    private String name;          // 가게 이름
-    private String distinction;   // 업종 구분
-    private int reviewcnt;        // 리뷰 수
-    private String address1;      // 도로명 주소
-    private String address2 = ""; // 상세 주소 (기본값을 빈 문자열로 설정)
-    private String busihours;     // 영업 시간
-    private String tel;           // 전화번호
-    private String reservation;   // 예약 가능 여부 (Y/N)
-    private String rsite;         // 가게 등록 주소
-    private String msite;         // 지도 페이지 주소
-    private double rating;        // 평점
-    private String rsites;        // 추가 필드 (필요 시 추가)
+    private int storeno;
+    private String name;
+    private String distinction;
+    private int reviewcnt;
+    private String address1;
+    private String address2 = "";
+    private String busihours;
+    private String tel;
+    private String reservation;
+    private String rsite;
+    private String msite;
+    private double rating;
+
+    // 파일 업로드 관련 필드
+    private MultipartFile file1MF=null;  // 업로드된 파일
+    private String file1saved = ""; // 저장된 파일명
+    private String thumb1 = "";     // 썸네일 파일명
+    private long size1 = 0;         // 파일 크기
+    private String file1="";
 }
+

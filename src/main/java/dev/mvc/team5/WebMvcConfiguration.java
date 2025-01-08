@@ -24,6 +24,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         
         registry.addResourceHandler("/images/**").addResourceLocations("file:///" + Contents.getUploadDir_inquiry());
         
+        registry.addResourceHandler("/store/storage/**").addResourceLocations("file:///" + Contents.getUploadDir_store());
+        
         // Survey 관련 ResourceHandler
         // Windows: path = "C:/kd/deploy/resort/contents/storage";
         // ▶ file:///C:/kd/deploy/resort/contents/storage
@@ -33,5 +35,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
       
         // JSP 인식되는 경로: http://localhost:9091/survey/storage;
         registry.addResourceHandler("/survey/storage/**").addResourceLocations("file:///" + Survey.getUploadDir());
+          
     }
 }

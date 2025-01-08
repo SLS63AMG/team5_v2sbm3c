@@ -1,87 +1,113 @@
 <!DOCTYPE html>
-<html layout:decorate="~{th/layout}">
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{th/layout}">
 <head>
-  <style>
-    /* 추가 버튼 스타일 */
-    .action-btn-add {
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border: 2px solid #007BFF;
-      background-color: #007BFF;
-      color: white;
-      border-radius: 5px;
-      text-decoration: none;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
+    <style>
+        .form-container {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
 
-    .action-btn-add:hover {
-      background-color: #0056b3;
-      transform: scale(1.05);
-    }
-  </style>
+        .form-container label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="number"],
+        .form-container input[type="file"],
+        .form-container input[type="url"],
+        .form-container input[type="submit"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-container input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+
+        .form-container input[data-default] {
+            color: #aaa;
+        }
+
+        .form-container input[data-default]:focus {
+            color: #000;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const inputs = document.querySelectorAll('input[data-default]');
+            inputs.forEach(input => {
+                const defaultValue = input.getAttribute("data-default");
+                input.value = defaultValue;
+
+                input.addEventListener("focus", function () {
+                    if (this.value === defaultValue) {
+                        this.value = '';
+                    }
+                });
+
+                input.addEventListener("blur", function () {
+                    if (this.value === '') {
+                        this.value = defaultValue;
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
-  <div layout:fragment="content">
+<main layout:fragment="content">
     <div class="title_line">음식점 추가</div>
-    <aside class="aside_right">
-      <a href="javascript: location.reload();">새로 고침</a>
-    </aside>
-
-    <div class="menu_line"></div>
-    <div style="width: 60%; margin: 0px auto;">
-      <form th:action="@{/th/store/create}" method="post">
-        <ul class="list-group">
-          <li class="list-group-item">
-            <label for="name">식당 이름:</label>
-            <input type="text" id="name" name="name" required>
-          </li>
-          <li class="list-group-item">
-            <label for="distinction">업종:</label>
-            <input type="text" id="distinction" name="distinction" required>
-          </li>
-          <li class="list-group-item">
-            <label for="reviewcnt">리뷰 수:</label>
-            <input type="number" id="reviewcnt" name="reviewcnt" required>
-          </li>
-          <li class="list-group-item">
-            <label for="address1">도로명 주소:</label>
-            <input type="text" id="address1" name="address1" required>
-          </li>
-          <li class="list-group-item">
-            <label for="address2">상세 주소:</label>
-            <input type="text" id="address2" name="address2">
-          </li>
-          <li class="list-group-item">
-            <label for="busihours">영업 시간:</label>
-            <input type="text" id="busihours" name="busihours">
-          </li>
-          <li class="list-group-item">
-            <label for="tel">전화번호:</label>
-            <input type="text" id="tel" name="tel">
-          </li>
-          <li class="list-group-item">
-            <label for="reservation">예약 여부 (Y/N):</label>
-            <input type="text" id="reservation" name="reservation" maxlength="1">
-          </li>
-          <li class="list-group-item">
-            <label for="rsite">가게 등록 주소:</label>
-            <input type="text" id="rsite" name="rsite">
-          </li>
-          <li class="list-group-item">
-            <label for="msite">지도 페이지 주소:</label>
-            <input type="text" id="msite" name="msite" required>
-          </li>
-          <li class="list-group-item">
-            <label for="rating">평점:</label>
-            <input type="number" id="rating" name="rating" step="0.01">
-          </li>
-        </ul>
-        <div style="text-align: center; margin-top: 20px;">
-          <button type="submit" class="action-btn-add">추가</button>
-        </div>
-      </form>
-    </div>
-  </div>
+    <form class="form-container" th:action="@{/th/store/create}" method="post" enctype="multipart/form-data">
+          <label for="name">식당 이름:</label>
+          <input type="text" id="name" name="name" value="기본 식당 이름" required />
+      
+          <label for="distinction">업종:</label>
+          <input type="text" id="distinction" name="distinction" value="한식" required />
+      
+          <label for="reviewcnt">리뷰 수:</label>
+          <input type="number" id="reviewcnt" name="reviewcnt" value="0" min="0" required />
+      
+          <label for="address1">도로명 주소:</label>
+          <input type="text" id="address1" name="address1" value="서울시 종로구 종로1가" required />
+      
+          <label for="address2">상세 주소:</label>
+          <input type="text" id="address2" name="address2" value="1층" required />
+      
+          <label for="busihours">영업 시간:</label>
+          <input type="text" id="busihours" name="busihours" value="09:00-21:00" required />
+      
+          <label for="tel">전화번호:</label>
+          <input type="text" id="tel" name="tel" value="010-1234-5678" required />
+      
+          <label for="reservation">예약 여부:</label>
+          <select id="reservation" name="reservation" required>
+              <option value="Y" selected>예</option>
+              <option value="N">아니오</option>
+          </select>
+      
+          <label for="rsite">가게 등록 주소:</label>
+          <input type="url" id="rsite" name="rsite" value="http://example.com" />
+      
+          <label for="msite">지도 페이지 주소:</label>
+          <input type="url" id="msite" name="msite" value="http://map.example.com" />
+      
+          <label for="rating">평점:</label>
+          <input type="number" id="rating" name="rating" value="4.5" step="0.1" min="0" max="5" required />
+      
+          <label for="file1MF">메인 이미지 업로드:</label>
+          <input type="file" id="file1MF" name="file1MF" accept="image/*" />
+      
+          <input type="submit" value="추가" />
+     </form>
+</main>
 </body>
 </html>

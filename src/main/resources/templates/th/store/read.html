@@ -1,62 +1,154 @@
 <!DOCTYPE html>
 <html layout:decorate="~{th/layout}">
-  <div layout:fragment="content">
-    <div class="title_line">음식점 상세 정보</div>
+  <head>
+    <style>
+      /* 중앙 정렬 및 테이블 스타일 */
+      .table {
+        width: 100%;
+        max-width: 800px;
+        margin: 20px auto;
+        border-collapse: collapse;
+        font-size: 16px;
+        table-layout: fixed;
+      }
 
-    <div class="menu_line"></div>
+      .table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        word-wrap: break-word;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
-    <div style="width: 60%; margin: 0px auto;">
-      <table class="table">
-        <tr>
-          <td>식당 이름</td>
-          <td th:text="${store.name}"></td>
-        </tr>
-        <tr>
-          <td>업종</td>
-          <td th:text="${store.distinction}"></td>
-        </tr>
-        <tr>
-          <td>리뷰 수</td>
-          <td th:text="${store.reviewcnt}"></td>
-        </tr>
-        <tr>
-          <td>도로명 주소</td>
-          <td th:text="${store.address1}"></td>
-        </tr>
-        <tr>
-          <td>상세 주소</td>
-          <td th:text="${store.address2}"></td>
-        </tr>
-        <tr>
-          <td>영업 시간</td>
-          <td th:text="${store.busihours}"></td>
-        </tr>
-        <tr>
-          <td>전화번호</td>
-          <td th:text="${store.tel}"></td>
-        </tr>
-        <tr>
-          <td>예약 여부</td>
-          <td th:text="${store.reservation}"></td>
-        </tr>
-        <tr>
-          <td>가게 등록 주소</td>
-          <td th:text="${store.rsite}"></td>
-        </tr>
-        <tr>
-          <td>지도 페이지 주소</td>
-          <td th:text="${store.msite}"></td>
-        </tr>
-        <tr>
-          <td>평점</td>
-          <td th:text="${store.rating}"></td>
-        </tr>
-      </table>
+      .table tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
 
-      <div style="text-align: center; margin-top: 20px;">
-        <a href="/th/store/update/{storeno}" th:href="@{/th/store/update/{storeno}(storeno=${store.storeno})}" class="btn btn-warning">수정</a>
-        <a href="/th/store/delete/{storeno}" th:href="@{/th/store/delete/{storeno}(storeno=${store.storeno})}" class="btn btn-danger">삭제</a>
+      .table tr:hover {
+        background-color: #f1f1f1;
+      }
+
+      .table td:first-child {
+        font-weight: bold;
+        background-color: #f4f4f4;
+        width: 30%;
+        text-align: left;
+      }
+
+      .table td:last-child {
+        width: 70%;
+        text-align: left;
+      }
+
+      /* 버튼 스타일 */
+      .btn {
+        display: inline-block;
+        font-size: 16px;
+        padding: 10px 20px;
+        margin: 10px 5px;
+        text-decoration: none;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .btn-warning {
+        background-color: #ffc107;
+        border: 1px solid #ffc107;
+      }
+
+      .btn-warning:hover {
+        background-color: #e0a800;
+        border-color: #e0a800;
+      }
+
+      .btn-danger {
+        background-color: #dc3545;
+        border: 1px solid #dc3545;
+      }
+
+      .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #c82333;
+      }
+
+      /* 제목 스타일 */
+      .title_line {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="title_line">음식점 상세 정보</div>
+
+      <div style="width: 60%; margin: 0 auto;">
+        <table class="table">
+          <tr>
+            <td>식당 이름</td>
+            <td th:text="${storeVO.name}"></td>
+          </tr>
+          <tr>
+            <td>업종</td>
+            <td th:text="${storeVO.distinction}"></td>
+          </tr>
+          <tr>
+            <td>리뷰 수</td>
+            <td th:text="${storeVO.reviewcnt}"></td>
+          </tr>
+          <tr>
+            <td>도로명 주소</td>
+            <td th:text="${storeVO.address1}"></td>
+          </tr>
+          <tr>
+            <td>상세 주소</td>
+            <td th:text="${storeVO.address2}"></td>
+          </tr>
+          <tr>
+            <td>영업 시간</td>
+            <td th:text="${storeVO.busihours}"></td>
+          </tr>
+          <tr>
+            <td>전화번호</td>
+            <td th:text="${storeVO.tel}"></td>
+          </tr>
+          <tr>
+            <td>예약 여부</td>
+            <td th:text="${storeVO.reservation == 'Y' ? '가능' : '불가능'}"></td>
+          </tr>
+          <tr>
+            <td>가게 등록 주소</td>
+            <td>
+              <a th:href="${storeVO.rsite}" target="_blank" th:text="${storeVO.rsite}"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>지도 페이지 주소</td>
+            <td>
+              <a th:href="${storeVO.msite}" target="_blank" th:text="${storeVO.msite}"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>평점</td>
+            <td th:text="${storeVO.rating}"></td>
+          </tr>
+          <tr>
+            <td>포스터</td>
+            <td>
+              <img th:src="@{|/store/storage/${storeVO.thumb1}|}" alt="음식점 이미지" style="max-width: 200px; height: auto;" />
+            </td>
+          </tr>
+        </table>
+
+        <div style="text-align: center; margin-top: 20px;">
+          <a th:href="@{/th/store/update/{storeno}(storeno=${storeVO.storeno})}" class="btn btn-warning">수정</a>
+          <a th:href="@{/th/store/delete/{storeno}(storeno=${storeVO.storeno})}" class="btn btn-danger">삭제</a>
+        </div>
       </div>
     </div>
-  </div>
+  </body>
 </html>
