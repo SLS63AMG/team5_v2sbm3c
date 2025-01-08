@@ -114,7 +114,7 @@ public class InquiryCont {
   
   
   // 문의 사항 조회-------------------------------------------------------------------
-  @GetMapping(value="read")
+  @GetMapping(value="/read")
   public String read_form(HttpSession session, Model model, 
       @RequestParam(name="inquiryno") int inquiryno) {
     if(Tool.isAdmin(session)) {
@@ -143,7 +143,7 @@ public class InquiryCont {
   
   
   // 문의 사항 수정-------------------------------------------------------------------
-  @GetMapping(value="update")
+  @GetMapping(value="/update")
   public String update_form(Model model, HttpSession session,
       @RequestParam(name = "inquiryno") int inquiryno) {
     
@@ -158,7 +158,7 @@ public class InquiryCont {
     return "/th/member/login";
   }
   
-  @PostMapping(value="update")
+  @PostMapping(value="/update")
   public String update_proc(Model model, HttpSession session, 
       @ModelAttribute("inquiryVO") InquiryVO inquiryVO,
       @RequestParam(name="image_state") String image_state,
@@ -169,6 +169,14 @@ public class InquiryCont {
       
       // 파일 저장 코드 -------------------------
       if(image_state.equals("images")) {
+        // 파일 삭제 시작
+        InquiryVO delVO = this.inquiryProc.inquiry_read(inquiryVO.getInquiryno(), -1);
+        if(delVO.getFilename() != null) {
+          String filename = delVO.getFilename();
+          String uploadDir = Contents.getUploadDir_inquiry();
+          Tool.deleteFile(uploadDir, filename);
+        }
+        // 파일 삭제 끝
         String file = "";
         String filesaved = "";
         String upDir = Contents.getUploadDir_inquiry();
@@ -192,14 +200,26 @@ public class InquiryCont {
           System.out.println("글만 등록");
         }
       } else if(image_state.equals("no images")) {
+        // 파일 삭제 시작
+        InquiryVO delVO = this.inquiryProc.inquiry_read(inquiryVO.getInquiryno(), -1);
+        if(delVO.getFilename() != null) {
+          String filename = delVO.getFilename();
+          String uploadDir = Contents.getUploadDir_inquiry();
+          Tool.deleteFile(uploadDir, filename);
+        }
+        // 파일 삭제 끝
+        
         inquiryVO.setFilename(null);
       } else if(image_state.equals("default")) {
         inquiryVO.setFilename("No");
       }
+      int cnt = this.inquiryProc.inquiry_update(inquiryVO);
+      return "redirect:/inquiry/list";
       
+    } else {
+      return "redirect:/member/login";
     }
-    int cnt = this.inquiryProc.inquiry_update(inquiryVO);
-    return "redirect:/inquiry/list";
+    
   }
   // 문의 사항 수정-------------------------------------------------------------------
   
@@ -237,7 +257,6 @@ public class InquiryCont {
     }
     return "redirect:/inquiry/list"; // 삭제 후 목록 페이지로 이동
   }
-
   // 문의 사항 삭제/취소-------------------------------------------------------------------
 
   
