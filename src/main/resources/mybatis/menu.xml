@@ -4,35 +4,36 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dev.mvc.menu.MenuDAOInter">
 
+    <!-- 메뉴 등록 -->
     <insert id="create" parameterType="dev.mvc.menu.MenuVO">
-        INSERT INTO menu (menuno, name, explanation, price, photo, storeno)
-        VALUES (MENU_SEQ.NEXTVAL, #{name}, #{explanation}, #{price}, #{photo}, #{storeno})
+        INSERT INTO menu (menuno, name, explanation, price, photo, recom, storeno)
+        VALUES (MENU_SEQ.NEXTVAL, #{name}, #{explanation}, #{price}, #{photo}, 0, #{storeno})
     </insert>
-
 
     <!-- 메뉴 목록 조회 -->
     <select id="list" resultType="dev.mvc.menu.MenuVO">
-        SELECT menuno, name, explanation, price, photo, storeno
+        SELECT menuno, name, explanation, price, photo, recom, storeno
         FROM menu
-        ORDER BY menuno DESC
+        ORDER BY menuno ASC
     </select>
 
     <!-- 메뉴 상세 조회 -->
     <select id="read" parameterType="int" resultType="dev.mvc.menu.MenuVO">
-        SELECT menuno, name, explanation, price, photo, storeno
+        SELECT menuno, name, explanation, price, photo, recom, storeno
         FROM menu
         WHERE menuno = #{menuno}
     </select>
-
+    
     <!-- 메뉴 수정 -->
     <update id="update" parameterType="dev.mvc.menu.MenuVO">
         UPDATE menu
-        SET name         = #{name},
-            explanation  = #{explanation},
-            price        = #{price},
-            photo        = #{photo},
-            storeno      = #{storeno}
-        WHERE menuno     = #{menuno}
+        SET name = #{name, jdbcType=VARCHAR},
+            explanation = #{explanation, jdbcType=VARCHAR},
+            price = #{price, jdbcType=INTEGER},
+            photo = #{photo, jdbcType=VARCHAR},
+            recom = #{recom, jdbcType=INTEGER},
+            storeno = #{storeno, jdbcType=INTEGER}
+        WHERE menuno = #{menuno, jdbcType=INTEGER}
     </update>
 
     <!-- 메뉴 삭제 -->
@@ -40,44 +41,20 @@
         DELETE FROM menu
         WHERE menuno = #{menuno}
     </delete>
+
+    <!-- 추천 수 증가 -->
+    <update id="increaseRecom" parameterType="int">
+        UPDATE menu
+        SET recom = recom + 1
+        WHERE menuno = #{menuno}
+    </update>
+
+    <!-- 추천 수 감소 -->
+    <update id="decreaseRecom" parameterType="int">
+        UPDATE menu
+        SET recom = recom - 1
+        WHERE menuno = #{menuno}
+    </update>
     
-    <select id="list_search" resultType="dev.mvc.menu.MenuVO" parameterType="String">
-        SELECT menuno, name, explanation, price, photo, storeno
-        FROM menu
-        WHERE 1=1
-        <if test="word != null and word != ''">
-            AND ((UPPER(name) LIKE '%' || UPPER(#{word}) || '%') 
-                 OR (UPPER(explanation) LIKE '%' || UPPER(#{word}) || '%'))
-        </if>
-        ORDER BY menuno DESC
-    </select>
-
-    <select id="list_search_count" resultType="Integer" parameterType="String">
-        SELECT COUNT(*) AS cnt
-        FROM menu
-        WHERE 1=1
-        <if test="word != null and word != ''">
-            AND ((UPPER(name) LIKE '%' || UPPER(#{word}) || '%') 
-                 OR (UPPER(explanation) LIKE '%' || UPPER(#{word}) || '%'))
-        </if>
-    </select>
-
-    <select id="list_search_paging" resultType="dev.mvc.menu.MenuVO" parameterType="Map">
-        SELECT menuno, name, explanation, price, photo, storeno, r
-        FROM (
-            SELECT menuno, name, explanation, price, photo, storeno, rownum AS r
-            FROM (
-                SELECT menuno, name, explanation, price, photo, storeno
-                FROM menu
-                WHERE 1=1
-                <if test="word != null and word != ''">
-                    AND ((UPPER(name) LIKE '%' || UPPER(#{word}) || '%') 
-                         OR (UPPER(explanation) LIKE '%' || UPPER(#{word}) || '%'))
-                </if>
-                ORDER BY menuno DESC
-            )
-        )
-        WHERE r &gt;= #{start_num} AND r &lt;= #{end_num}
-    </select>
 
 </mapper>

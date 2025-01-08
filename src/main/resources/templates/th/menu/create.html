@@ -19,18 +19,9 @@
     
   <div style="width: 50%; margin: 0px auto;">
     <!-- 폼에서 MenuVO를 바인딩 -->
-    <form name="frm" method="post" action="/th/menu/create" th:object="${menuVO}">
+    <form name="frm" method="post" action="/th/menu/create" th:object="${menuVO}" enctype="multipart/form-data">
+
       <!-- ★ 이 부분이 핵심: action="/th/menu/create" -->
-      
-            <!-- 메뉴 이름 -->
-      <div>
-        <label>메뉴 번호</label>
-        <input type="number"
-               th:field="*{menuno}"
-               class="form-control"
-               style="width:100%;"
-               autofocus="autofocus" />
-      </div>
       
       <!-- 메뉴 이름 -->
       <div>
@@ -62,12 +53,13 @@
                style="width:50%;" />
       </div>
 
-      <!-- 사진 경로 -->
+      <!-- 사진 업로드 -->
       <div style="margin-top:10px;">
-        <label>사진 경로</label>
-        <input type="text"
-               th:field="*{photo}"
-               class="form-control"
+        <label>메뉴 이미지</label>
+        <!-- 파일 선택 필드 추가 -->
+        <input type="file" 
+               name="photoMF" 
+               class="form-control" 
                style="width:100%;" />
       </div>
 

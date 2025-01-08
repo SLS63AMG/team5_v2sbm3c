@@ -23,6 +23,25 @@ public class Contents {
 
         return path;
     }
+    
+    public static String getUploadDir_menu() {
+      String osName = System.getProperty("os.name").toLowerCase();
+      String path = "";
+
+      if (osName.contains("win")) { // Windows
+          path = "C:\\kd\\deploy\\team5\\menu\\storage\\";
+      } else if (osName.contains("mac")) { // MacOS
+          path = "/Users/yourusername/deploy/team5/menu/storage/";
+      } else { // Linux
+          path = "/home/ubuntu/deploy/team5/menu/storage/";
+      }
+
+      // 폴더가 없으면 생성
+      createDirectoryIfNotExists(path);
+
+      return path;
+  }
+  
 
     /**
      * 지정된 경로에 디렉토리가 없으면 생성하는 메서드

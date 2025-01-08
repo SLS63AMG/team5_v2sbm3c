@@ -490,7 +490,10 @@ public class Tool {
     return sw;
   }
   
-  /** DATE 형식을 String로 바꾸는 함수 */
+  /** DATE 형식을 String로 바꾸는 함수
+   * yyyy-MM-dd hh:mm:ss
+   * yyyy-MM-dd 
+   */
   public static String formatBirth(String birth) {
     // birth 값이 null이 아니고 비어 있지 않으면
     if (birth != null && !birth.isEmpty()) {
@@ -681,8 +684,9 @@ public class Tool {
       return url.toString();
   }
 
-
-
+  public static Date formatDate(Date cartdate) {
+    return cartdate; // 추가 변환 없이 Date 타입 그대로 반환
+  }
   
 }
 

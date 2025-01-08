@@ -1,9 +1,12 @@
 package dev.mvc.store;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import dev.mvc.menu.MenuProcInter;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +17,10 @@ public class StoreCont {
 
     @Autowired
     private StoreProc storeProc; // 서비스 계층 호출
+    
+    @Autowired
+    @Qualifier("dev.mvc.menu.MenuProc")
+    private MenuProcInter menuProc;
 
     /**
      * 음식점 추가 페이지를 보여주는 메서드 (GET 방식)
