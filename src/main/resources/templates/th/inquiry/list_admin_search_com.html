@@ -1,0 +1,28 @@
+<div th:fragment="list_search_fragment"> <!-- <div th:replace=... -->
+    <div style="text-align: right; clear: both;">
+    <form name="frm_search" method="get" action="/inquiry/list_admin">
+      
+      <label>제목</label>
+      <input type="text" name="word_title" id="word_title" th:value="${word_title}" >
+      
+      <label>이름</label>
+      <input type="text" name="word_name" id="word_name" th:value="${word_name}" >
+      
+      <label>선택</label>
+      <select name="state" id="state">
+        <option value="" selected disabled>선택</option>
+        <option value="1" th:selected="${state == 1}">N</option>
+        <option value="2" th:selected="${state == 2}">Y</option>
+      </select>
+      
+      <button type='submit' class='btn btn-secondary btn-sm' 
+                   style="padding: 2px 8px 3px 8px; margin: 0px 0px 2px 0px;">검색</button>
+      <span th:if="${word != null and word != ''}">
+        <button type='button' class='btn btn-secondary btn-sm' 
+                     style="padding: 2px 8px 3px 8px; margin: 0px 0px 2px 0px;"
+                     th:onclick="|location.href='/inquiry/list_admin'|">검색 취소</button>
+      </span>
+                    
+    </form>
+  </div>
+</div>

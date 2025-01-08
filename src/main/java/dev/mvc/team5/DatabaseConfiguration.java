@@ -21,16 +21,23 @@ import com.zaxxer.hikari.HikariDataSource;
 @MapperScan(basePackages= {"dev.mvc.member", 
                                        "dev.mvc.notice",
                                        "dev.mvc.loginlog",
-                                       "dev.mvc.wishlist",
+                                       "dev.mvc.inquiry",
                                        "dev.mvc.survey",
                                        "dev.mvc.surveyitem",
                                        "dev.mvc.menu",
                                        "dev.mvc.ranking",
                                        "dev.mvc.order",
                                        "dev.mvc.cart",
+<<<<<<< HEAD
                                        "dev.mvc.store", // DAO interface를 찾는 위치
                                        "dev.mvc.surveymember",
                                        "dev.mvc.menurecom"})
+=======
+                                       "dev.mvc.store",
+                                       "dev.mvc.storec",// DAO interface를 찾는 위치
+                                       "dev.mvc.surveymember",
+                                       "dev.mvc.surveygood"})
+>>>>>>> 6fec2892767a54be11a6649956893d6db78d63a0
 
 public class DatabaseConfiguration {
     

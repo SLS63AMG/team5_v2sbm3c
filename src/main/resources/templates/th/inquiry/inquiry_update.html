@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속 -->
+
+<div layout:fragment="content" style="max-width: 800px; margin: 0 auto; font-family: Arial, sans-serif;">
+
+  <!-- 제목 -->
+  <h1 style="text-align: center; margin-bottom: 20px; color: #333;">문의사항 작성</h1>
+
+  <!-- 작성 폼 -->
+  <form name="frm" id="frm" th:object="${inquiryVO}" method="post" action="/inquiry/update" enctype="multipart/form-data" 
+        style="background: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    
+    <input type="hidden" name="inquiryno" th:value="${inquiryVO.inquiryno}">
+    
+    <!-- 제목 입력 -->
+    <label for="title" style="font-weight: bold; color: #555;">제목</label>
+    <input type="text" id="title" name="title" required  th:value="${inquiryVO.title}"
+           style="width: 100%; margin-top: 5px; margin-bottom: 20px; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;">
+
+    <!-- 내용 입력 -->
+    <label for="content" style="font-weight: bold; color: #555;">내용</label>
+    <textarea id="content" name="content" rows="10" required th:text="${inquiryVO.content}"
+              style="width: 100%; margin-top: 5px; margin-bottom: 20px; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; resize: none;"></textarea>
+
+    <!-- 파일 업로드 -->
+    <label for="file1MF" style="font-weight: bold; color: #555;">파일 업로드</label>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+      <input type="file" id="file1MF" name="file1MF" accept=".jpg,.png,.gif" 
+             style="padding: 5px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; flex-grow: 1;" 
+             onchange="previewImage(event)">
+      <button type="button" id="clearFile" 
+              style="background: #ff6b6b; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">X</button>
+    </div>
+    <input type="hidden" name="image_state" id="image_state" value="default">
+    
+    <!-- 미리보기 -->
+    <div id="imagePreview" style="text-align: center; margin-bottom: 20px;">
+      <img id="preview" alt="미리보기 이미지" 
+           style="max-width: 600px; display: {{inquiryVO.filename != null ? 'block' : 'none'}};" 
+           th:src="@{'/images/' + ${inquiryVO.filename}}" >
+    </div>
+
+    <script>
+      // 파일 선택 시 이미지 미리보기 표시
+      function previewImage(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function (e) {
+          const img = document.getElementById('preview');
+          img.src = e.target.result;
+          img.style.display = 'block';
+          
+          const hiddenInput = document.getElementById('image_state');
+          hiddenInput.value = 'images';  // 선택된 파일이 있을 때 "images"로 변경
+        };
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+      }
+    
+      // X 버튼 클릭 시 파일 및 미리보기 초기화
+      document.getElementById('clearFile').addEventListener('click', function () {
+        const fileInput = document.getElementById('file1MF');
+        const imgPreview = document.getElementById('preview');
+        const hiddenInput = document.getElementById('image_state'); 
+        fileInput.value = '';
+        imgPreview.src = '';
+        imgPreview.style.display = 'none';
+        hiddenInput.value = 'no images';
+      });
+    </script>
+
+    <!-- 저장 버튼 -->
+    <button type="submit" 
+            style="width: 100%; padding: 10px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">저장</button>
+
+  </form>
+
+</div>
+
+
+</html>

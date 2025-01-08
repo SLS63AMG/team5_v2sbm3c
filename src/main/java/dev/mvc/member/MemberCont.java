@@ -235,7 +235,6 @@ public class MemberCont {
         ck_id.setMaxAge(0);
         response.addCookie(ck_id);
       }
-
       // Cookie 종료
       return "redirect:/";
     } else {
@@ -420,7 +419,6 @@ public class MemberCont {
 
       // -----------------------------------------------------------------
       int search_cnt = this.memberProc.list_search_count(word);
-      model.addAttribute("search_cnt", search_cnt);
       model.addAttribute("word", word);
       
 //      String paging = this.memberProc.pagingBox(now_page, word, list_file_name, search_cnt, this.record_per_page, this.page_per_block);
@@ -618,6 +616,110 @@ public class MemberCont {
 
     return "/th/member/passwd_find_form"; // /templates/mail/form.html
   }
+  
+  
+  @PostMapping(value = "/proc")
+  public ModelAndView proc(HttpSession session, HttpServletRequest request,
+      @RequestParam(name="id") String id,
+      @RequestParam(name="rphone") String rphone) {
+    ModelAndView mav = new ModelAndView();
+    
+    // 아이디 확인
+    MemberVO memberVO =  this.memberProc.find_passwd(id, rphone);
+    
+    // 전화번호 + 아이디 존재 여부 확인
+    if(memberVO != null) {
+
+      // 0 ~ 9, 번호 6자리 생성------------------------------------------------------------------------------------------------------
+      String auth_no = "";
+      Random random = new Random();
+      for (int i=0; i<= 5; i++) {
+        auth_no = auth_no + random.nextInt(10); // 0 ~ 9, 번호 6자리 생성
+      }
+      session.setAttribute("auth_no", auth_no); // 생성된 번호를 비교를위하여 session 에 저장
+      
+      // 번호, 전화 번호, ip, auth_no, 날짜 -> SMS Oracle table 등록, 문자 전송 내역 관리 목적으로 저장(필수 아니나 권장)
+      String msg = "[본인 확인 인증 번호] [" + auth_no + "]을 인증번호란에 입력해주세요.";
+      System.out.print(msg);
+      
+      mav.addObject("msg", msg); // request.setAttribute("msg")
+      mav.setViewName("/sms/proc");  // /WEB-INF/views/sms/proc.jsp
+      
+
+      
+      // 비밀번호 변경을 위한 토큰 부여
+      String token;
+      int attempts = 0;
+      int token_ck;
+      do {
+          token = this.security.createToken();
+          token_ck = this.memberProc.checkToken(token);
+          attempts++;
+      } while ( token_ck == 0 && attempts < 10);
+      
+      // 토큰 부여 실패
+      if(token_ck == 1) {
+        mav.addObject("error", "[알 수 없는 오류]<br>다시 시도해 주십시오.");
+        mav.setViewName("/th/member/passwd_find_form");  // HTML 파일 경로 설정 (예: src/main/resources/templates/member/find_password.html)
+        return mav;
+      }
+      session.setAttribute("grade", 100);
+      session.setAttribute("token", token);
+      
+      HashMap<String, Object> map = new HashMap<String, Object>();
+      map.put("token", token);
+      map.put("id", id);
+      
+      
+      this.memberProc.token_grant(map);
+      
+      // 비밀번호 변경을 위한 토큰 부여
+      
+      
+      
+      return mav;
+    } else {
+      mav.addObject("error", "아이디나 전화번호가 올바르지 않거나 존재하지 않습니다.");
+      mav.setViewName("/th/member/passwd_find_form");  // HTML 파일 경로 설정 (예: src/main/resources/templates/member/find_password.html)
+      return mav;
+    }
+    // 아이디, 이름 확인 로직 예정
+    
+    // 이따가 패스워드 찾기해야지 MemberCont, Passwd_find_form.html
+
+  }
+  
+  @GetMapping(value = "/passwd_re")
+  public String passwd_re() {
+    
+    return "/th/member/passwd_re";
+  }
+  
+  @PostMapping(value="/passwd_re")
+  public String passwd_re_proc(HttpSession session, Model model,
+      @RequestParam(value="passwd", defaultValue = "") String passwd) {
+    
+    String token = (String)session.getAttribute("token");
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    map.put("token", token);
+    map.put("passwd", passwd);
+    int cnt = this.memberProc.update_passwd(map);
+    
+    // 비밀번호 업데이트 성공/실패 처리
+    if(cnt == 1) {
+      model.addAttribute("code", "passwd_change_success");
+      model.addAttribute("cnt", 1);
+      session.invalidate();
+    } else {
+      model.addAttribute("code", "passwd_change_fail");
+      model.addAttribute("cnt", 0);
+      return "/th/member/msg"; // **이곳에 추가된 }**
+    }
+    // 비밀번호 변경 성공/실패 후 결과 페이지로 이동
+    return "/th/member/msg"; // **이곳에 추가된 }**
+  }
+  
+
   
   // 아이디 찾기, 비밀번호 찾기
   

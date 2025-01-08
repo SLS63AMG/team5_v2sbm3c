@@ -170,5 +170,16 @@ public class MemberProc implements MemberProcInter {
     ArrayList<MemberVO> list = this.memberDAO.find_id(email);
     return list;
   }
+  
+  @Override
+  public MemberVO find_passwd(String id, String tel) {
+    
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    map.put("id", id);
+    map.put("tel", tel);
+    MemberVO memberVO = this.memberDAO.find_passwd(map);
+    return memberVO;
+  }
+  
 
 }

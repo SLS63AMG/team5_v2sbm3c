@@ -27,14 +27,7 @@ DELETE FROM login_log
 WHERE logno=1;
 
 
-order_state
-login_state
-date_state
-date
-startDate
-endDate
-start_num
-end_num
+
 -- 로그인 로그 페이징
 -- word: 검색어 (로그인 ID에서 검색).
 

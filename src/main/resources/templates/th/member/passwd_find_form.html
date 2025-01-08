@@ -1,42 +1,45 @@
 <!DOCTYPE html>
 <html layout:decorate="~{th/layout}"> <!-- layout.html 상속 -->
+  
+
   <div layout:fragment="content" style="width: 80%; margin: 50px auto; text-align: center;">
-  
-    <script>
-        function send(f){
-            let panel = document.getElementById("panel");
-            panel.innerHTML = "메일을 전송 중입니다.";
-            
-            f.submit();
-        }
-    </script>
-
-    <div style='width: 40%; margin: 0px auto;'>
-      <div class='title_line'>계정 찾기</div>
-      <form name='frm' method='post' action="./send">
-
-        <div id='panel'></div> <!--/* 전송 메시지 */-->
-        
-        <table class='table_basic'>
-        
-          <colgroup>
-            <col style='width: 30%;' />   <!-- 출력 순서 -->
-            <col style='width: 70%;' /> <!-- 제목 -->
-          </colgroup>
-          
-          <tr>
-            <th class='th_basic'>받는 사람</th>
-            <td class='td_left'><input type="text" name="receiver" value='wogns00814@naver.com' class='input_basic' style='width: 90%;'></td>
-          </tr>
-        
-        </table>
-        
-        <div  class="bottom_menu">
-          <input type="button" value="보내기" onclick="send(this.form)">
-          <input type="button" value="취소" onclick="history.back()">
+  <link href="/css/member_find.css" rel="Stylesheet" type="text/css">
+  <div style='margin: 50px;'>
+    <form name="smsForm" action="/member/proc" method="post">
+      <input type="hidden" name="action" value="go"> 
+      <input type="hidden" name="smsType" value="S"> <!-- 발송 타입 -->
+      <input type="hidden" name="subject" value=""> <!-- 장문(LMS)인 경우(한글30자이내) -->
+      
+      <!-- 정상적으로 문자가 전송되고 나서 이동할 주소 -->
+      <input type="hidden" name="returnurl" maxlength="64" value="/sms/proc_next" size="80">
+      
+      <div class="form-container">
+        <div class="input-field">
+          <input type="text" name="id" id="id" class="input-field" required autocomplete="off">
+          <label for="id">아이디</label>
+          <span></span>
         </div>
-      </form>
-    </div>
-  
+      
+        <div class="input-field">
+          <input type="text" name="rphone" class="input-field" required autocomplete="off"> 
+          <label for="rphone">전화번호</label>
+          <span></span>
+        </div>
+        <span> 예) 010-0112-1112 , '-' 포함해서 입력.</span>
+      
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+      </div>
+      <span class="policy-text">이통사 정책에 따라 발신번호와 수신번호가 같은 경우 발송되지 않습니다.</span>
+      
+      <input type="submit" value="전송" class="submit-button">
+      
+      <input type="hidden" name="sphone1" value="010"> <!-- 전화번호 첫째자리 -->
+      <input type="hidden" name="sphone2" value="2722"> <!-- 전화번호 둘째자리 -->
+      <input type="hidden" name="sphone3" value="9751"> <!-- 전화번호 셋째자리 -->
+    
+    </form>
+  </div>
   </div>
 </html>
+ 
+

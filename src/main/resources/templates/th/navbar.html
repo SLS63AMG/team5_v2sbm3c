@@ -3,8 +3,8 @@
     <div class="top_menu_label">이지하조 Ver1</div>
   </div>
   
-  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-    <div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" >
+    <div class="container-fluid" th:if="${session.grade <= 99}" style="padding-right:20px;">
         <a class="navbar-brand" href="/">HOME</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,36 @@
               <li class="nav-item">
                 <a class="nav-link" th:href="@{/th/menu/list_all}">메뉴 리스트</a>
               </li>
-            
+
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/th/store/list}">음식점 리스트</a>
+              </li>
+               
+               
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="storeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                음식점 컨텐츠
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="storeDropdown">
+                <li>
+                  <a class="dropdown-item" th:href="@{/th/storec/list}">음식점 추천 목록</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/th/storec/create}">음식점 추천 등록</a>
+                </li>
+              </ul>
+            </li>
+
+
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/th/ranking/list_all}">음식점 랭킹 </a>
+              </li>
+               
+               <li class="nav-item">
+                <a class="nav-link" th:href="@{/th/survey/list}">설문조사</a>
+               </li>
+               
+               
               <li class="nav-item dropdown" th:if="${session.grade != null and session.grade <= 9}">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" 
                   role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="관리자">                                                             
@@ -29,12 +58,14 @@
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li class="nav-item"><a class="nav-link" th:href="@{|/member/list|}">회원목록</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{|/loginlog/list|}">로그인 내역</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{|/inquiry/list_admin|}">문의 사항 답변</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{|/authentication/form|}">메일 보내기</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{|/sms/form|}">문자 보내기</a></li>
                   </ul>
               
               </li>
               
+<<<<<<< HEAD
               <li class="nav-item">
                 <a class="nav-link" th:href="@{/th/store/list}">음식점 리스트</a>
               </li>
@@ -54,17 +85,40 @@
               <li class="nav-item">
                 <span th:if="${session.token == null}"><a class="nav-link" th:href="@{/member/login}" th:text="'로그인'"></a></span>
               </li>
+=======
+>>>>>>> 6fec2892767a54be11a6649956893d6db78d63a0
               
-              <li class="nav-item">
-                <span th:if="${session.token == null}"><a class="nav-link" th:href="@{|/member/signup|}">회원가입</a></span>
-              </li>
-              <li class="nav-item">
-                <span th:if="${session.token != null}"><a class="nav-link" href="/member/profile" th:text="@{|프로필|}"></a></span>
-              </li>
-              <li class="nav-item">
-                <span th:if="${session.token != null}"><a class="nav-link" href="/member/logout" th:text="@{|${session.id} 로그아웃|}"></a></span>
-              </li>
             </ul>
+            
+            
+<div class="dropdown text-start d-flex justify-content-end align-items-center">
+  <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    <img th:if="${session.token == null}" src="/th/images/login.png" alt="mdo" width="32" height="32" class="rounded-circle">
+    <img th:if="${session.token != null}" src="/th/images/unknown.png" alt="mdo" width="32" height="32" class="rounded-circle">
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end text-small">
+      <li class="nav-item">
+        <span th:if="${session.token == null}"><a class="nav-link" th:href="@{/member/login}" th:text="'로그인'"></a></span>
+      </li>
+      <li class="nav-item">
+        <span th:if="${session.token == null}"><a class="nav-link" th:href="@{|/member/signup|}">회원가입</a></span>
+      </li>
+      <li class="nav-item">
+        <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/member/profile" th:text="@{|프로필|}"></a></span>
+      </li>
+      <li class="nav-item">
+        <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/inquiry/list" th:text="@{|문의 사항|}"></a></span>
+      </li>
+      <li class="nav-item">
+        <span th:if="${session.token != null and session.grade <= 99}"><a class="nav-link" href="/member/logout" th:text="@{|${session.id} 로그아웃|}"></a></span>
+      </li>
+  </ul>
+</div>
+
+            
+            
+            
+            
         </div>
     </div>  
   </nav>

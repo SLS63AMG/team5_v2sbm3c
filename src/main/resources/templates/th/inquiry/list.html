@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
+<div layout:fragment="content">
+  
+  <div class='title_line'>문의 사항</div>
+
+  <aside class="aside_right">
+    <a href="javascript:location.reload();" class="menu-link">새로고침</a>
+    <span class='menu_divide' >│</span> 
+    <a href='./create' class="menu-link">문의사항</a>
+    <span class='menu_divide' >│</span> 
+    <a href='./list' class="menu-link">목록</a>
+  </aside> 
+
+  <div th:replace="~{th/inquiry/list_search_com::list_search_fragment}"></div>
+  <div class='menu_line'></div>
+       
+  <table class="table table-striped">
+    <colgroup>
+      <col style='width: 5%;'/>
+      <col style='width: 10%;'/>
+      <col style='width: 15%;'/>
+      <col style='width: 15%;'/>
+      <col style='width: 15%;'/>
+    </colgroup>
+    <thead>
+      <tr>
+        <th class='th_bs'> </th>
+        <th class='th_bs'>제목</th>
+        <th class='th_bs'>내용</th>
+        <th class='th_bs'>문의일</th>
+        <th class='th_bs'>처리 상태</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="inquiryVO, status : ${list}"
+      th:onclick="|location.href='/inquiry/read?inquiryno=' + ${inquiryVO.inquiryno}|"
+      style="cursor: pointer;">
+      
+        <td class='td_basic' th:text="${search_cnt - status.index}"></td>
+        
+        <td class='td_basic' th:text="${inquiryVO.title}"></td>
+        
+        <td class='td_basic'>
+          <span th:if="${#strings.length(inquiryVO.content) > 14}"
+                th:text="${#strings.substring(inquiryVO.content, 0, 14) + '...'}"></span>
+          <span th:if="${#strings.length(inquiryVO.content) <= 14}" 
+                th:text="${inquiryVO.content}"></span>
+        </td>
+
+        <td class='td_basic' th:text="${inquiryVO.rdate}"></td>
+        
+        <td class='td_basic'>
+            <span th:if="${inquiryVO.state == 1}">답변 대기중</span>
+            <span th:if="${inquiryVO.state == 2}">처리 완료</span>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="Bottom_menu" th:utext="${paging}"></div>
+
+</div>
+
+
+
+</html>
