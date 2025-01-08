@@ -55,8 +55,7 @@ public class MenurecomCont {
       public String create(HttpSession session, @RequestBody    MenurecomVO menurecomVO) {
         System.out.println("-> 수신 데이터:" + menurecomVO.toString());
         
-        int memberno = 1; // test 
-        // int memberno = (int)session.getAttribute("memberno"); // 보안성 향상
+        int memberno = (int)session.getAttribute("memberno"); // 보안성 향상
         menurecomVO.setMemberno(memberno);
         
         int cnt = this.menurecomProc.create(menurecomVO);

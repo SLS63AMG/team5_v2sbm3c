@@ -152,9 +152,40 @@ public class MenuCont {
             return "/th/menu/update";
         }
 
+        // 파일 업로드 처리
+        String photosaved = ""; // 저장된 파일명
+        String upDir = Menu.getUploadDir(); // 업로드 경로 가져오기
+
+        MultipartFile mf = menuVO.getPhotoMF(); // 업로드된 파일 객체 가져오기
+        long size1 = mf.getSize(); // 파일 크기
+
+        if (size1 > 0) { // 파일이 첨부된 경우
+            String originalFilename = mf.getOriginalFilename(); // 원본 파일명
+            if (Tool.checkUploadFile(originalFilename)) { // 업로드 가능한 파일인지 검사
+                try {
+                    photosaved = Upload.saveFileSpring(mf, upDir); // 파일 저장
+                    menuVO.setPhoto(photosaved); // 저장된 파일명을 VO에 설정
+                    System.out.println("[POST] 파일 저장 완료: " + photosaved);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    model.addAttribute("code", "file_upload_fail");
+                    return "/th/menu/msg"; // 파일 업로드 실패 시 메시지 페이지로 이동
+                }
+            } else {
+                System.out.println("[POST] 업로드 불가능한 파일 형식");
+                model.addAttribute("code", "check_upload_file_fail");
+                return "/th/menu/msg"; // 업로드 불가능한 파일 형식 시 메시지 페이지로 이동
+            }
+        } else {
+            System.out.println("[POST] 파일 첨부 없이 수정 진행");
+            // 기존 사진을 유지하려면 기존 사진 경로를 설정
+            String existingPhoto = menuProc.read(menuVO.getMenuno()).getPhoto();
+            menuVO.setPhoto(existingPhoto);
+        }
+
         int cnt = menuProc.update(menuVO);
         if (cnt == 1) {
-          return "redirect:/th/menu/list_all";
+            return "redirect:/th/menu/list_all";
         } else {
             model.addAttribute("code", "update_fail");
             return "/th/menu/msg";

@@ -23,7 +23,6 @@ public class Contents {
 
         return path;
     }
-<<<<<<< HEAD
     
     public static String getUploadDir_menu() {
       String osName = System.getProperty("os.name").toLowerCase();
@@ -43,14 +42,12 @@ public class Contents {
       return path;
   }
   
-=======
     /**
      * 공지사항 이미지 경로
      */
     public static String getUploadDir_inquiry() {
         String osName = System.getProperty("os.name").toLowerCase();
         String path = "";
->>>>>>> 6fec2892767a54be11a6649956893d6db78d63a0
 
         if (osName.contains("win")) { // Windows
             path = "C:\\kd\\deploy\\team5\\inquiry\\storage\\";
