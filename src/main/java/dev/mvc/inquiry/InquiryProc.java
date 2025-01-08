@@ -23,10 +23,11 @@ public class InquiryProc implements InquiryProcInter {
     
     HashMap<String, Object> map = new HashMap<String, Object>();
     map.put("inquiryno", inquiryno);
-    map.put("memberno", memberno);
-    
+    if(memberno != -1) {
+      map.put("memberno", memberno);      
+    }
     InquiryVO inquiryVO = this.inquiryDAO.inquiry_read(map);
-      
+    
     return inquiryVO;
   }
   
@@ -60,7 +61,16 @@ public class InquiryProc implements InquiryProcInter {
 
   @Override
   public ArrayList<InquiryVO> inquiry_admin_list_search_paging(HashMap<String, Object> map) {
-    ArrayList<InquiryVO> list = this.inquiryDAO.inquiry_user_list_search_paging(map);
+    
+    int now_page = (int)map.get("start_num");
+    int record_per_page = (int)map.get("end_num");
+    
+    int start_num = ((now_page - 1) * record_per_page) + 1;
+    int end_num = (start_num + record_per_page) - 1;
+    map.put("start_num", start_num);
+    map.put("end_num", end_num);
+    
+    ArrayList<InquiryVO> list = this.inquiryDAO.inquiry_admin_list_search_paging(map);
     return list;
   }
 

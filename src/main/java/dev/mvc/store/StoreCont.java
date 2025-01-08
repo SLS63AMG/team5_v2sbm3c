@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+<<<<<<< HEAD
 import dev.mvc.tool.Tool;
 import dev.mvc.tool.Upload;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,10 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.File;
 import java.util.HashMap;
+=======
+import dev.mvc.menu.MenuProcInter;
+
+>>>>>>> fd4ce1ce1e5df9a0bccbeb9b5198e37b13155147
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +30,10 @@ public class StoreCont {
     @Autowired
     @Qualifier("dev.mvc.store.StoreProc")
     private StoreProc storeProc; // 서비스 계층 호출
+    
+    @Autowired
+    @Qualifier("dev.mvc.menu.MenuProc")
+    private MenuProcInter menuProc;
 
     
     @GetMapping("/list")

@@ -18,7 +18,7 @@
               </li>
               
               <li class="nav-item">
-                <a class="nav-link" th:href="@{/th/menu/list_search}">메뉴 리스트</a>
+                <a class="nav-link" th:href="@{/th/menu/list_all}">메뉴 리스트</a>
               </li>
 
     
@@ -56,12 +56,32 @@
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li class="nav-item"><a class="nav-link" th:href="@{|/member/list|}">회원목록</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{|/loginlog/list|}">로그인 내역</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{|/inquiry/list_admin|}">문의 사항 답변</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{|/authentication/form|}">메일 보내기</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{|/sms/form|}">문자 보내기</a></li>
                   </ul>
               
               </li>
+             
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/th/store/list}">음식점 리스트</a>
+              </li>
               
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/th/cart/list_search_paging}">장바구니</a>
+              </li>
+               
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/th/ranking/list_all}">음식점 랭킹 </a>
+              </li>
+               
+               <li class="nav-item">
+                <a class="nav-link" th:href="@{/th/survey/list}">설문조사</a>
+               </li>
+
+              <li class="nav-item">
+                <span th:if="${session.token == null}"><a class="nav-link" th:href="@{/member/login}" th:text="'로그인'"></a></span>
+              </li>
               
             </ul>
             

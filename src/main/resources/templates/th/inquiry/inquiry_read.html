@@ -15,7 +15,7 @@
 
     <div style="padding: 20px;">
       <div th:if="${inquiryVO.filename != null and (inquiryVO.filename.endsWith('jpg') or inquiryVO.filename.endsWith('png') or inquiryVO.filename.endsWith('gif'))}">
-        <img th:src="@{'/images/' + ${inquiryVO.filename}}" 
+        <img th:src="@{'/inquiry/storage/' + ${inquiryVO.filename}}" 
              style="width: 100%; max-width: 450px; margin-top: 20px; display: block; margin-bottom: 20px; border-radius: 8px;">
       </div>
       

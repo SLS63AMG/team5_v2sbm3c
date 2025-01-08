@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html layout:decorate="~{th/layout}">
+<div layout:fragment="content">
+  <div class="title_line">장바구니 등록</div>
+  
+  <div class="menu_line"></div>
+  
+  <div style="width: 50%; margin: 0px auto;">
+    <form name="frm" method="post" action="/th/cart/create" th:object="${cartVO}">
+      <!-- 상품 번호 -->
+      <div style="margin-bottom: 20px;">
+        <label>장바구니 번호 (cartno)</label>
+        <input type="number" th:field="*{cartno}" min="1" class="form-control" placeholder="장바구니 번호를 입력하세요" required />
+      </div>
+      
+      <!-- 수량 -->
+      <div style="margin-bottom: 20px;">
+        <label>수량 (cartcnt)</label>
+        <input type="number" th:field="*{cartcnt}" min="1" class="form-control" placeholder="수량을 입력하세요" required />
+      </div>
+      
+      <div style="margin-bottom: 20px;">
+        <label>메뉴 번호 (menuno)</label>
+        <input type="number" th:field="*{menuno}" min="1" class="form-control" placeholder="메뉴 번호를 입력하세요" required />
+      </div>
+
+      <!-- 회원 번호 -->
+      <div style="margin-bottom: 20px;">
+        <label>회원 번호 (memberno)</label>
+        <input type="number" th:field="*{memberno}" min="1" class="form-control" placeholder="회원 번호를 입력하세요" required />
+      </div>
+
+      <!-- 버튼 영역 -->
+      <div style="margin-top:20px; text-align: center;">
+        <button type="submit" class="btn btn-secondary btn-sm">등록</button>
+        <button type="button" onclick="location.href='/th/cart/list_all'" class="btn btn-secondary btn-sm">목록</button>
+      </div>
+    </form>
+  </div>
+</div>
+</html>
