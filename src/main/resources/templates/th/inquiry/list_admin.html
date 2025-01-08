@@ -8,27 +8,29 @@
   <aside class="aside_right">
     <a href="javascript:location.reload();" class="menu-link">새로고침</a>
     <span class='menu_divide' >│</span> 
-    <a href='./create' class="menu-link">문의사항</a>
-    <span class='menu_divide' >│</span> 
-    <a href='./list' class="menu-link">목록</a>
+    <a href='./list_admin' class="menu-link">목록</a>
   </aside> 
 
-  <div th:replace="~{th/inquiry/list_search_com::list_search_fragment}"></div>
+  <div th:replace="~{th/inquiry/list_admin_search_com::list_search_fragment}"></div>
   <div class='menu_line'></div>
        
   <table class="table table-striped">
     <colgroup>
       <col style='width: 5%;'/>
+      <col style='width: 16%;'/>
+      <col style='width: 15%;'/>
+      <col style='width: 14%;'/>
+      <col style='width: 14%;'/>
       <col style='width: 10%;'/>
-      <col style='width: 15%;'/>
-      <col style='width: 15%;'/>
-      <col style='width: 15%;'/>
+      <col style='width: 10%;'/>
     </colgroup>
     <thead>
       <tr>
         <th class='th_bs'> </th>
         <th class='th_bs'>제목</th>
         <th class='th_bs'>내용</th>
+        <th class='th_bs'>이름</th>
+        <th class='th_bs'>아이디</th>
         <th class='th_bs'>문의일</th>
         <th class='th_bs'>처리 상태</th>
       </tr>
@@ -49,6 +51,8 @@
                 th:text="${inquiryVO.content}"></span>
         </td>
 
+        <td class='td_basic' th:text="${inquiryVO.name}"></td>
+        <td class='td_basic' th:text="${inquiryVO.id}"></td>
         <td class='td_basic' th:text="${inquiryVO.rdate}"></td>
         
         <td class='td_basic'>

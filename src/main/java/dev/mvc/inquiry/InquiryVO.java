@@ -47,6 +47,9 @@ public class InquiryVO {
   /** 회원 이름 */
   private String name;
   
+  /** 회원 이름 */
+  private String id;
+  
   /** 파일 이름 */
   private MultipartFile file1MF;
 

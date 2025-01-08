@@ -13,7 +13,10 @@
   <select id="inquiry_read" resultType="dev.mvc.inquiry.InquiryVO" parameterType="HashMap">
     SELECT inquiryno, title, content, rdate, state, filename, memberno
     FROM inquiry
-    WHERE inquiryno = #{inquiryno} AND memberno = #{memberno}
+    WHERE inquiryno = #{inquiryno} 
+    <if test="memberno != null">
+      AND memberno = #{memberno}
+    </if>
   </select>
   
   <!-- 문의 사항 수정 -->
@@ -53,20 +56,27 @@
   
   <!-- 문의 사항 관리자 페이지 -->
   <select id="inquiry_admin_list_search_paging" resultType="dev.mvc.inquiry.InquiryVO" parameterType="HashMap">
-    SELECT inquiryno, title, content, rdate, state, filename, memberno, name, r
+    SELECT inquiryno, title, content, rdate, state, filename, memberno, name, id, r
     FROM (
-        SELECT inquiryno, title, content, rdate, state, filename, memberno, name, rownum as r
+        SELECT inquiryno, title, content, rdate, state, filename, memberno, name, id, rownum as r
         FROM (
-            SELECT i.inquiryno, i.title, i.content, i.rdate, i.state, i.filename, i.memberno, m.name
+            SELECT i.inquiryno, i.title, i.content, i.rdate, i.state, i.filename, i.memberno, m.name, m.id
             FROM inquiry i INNER JOIN member m
             ON i.memberno = m.memberno
-            WHERE (UPPER(i.title) LIKE '%' || UPPER(#{word}) || '%') OR (UPPER(m.name) LIKE '%' || UPPER(#{word}) || '%')
-    
-            <if test="state != null">
+            WHERE 1=1 
+            
+            <if test="word_title != null">
+              AND (UPPER(i.title) LIKE '%' || UPPER(#{word_title}) || '%') 
+            </if>
+            
+            <if test="word_name != null">
+              AND (UPPER(m.name) LIKE '%' || UPPER(#{word_name}) || '%')
+            </if>
+            <if test="state != null and state != 0">
                 AND i.state = #{state}
             </if>
             
-            ORDER BY i.rdate ASC
+            ORDER BY i.rdate ASC, i.state ASC
         )
     )
     WHERE r &gt;=#{start_num} AND r &lt;=#{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
@@ -89,11 +99,11 @@
     
         <!-- order가 1인 경우 title과 name을 검색하고 state 조건도 추가 -->
         <when test="order == 1">
-            WHERE (UPPER(i.title) LIKE '%' || UPPER(#{word}) || '%') 
-               OR (UPPER(m.name) LIKE '%' || UPPER(#{word}) || '%')
+            WHERE (UPPER(i.title) LIKE '%' || UPPER(#{word_title}) || '%') 
+               AND (UPPER(m.name) LIKE '%' || UPPER(#{word_name}) || '%')
             
             <!-- state가 존재하면 state 조건 추가 -->
-            <if test="state != null">
+            <if test="state != null and state != 0">
                 AND i.state = #{state}
             </if>
         </when>

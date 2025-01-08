@@ -117,8 +117,17 @@ public class InquiryCont {
   @GetMapping(value="read")
   public String read_form(HttpSession session, Model model, 
       @RequestParam(name="inquiryno") int inquiryno) {
-    
-    if(Tool.isMember(session)) {
+    if(Tool.isAdmin(session)) {
+      int memberno = -1;
+      InquiryVO inquiryVO = this.inquiryProc.inquiry_read(inquiryno, memberno);
+      
+      String contentWithBreaks = inquiryVO.getContent().replace("\n", "<br/>");
+      inquiryVO.setContent(contentWithBreaks); // content를 변환된 값으로 업데이트
+      
+      model.addAttribute("inquiryVO", inquiryVO);
+      return "/th/inquiry/inquiry_read";
+      
+    } else if(Tool.isMember(session)) {
       int memberno =  (int) session.getAttribute("memberno");
       InquiryVO inquiryVO = this.inquiryProc.inquiry_read(inquiryno, memberno);
       
@@ -198,28 +207,41 @@ public class InquiryCont {
   // 문의 사항 삭제/취소-------------------------------------------------------------------
   @GetMapping(value="/delete")
   public String delete_form(HttpSession session, Model model,
-      @RequestParam(name="inquiryno") int inquiryno, HttpServletRequest request) {
-    
-    if(Tool.isMember(session)) {
-      int memberno =  (int) session.getAttribute("memberno");
+      @RequestParam(name = "inquiryno") int inquiryno) {
+    if(Tool.isAdmin(session)) {
       // 파일 삭제 시작
+      int  memberno = -1;
       InquiryVO inquiryVO = this.inquiryProc.inquiry_read(inquiryno, memberno);
-      String filename = inquiryVO.getFilename();
-      
-      String uploadDir = Contents.getUploadDir_inquiry();
-      Tool.deleteFile(uploadDir, filename);
+      if (inquiryVO != null) { // InquiryVO가 null인지 확인
+          String filename = inquiryVO.getFilename();
+          String uploadDir = Contents.getUploadDir_inquiry();
+          Tool.deleteFile(uploadDir, filename);
+          this.inquiryProc.inquiry_delete(inquiryVO);
+      }
       // 파일 삭제 끝
       
-      int cnt = this.inquiryProc.inquiry_delete(inquiryVO);
-      return "/th/inquiry/list";
-    } else {
-      String currentUrl = request.getHeader("Referer"); 
-      return "redirect:" + currentUrl; // 현재 페이지로 리다이렉트
+    } if (Tool.isMember(session)) {
+      
+      int memberno = (int) session.getAttribute("memberno");
+      
+      // 파일 삭제 시작
+      InquiryVO inquiryVO = this.inquiryProc.inquiry_read(inquiryno, memberno);
+      if (inquiryVO != null) { // InquiryVO가 null인지 확인
+          String filename = inquiryVO.getFilename();
+          String uploadDir = Contents.getUploadDir_inquiry();
+          Tool.deleteFile(uploadDir, filename);
+          this.inquiryProc.inquiry_delete(inquiryVO);
+      }
+      // 파일 삭제 끝
+        
     }
-    
+    return "redirect:/inquiry/list"; // 삭제 후 목록 페이지로 이동
   }
+
   // 문의 사항 삭제/취소-------------------------------------------------------------------
 
+  
+  
   
   // 사용자 페이징-------------------------------------------------------------------
   @GetMapping(value="/list")
@@ -262,7 +284,54 @@ public class InquiryCont {
     
   }
   // 사용자 페이징-------------------------------------------------------------------
+  
+  // 관리자 페이징-------------------------------------------------------------------
+  @GetMapping(value="/list_admin")
+  public String list_admin_form(Model model, HttpSession session, 
+      @RequestParam(name="word_title", defaultValue="") String word_title, 
+      @RequestParam(name="word_name", defaultValue="") String word_name, 
+      @RequestParam(name="state", defaultValue="0") int state, 
+      @RequestParam(name="now_page", defaultValue = "1") int now_page) {
+    
 
+    if(Tool.isAdmin(session)) {
+      HashMap<String, Object> map = new HashMap<String, Object>();
+      map.put("word_title", word_title);
+      map.put("word_name", word_name);
+      map.put("start_num", now_page);
+      map.put("end_num", this.record_per_page);
+      map.put("state", state);
+      
+      ArrayList<InquiryVO> list = this.inquiryProc.inquiry_admin_list_search_paging(map);
+      model.addAttribute("list", list);
+      
+      //페이징
+      map.put("order", 1);
+      int search_cnt = this.inquiryProc.list_search_count(map);
+      model.addAttribute("word_title", word_title);
+      model.addAttribute("word_name", word_name);
+      model.addAttribute("state", state);
+      model.addAttribute("search_cnt", search_cnt);
+      
+      
+      String paging = Tool.inquiryBox(now_page, word_title, word_name, state, "/inquiry/list_admin", search_cnt, this.record_per_page, this.page_per_block);
+      model.addAttribute("paging", paging);
+      model.addAttribute("now_page", now_page);
+      
+      int no = search_cnt - ((now_page - 1) * this.record_per_page);
+      model.addAttribute("no", no);
+      //페이징
+      
+      
+      
+      return "/th/inquiry/list_admin";
+      
+    } else {
+      return "redirect:/member/login";
+    }
+    
+  }
+  // 관리자 페이징-------------------------------------------------------------------
 
 
 }
