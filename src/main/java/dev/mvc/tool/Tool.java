@@ -770,10 +770,6 @@ public class Tool {
       url.append(key).append("=").append(value);
       return url.toString();
   }
-
-  public static Date formatDate(Date cartdate) {
-    return cartdate; // 추가 변환 없이 Date 타입 그대로 반환
-  }
   
 }
 
