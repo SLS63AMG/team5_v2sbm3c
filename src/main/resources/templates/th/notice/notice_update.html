@@ -45,8 +45,8 @@
     <!-- 파일이 있을 경우 미리보기 이미지가 보이도록 설정 -->
     <img id="preview" 
          alt="미리보기 이미지" 
-         style="max-width: 600px; display: {{noticeVO.filename != null ? 'block' : 'none'}};" 
-         th:src="@{'/images/' + ${noticeVO.filename}}" />
+         th:style="'max-width: 600px;' + (${noticeVO.filename == null ? ' display: none;' : ''})"
+         th:src="@{|/notice/storage/${noticeVO.filename}|}" />
   </div>
 </div>
 

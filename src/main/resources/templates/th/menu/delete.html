@@ -4,7 +4,7 @@
 <div layout:fragment="content">
   <div class="title_line">메뉴 삭제</div>
   <aside class="aside_right">
-    <a th:href="@{|/th/menu/list_search?word=${word}|}">목록</a>
+    <a th:href="@{|/th/menu/list_all?word=${word}|}">목록</a>
     <span class="menu_divide">|</span>
     <a th:href="@{/th/menu/update/{menuno}(menuno=${menuVO.menuno})}">수정</a>
     <span class="menu_divide">|</span>

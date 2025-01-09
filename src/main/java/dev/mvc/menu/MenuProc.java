@@ -9,12 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.mvc.menu.MenuVO;
+import dev.mvc.menurecom.MenurecomDAOInter;
+import dev.mvc.menurecom.MenurecomVO;
 
 @Service("dev.mvc.menu.MenuProc")
 public class MenuProc implements MenuProcInter {
 
     @Autowired
     private MenuDAOInter menuDAO;
+    
+    @Autowired
+    private MenurecomDAOInter menurecomDAO;
 
     public MenuProc() {
         System.out.println("-> MenuProc created.");
@@ -206,6 +211,25 @@ public class MenuProc implements MenuProcInter {
       str.append("</div>"); 
        
       return str.toString(); 
+    }
+    
+    
+    @Override
+    public int increaseRecom(int menurecomno) {
+      int cnt = this.menuDAO.increaseRecom(menurecomno);
+      return cnt;
+    }
+
+    @Override
+    public int decreaseRecom(int menurecomno) {
+      int cnt = this.menuDAO.decreaseRecom(menurecomno);
+      return cnt;
+    }
+    
+    @Override
+    public int good(int menuno) {
+      
+      return 0;
     }
 
 }

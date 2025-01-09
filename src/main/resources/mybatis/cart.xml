@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.mvc.cart.CartDAOInter">
+
+    <!-- 장바구니 추가 -->
+    <insert id="create" parameterType="dev.mvc.cart.CartVO">
+        INSERT INTO cart (cartno, cartcnt, cartdate, menuno, memberno)
+        VALUES (cart_seq.NEXTVAL, #{cartcnt}, SYSDATE, #{menuno}, #{memberno})
+    </insert>
+
+    <!-- 장바구니 항목 삭제 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM cart WHERE cartno = #{cartno}
+    </delete>
+    
+    <select id="listByMemberno" parameterType="int" resultType="dev.mvc.cart.CartVO">
+      SELECT cartno, cartcnt, cartdate, menuno, memberno
+      FROM cart
+      WHERE memberno = #{memberno}
+      ORDER BY cartno DESC
+    </select>
+    
+  <!-- 장바구니(검색 + 페이징) -->
+  <select id="list_search_paging" resultType="dev.mvc.cart.CartVO" parameterType="map">
+    SELECT cartno, cartcnt, cartdate, menuno, memberno, r
+    FROM (
+        SELECT cartno, cartcnt, cartdate, menuno, memberno, ROW_NUMBER() OVER (ORDER BY cartno DESC) AS r
+        FROM cart
+        WHERE memberno = #{memberno}
+        <if test="word != null and word != ''">
+            AND (
+                UPPER(menuno) LIKE '%' || UPPER(#{word}) || '%'
+            )
+        </if>
+    )
+    WHERE r &gt;= #{start_num} AND r &lt;= #{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
+  </select>
+
+  <!-- 검색된 레코드 개수 -->
+  <select id="list_search_count" resultType="Integer" parameterType="map">
+    SELECT COUNT(*) AS cnt
+    FROM cart
+    WHERE memberno = #{memberno}
+    <if test="word != null and word != ''">
+        AND (
+            UPPER(menuno) LIKE '%' || UPPER(#{word}) || '%'
+        )
+    </if>
+  </select>
+
+
+</mapper>

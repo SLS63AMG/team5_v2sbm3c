@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.mvc.menurecom.MenurecomDAOInter">
+
+  <!-- 등록 -->
+  <insert id="create" parameterType="dev.mvc.menurecom.MenurecomVO">
+    INSERT INTO menurecom(recomno, rdate, menuno, memberno)
+    VALUES (menurecom_seq.nextval, sysdate, #{menuno}, #{memberno})
+  </insert>
+  
+  <!-- 전체 목록 -->
+  <select id="list_all" resultType="dev.mvc.menurecom.MenurecomVO">
+    SELECT recomno, rdate, menuno, memberno
+    FROM menurecom
+    ORDER BY recomno DESC
+  </select>
+   
+  <!-- 삭제 -->
+  <delete id="delete" parameterType="int">
+    DELETE FROM menurecom
+    WHERE recomno = #{recomno}
+  </delete>
+  
+  <!-- 특정 메뉴의 특정 회원 추천 갯수 산출 -->
+<select id="hartCnt" resultType="int" parameterType="HashMap">
+  SELECT COUNT(*) as cnt
+  FROM menurecom
+  WHERE menuno=#{menuno} AND memberno=#{memberno}
+</select>
+  
+  <!-- 일반적인 조회 -->
+  <select id="read" resultType="dev.mvc.menurecom.MenurecomVO" parameterType="int">
+    SELECT recomno, rdate, menuno, memberno
+    FROM menurecom
+    WHERE recomno = #{recomno}
+  </select>  
+
+  <!-- menuno, memberno로 조회 -->
+  <select id="readByMenunoMemberno" resultType="dev.mvc.menurecom.MenurecomVO" parameterType="HashMap">
+    SELECT recomno, rdate, menuno, memberno
+    FROM menurecom
+    WHERE menuno=#{menuno} AND memberno=#{memberno}
+  </select>  
+
+</mapper>

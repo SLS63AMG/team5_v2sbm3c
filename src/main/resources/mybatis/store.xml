@@ -2,62 +2,123 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MyBatis Mapping 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dev.mvc.store.StoreDAOInter">
 
-    <insert id="create" parameterType="dev.mvc.store.StoreVO">
-    INSERT INTO store (storeno, name, distinction, reviewcnt, address1, address2, busihours, tel, reservation, rsite, msite, rating)
-    VALUES (store_seq.NEXTVAL, #{name}, #{distinction}, #{reviewcnt}, #{address1}, #{address2}, #{busihours}, #{tel}, 
-            #{reservation}, 
-            <if test="rsites != null">#{rsites}</if>
-            <if test="rsites == null">NULL</if>,
-            #{msite}, #{rating})
-    </insert>
+    <!-- 음식점 등록 -->
+<insert id="create" parameterType="dev.mvc.store.StoreVO">
+    INSERT INTO store (
+        storeno, name, distinction, reviewcnt, address1, address2, busihours, tel, 
+        reservation, rsite, msite, rating, file1, file1saved, thumb1, size1
+    ) VALUES (
+        store_seq.NEXTVAL, #{name}, #{distinction}, #{reviewcnt}, #{address1}, #{address2}, 
+        #{busihours}, #{tel}, #{reservation}, #{rsite}, #{msite}, #{rating}, #{file1}, 
+        #{file1saved}, #{thumb1}, #{size1}
+    )
+</insert>
 
 
-
-    <!-- 음식점 리스트 조회 -->
-    <select id="listAll" resultType="dev.mvc.store.StoreVO">
-        SELECT * FROM store
+    <select id="list" resultType="dev.mvc.store.StoreVO">
+        SELECT 
+            storeno, 
+            name, 
+            distinction, 
+            reviewcnt, 
+            address1, 
+            address2, 
+            busihours, 
+            tel, 
+            reservation, 
+            rsite, 
+            msite, 
+            rating, 
+            file1, 
+            file1saved, 
+            thumb1, 
+            size1
+        FROM 
+            store
+        ORDER BY 
+            storeno DESC
     </select>
 
     <!-- 특정 음식점 조회 -->
-    <!-- store.xml -->
     <select id="read" parameterType="int" resultType="dev.mvc.store.StoreVO">
-      SELECT * FROM store WHERE storeno = #{storeno}
+        SELECT * FROM store WHERE storeno = #{storeno}
     </select>
 
-
-
     <!-- 음식점 정보 수정 -->
-<update id="update" parameterType="dev.mvc.store.StoreVO">
-    UPDATE store SET 
-        name = #{name}, 
-        distinction = #{distinction}, 
-        reviewcnt = #{reviewcnt},
-        address1 = #{address1}, 
-        address2 = #{address2, jdbcType=VARCHAR}, 
-        busihours = #{busihours},
-        tel = #{tel}, 
-        reservation = #{reservation}, 
-        rsite = #{rsites, jdbcType=VARCHAR}, 
-        msite = #{msite}, 
-        rating = #{rating}
-    WHERE storeno = #{storeno}
-</update>
-
+    <update id="update" parameterType="dev.mvc.store.StoreVO">
+        UPDATE store 
+        SET 
+            name = #{name}, 
+            distinction = #{distinction}, 
+            reviewcnt = #{reviewcnt},
+            address1 = #{address1}, 
+            address2 = #{address2, jdbcType=VARCHAR}, 
+            busihours = #{busihours},
+            tel = #{tel}, 
+            reservation = #{reservation}, 
+            rsite = #{rsite, jdbcType=VARCHAR}, 
+            msite = #{msite}, 
+            rating = #{rating},
+            file1saved = #{file1saved},
+            thumb1 = #{thumb1},
+            size1 = #{size1}
+        WHERE storeno = #{storeno}
+    </update>
 
     <!-- 음식점 삭제 -->
     <delete id="delete" parameterType="int">
         DELETE FROM store WHERE storeno = #{storeno}
     </delete>
-    
+
     <!-- 음식점 검색 -->
     <select id="search" parameterType="map" resultType="dev.mvc.store.StoreVO">
-        SELECT storeno, name, distinction, reviewcnt, address1, tel, busihours, rating
+        SELECT storeno, name, distinction, reviewcnt, address1, address2, tel, busihours, rating, thumb1
         FROM store
         WHERE name LIKE '%' || #{keyword} || '%'
         ORDER BY storeno DESC
     </select>
 
-    
+    <!-- 음식점 전체 개수 -->
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM store
+    </select>
 
+    <!-- 페이지별 음식점 조회 -->
+    <select id="list_by_page" parameterType="map" resultType="dev.mvc.store.StoreVO">
+        SELECT *
+        FROM (
+            SELECT t.*, ROWNUM AS rn
+            FROM (
+                SELECT storeno, name, distinction, reviewcnt, address1, address2, tel, busihours, rating, thumb1
+                FROM store
+                ORDER BY storeno DESC
+            ) t
+            WHERE ROWNUM &lt;= #{endRow}
+        )
+        WHERE rn &gt;= #{startRow}
+    </select>
+
+    <!-- 검색 결과 개수 -->
+    <select id="searchCount" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM store
+        WHERE name LIKE '%' || #{keyword} || '%'
+    </select>
+
+    <!-- 검색 결과 페이지별 조회 -->
+    <select id="searchByPage" parameterType="map" resultType="dev.mvc.store.StoreVO">
+        SELECT *
+        FROM (
+            SELECT t.*, ROWNUM AS rn
+            FROM (
+                SELECT storeno, name, distinction, reviewcnt, address1, address2, tel, busihours, rating, thumb1
+                FROM store
+                WHERE name LIKE '%' || #{keyword} || '%'
+                ORDER BY storeno DESC
+            ) t
+            WHERE ROWNUM &lt;= #{endRow}
+        )
+        WHERE rn &gt;= #{startRow}
+    </select>
 
 </mapper>

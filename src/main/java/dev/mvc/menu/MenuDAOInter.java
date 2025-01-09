@@ -64,4 +64,13 @@ public interface MenuDAOInter {
      */
     public ArrayList<MenuVO> list_search_paging(Map<String, Object> map);
     
+    
+    /** 추천 수 증가 */
+    public int increaseRecom(int menurecomno);
+
+    /** 추천 수 감소 */
+    public int decreaseRecom(int menurecomno);
+   
+    public int good(int menuno);
+    
 }

@@ -262,9 +262,18 @@ public class NoticeCont {
       // 파일 전송 코드 시작
       // ------------------------------------------------------------------------------
       if(image_state.equals("images")) {
+        NoticeVO delVO = this.noticeProc.notice_read(noticeno);
+        if(delVO.getFilename() != null) {
+          // 파일 삭제 시작
+          String filename = delVO.getFilename();
+          String uploadDir = Contents.getUploadDir_inquiry();
+          Tool.deleteFile(uploadDir, filename);
+          // 파일 삭제 끝
+        }
+        
+        
         String file1 = ""; // 원본 파일명 image
         String file1saved = ""; // 저장된 파일명, image
-        System.out.println("흠 -> " + noticeVO.getFile1MF());
 
         String upDir = Contents.getUploadDir_notice(); // 파일을 업로드할 폴더 준비
         // upDir = upDir + "/" + 한글을 제외한 카테고리 이름
@@ -290,12 +299,22 @@ public class NoticeCont {
             ra.addFlashAttribute("code", "check_upload_file_fail"); // 업로드 할 수 없는 파일
             ra.addFlashAttribute("cnt", 0); // 업로드 실패
             ra.addFlashAttribute("url", "/review/msg"); // msg.html, redirect parameter 적용
-            return "redirect:/review/msg"; // Post -> Get - param...
+            return "redirect:/"; // Post -> Get - param...
           }
         } else { // 글만 등록하는 경우
           System.out.println("-> 글만 등록");
         }
       } else if(image_state.equals("no images")){
+                
+        NoticeVO delVO = this.noticeProc.notice_read(noticeno);
+        if(delVO.getFilename() != null) {
+          // 파일 삭제 시작
+          String filename = delVO.getFilename();
+          String uploadDir = Contents.getUploadDir_inquiry();
+          Tool.deleteFile(uploadDir, filename);
+          // 파일 삭제 끝
+        }
+
         noticeVO.setFilename(null);
         
       } else if(image_state.equals("default")){

@@ -6,6 +6,8 @@
     메뉴 <span th:if="${word != null and word != ''}" th:text="|${word}|"></span>
   </div>
   <aside class="aside_right">
+    <a th:href="@{/th/menu/create}">등록</a>
+    <span class="menu_divide">|</span>
     <a href="javascript: location.reload();">새로 고침</a>
   </aside>
   <!--/* '/cate/list_search_com.html' 파일의 list_search_fragment를 가져다 사용 */--> 
@@ -15,52 +17,7 @@
   
   <div class="flex_div_center" style="width: 80%; margin: 0px auto;">
     <form name="frm" method="post" action="/th/menu/create" th:object="${menuVO}">
-      <!-- 메뉴 번호 -->
-      <div style="margin-right: 2px; width: 10%; float: left;">
-        <input type="number" name="menuno" 
-               class="form-control" style="width: 100%;" 
-               th:field="*{menuno}" placeholder="메뉴 번호" readonly="readonly">
-      </div>
 
-      <!-- 메뉴 이름 -->
-      <div style="margin-right: 2px; width: 15%; float: left;">
-        <input type="text" name="name" 
-               class="form-control" style="width: 100%;" 
-               th:field="*{name}" placeholder="메뉴 이름" required>
-      </div>
-
-      <!-- 메뉴 설명 -->
-      <div style="margin-right: 2px; width: 20%; float: left;">
-        <textarea name="explanation" 
-                  class="form-control" style="width: 100%;" 
-                  th:field="*{explanation}" placeholder="설명"></textarea>
-      </div>
-
-      <!-- 가격 -->
-      <div style="margin-right: 2px; width: 10%; float: left;">
-        <input type="number" name="price" min="0" 
-               class="form-control" style="width: 100%;" 
-               th:field="*{price}" placeholder="가격">
-      </div>
-
-      <!-- 사진 -->
-      <div style="margin-right: 2px; width: 20%; float: left;">
-        <input type="text" name="photo" 
-               class="form-control" style="width: 100%;" 
-               th:field="*{photo}" placeholder="사진 경로" required>
-      </div>
-
-      <!-- 가게 번호 -->
-      <div style="margin-right: 2px; width: 10%; float: left;">
-        <input type="number" name="storeno" min="1" 
-               class="form-control" style="width: 100%;" 
-               th:field="*{storeno}" placeholder="가게 번호" required>
-      </div>
-
-      <div style="margin-right: 2px; width: 13%; float: left; margin-top: 3px; margin-left: 5px;">
-        <button type="submit" class="btn btn-secondary btn-sm">등록</button>
-        <button type="reset" class="btn btn-secondary btn-sm">취소</button>
-      </div>
       
     </form>
   </div>  

@@ -1,5 +1,7 @@
 package dev.mvc.menu;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -32,14 +34,17 @@ public class MenuVO {
     @Min(value = 0, message = "가격은 0원 이상이어야 합니다.")
     @Max(value = 1000000, message = "가격은 1,000,000원 이하이어야 합니다.")
     private Integer price;
+    
+    /** 업로드된 파일 객체 */
+    private MultipartFile photoMF;
 
-    /** 사진 */
-    @NotEmpty(message = "사진 경로는 필수 항목입니다.")
-    @Pattern(regexp = "^(.*\\.(jpg|png|gif|jpeg))$", message = "사진 경로는 JPG, PNG, GIF 파일이어야 합니다.")
+    /** 업로드된 파일 이름 */
     private String photo;
-
 
     /** 식당 번호 */
     @NotNull(message = "식당 번호는 필수 입력 항목입니다.")
     private Integer storeno;
+    
+    /** 추천 수 */
+    private Integer recom = 0;
 }
