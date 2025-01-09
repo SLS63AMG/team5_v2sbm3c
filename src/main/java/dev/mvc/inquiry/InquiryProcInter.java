@@ -38,4 +38,9 @@ public interface InquiryProcInter {
    * 문의 사항 검색 갯수
    */
   public Integer list_search_count(HashMap<String, Object> map);
+  
+  /**
+   * 문의 사항 처리 상태
+   */
+  public int state_update(int inquiryno, int state);
 }

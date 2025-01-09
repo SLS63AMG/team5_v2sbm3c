@@ -14,71 +14,326 @@
     </div>
 
     <div style="padding: 20px;">
-      <div th:if="${inquiryVO.filename != null and (inquiryVO.filename.endsWith('jpg') or inquiryVO.filename.endsWith('png') or inquiryVO.filename.endsWith('gif'))}">
-        <img th:src="@{|/inquiry/storage/${inquiryVO.filename}|}" 
-             style="width: 100%; max-width: 450px; margin-top: 20px; display: block; margin-bottom: 20px; border-radius: 8px;">
+      <div
+        th:if="${inquiryVO.filename != null and (inquiryVO.filename.endsWith('jpg') or inquiryVO.filename.endsWith('png') or inquiryVO.filename.endsWith('gif'))}">
+        <img th:src="@{|/inquiry/storage/${inquiryVO.filename}|}"
+          style="width: 100%; max-width: 450px; margin-top: 20px; display: block; margin-bottom: 20px; border-radius: 8px;">
       </div>
-      
 
-    
+
+
       <p th:utext="${inquiryVO.content}" style="font-size: 16px; line-height: 1.6; color: #555;"></p>
     </div>
+
+    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+      <a href='./list'
+        style="text-decoration: none; font-weight: bold; color: #007BFF; border: 1px solid #007BFF; padding: 5px 10px; border-radius: 4px;">목록</a>
+      <span class="menu_divide" style="color: #aaa;" th:if="${inquiryVO.state==1}">│</span>
+      <a href="#" id="update" th:if="${inquiryVO.state==1}"
+        style="color: #FF4D4D; font-weight: bold; cursor: pointer; border: 1px solid #FF4D4D; padding: 5px 10px; border-radius: 4px;">수정</a>
+      <span class="menu_divide" style="color: #aaa;" th:if="${inquiryVO.state==1 or grade <= 9}">│</span>
+      <a href="#" id="delete" th:if="${inquiryVO.state==1 or grade <= 9}"
+        style="color: #FF4D4D; font-weight: bold; cursor: pointer; border: 1px solid #FF4D4D; padding: 5px 10px; border-radius: 4px;">삭제</a>
+    </div>
+
+<hr style="border: 1px solid #ddd; margin-top: 10px; margin-bottom: 10px;">
+<!-- 답변 폼 -->
+<div th:if="${grade <= 9 AND answerVO==null}" style="border: 2px solid #ddd; border-radius: 12px;" id="container_div">
+  <form id="answerForm" enctype="multipart/form-data" 
+        style="background: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+
+    <!-- 답변 내용 -->
+    <label for="content" style="font-weight: bold; color: #555;">답변 내용</label>
+    <textarea name="content" id="content" placeholder="글을 입력하세요" required
+              style="width: 100%; height: 150px; margin-top: 5px; margin-bottom: 20px; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; resize: vertical; resize: none;"></textarea>
+
+    <!-- 파일 업로드 -->
+    <label for="file1MF" style="font-weight: bold; color: #555;">파일 업로드</label>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+      <input type="file" name="file1MF" id="file1MF" required 
+             style="padding: 5px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; flex-grow: 1;" 
+             onchange="previewImage(event)">
+      <button type="button" id="clearFile" 
+              style="background: #ff6b6b; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">X</button>
+    </div>
+
+    <!-- 미리보기 -->
+    <div id="imagePreview" style="text-align: center; margin-bottom: 20px;">
+      <img id="preview" alt="미리보기 이미지" 
+           style="max-width: 100%; max-height: 300px; display: none; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+
+    <input type="hidden" name="inquiryno" id="inquiryno" th:value="${inquiryVO.inquiryno}">
+
+    <!-- 답변 버튼 -->
+    <button type="button" onclick="submitAnswer()" 
+            style="width: 100%; padding: 10px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">답변</button>
+  </form>
+</div>
+
     
-<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
-  <a href='./list' style="text-decoration: none; font-weight: bold; color: #007BFF; border: 1px solid #007BFF; padding: 5px 10px; border-radius: 4px;">목록</a>
-  <span class="menu_divide" style="color: #aaa;">│</span>
-  <a href="#" id="update" style="color: #FF4D4D; font-weight: bold; cursor: pointer; border: 1px solid #FF4D4D; padding: 5px 10px; border-radius: 4px;">수정</a>
-  <span class="menu_divide" style="color: #aaa;">│</span>
-  <a href="#" id="delete" style="color: #FF4D4D; font-weight: bold; cursor: pointer; border: 1px solid #FF4D4D; padding: 5px 10px; border-radius: 4px;">삭제</a>
+<div th:if="${(grade >= 10 AND grade <= 19 AND answerVO!=null) OR (grade <= 9 AND answerVO!=null)}" style="border-radius: 12px; border: 1px solid #ddd; overflow: hidden;">
+  <div style="padding: 20px;">
+  
+    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+      <span style="font-weight: bold; font-size: 16px;" th:text="${answerVO.name}"></span>
+      <span style="font-size: 14px; color: #888;" th:text="${answerVO.rdate}"></span>
+    </div>
+    
+    <hr style="border: 1px solid #ddd; margin-top: 10px; margin-bottom: 10px;">
+
+    <div th:if="${answerVO.filename != null and (answerVO.filename.endsWith('jpg') or answerVO.filename.endsWith('png') or answerVO.filename.endsWith('gif'))}">
+      <img th:src="@{|/answer/storage/${answerVO.filename}|}"
+        style="width: 100%; max-width: 450px; margin-top: 20px; display: block; margin-bottom: 20px; border-radius: 8px;">
+    </div>
+
+    <p th:utext="${answerVO.content}" style="font-size: 16px; line-height: 1.6; color: #555;"></p>
+    
+    <!-- 수정, 삭제 버튼 -->
+    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;"  th:if="${grade<=9}">
+      <a href="#" id="answerUpdate"
+        style="color: #FF4D4D; font-weight: bold; cursor: pointer; border: 1px solid #FF4D4D; padding: 5px 10px; border-radius: 4px;">수정</a>
+      <span class="menu_divide" style="color: #aaa;">│</span>
+      <a href="#" id="answerDelete" 
+        style="color: #FF4D4D; font-weight: bold; cursor: pointer; border: 1px solid #FF4D4D; padding: 5px 10px; border-radius: 4px;">삭제</a>
+    </div>
+    
+  </div>
 </div>
 
     
   </div>
 
   <!-- 모달창 HTML -->
-  <div id="deleteModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; text-align: center;">
-    <div style="background-color: white; padding: 30px 20px; border-radius: 8px; width: 400px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
+  <div id="deleteModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; text-align: center;">
+    <div
+      style="background-color: white; padding: 30px 20px; border-radius: 8px; width: 400px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
       <h3 style="font-size: 18px; color: #333;">문의를 취소하시겠습니까?</h3>
       <div style="margin-top: 20px; display: flex; justify-content: center;">
-        <a href="javascript:void(0);" id="confirmDelete" th:href="@{'/inquiry/delete?inquiryno=' + ${inquiryVO.inquiryno}}" 
-           style="margin-right: 20px; color: red; font-weight: bold; text-decoration: none;">삭제</a>
-        <a href="javascript:void(0);" id="cancelDelete" 
-           style="color: #007BFF; font-weight: bold; text-decoration: none;">취소</a>
+        <a href="javascript:void(0);" id="confirmDelete"
+          th:href="@{'/inquiry/delete?inquiryno=' + ${inquiryVO.inquiryno}}"
+          style="margin-right: 20px; color: red; font-weight: bold; text-decoration: none;">삭제</a>
+        <a href="javascript:void(0);" id="cancelDelete"
+          style="color: #007BFF; font-weight: bold; text-decoration: none;">취소</a>
       </div>
     </div>
   </div>
-  
-  <div id="updateModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; text-align: center;">
-    <div style="background-color: white; padding: 30px 20px; border-radius: 8px; width: 450px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
+
+  <div id="updateModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; text-align: center;">
+    <div
+      style="background-color: white; padding: 30px 20px; border-radius: 8px; width: 450px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
       <h3 style="font-size: 18px; color: #333;">문의를 수정 하시겠습니까?<br>수정하신다면 단변 대기 순위가 늦춰질 수 있습니다.</h3>
       <div style="margin-top: 20px; display: flex; justify-content: center;">
-        <a href="javascript:void(0);" id="confirmUpdate" th:href="@{'/inquiry/update?inquiryno=' + ${inquiryVO.inquiryno}}" 
-           style="margin-right: 20px; color: red; font-weight: bold; text-decoration: none;">수정</a>
-        <a href="javascript:void(0);" id="cancelUPdate" 
-           style="color: #007BFF; font-weight: bold; text-decoration: none;">취소</a>
+        <a href="javascript:void(0);" id="confirmUpdate"
+          th:href="@{'/inquiry/update?inquiryno=' + ${inquiryVO.inquiryno}}"
+          style="margin-right: 20px; color: red; font-weight: bold; text-decoration: none;">수정</a>
+        <a href="javascript:void(0);" id="cancelUPdate"
+          style="color: #007BFF; font-weight: bold; text-decoration: none;">취소</a>
       </div>
     </div>
   </div>
   
+  <!-- 답변 수정 모달 -->
+  <div id="answerUpdateModal"
+      style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; text-align: center;">
+      <div
+          style="background-color: white; padding: 30px 20px; border-radius: 8px; width: 450px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
+          <h3 style="font-size: 18px; color: #333;">답변을 수정하시겠습니까?</h3>
+          <div style="margin-top: 20px; display: flex; justify-content: center;">
+              <a href="javascript:void(0);" id="confirmAnswerUpdate"
+                  th:href="@{'/answer/update?inquiryno=' + ${inquiryVO.inquiryno}}"
+                  style="margin-right: 20px; color: red; font-weight: bold; text-decoration: none;">수정</a>
+              <a href="javascript:void(0);" id="cancelAnswerUpdate"
+                  style="color: #007BFF; font-weight: bold; text-decoration: none;">취소</a>
+          </div>
+      </div>
+  </div>
+  
+  <!-- 답변 삭제 모달 -->
+  <div id="answerDeleteModal"
+      style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; text-align: center;">
+      <div
+          style="background-color: white; padding: 30px 20px; border-radius: 8px; width: 400px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
+          <h3 style="font-size: 18px; color: #333;">답변을 삭제하시겠습니까?</h3>
+          <div style="margin-top: 20px; display: flex; justify-content: center;">
+              <a href="javascript:void(0);" id="confirmAnswerDelete"
+                  style="margin-right: 20px; color: red; font-weight: bold; text-decoration: none;">삭제</a>
+              <a href="javascript:void(0);" id="cancelAnswerDelete"
+                  style="color: #007BFF; font-weight: bold; text-decoration: none;">취소</a>
+          </div>
+      </div>
+  </div>
+
+
+
   <script>
-    window.onload = function() {
-        function delete_btn() {
-            document.getElementById('deleteModal').style.display = 'flex';
-        }
-        document.getElementById('cancelDelete').onclick = function() {
-            document.getElementById('deleteModal').style.display = 'none';
-        }
-        document.getElementById('delete').onclick = delete_btn;
-        
-        // 수정 모달 이벤트
-        function update_btn() {
-            document.getElementById('updateModal').style.display = 'flex';
-        }
-        document.getElementById('cancelUPdate').onclick = function() {
-            document.getElementById('updateModal').style.display = 'none';
-        }
-        document.getElementById('update').onclick = update_btn;
+window.onload = function () {
+  // 문의 삭제 모달 이벤트
+  function delete_btn() {
+    var deleteModal = document.getElementById('deleteModal');
+    if (deleteModal !== null) {
+      deleteModal.style.display = 'flex';
     }
+  }
+  var cancelDelete = document.getElementById('cancelDelete');
+  if (cancelDelete !== null) {
+    cancelDelete.onclick = function () {
+      var deleteModal = document.getElementById('deleteModal');
+      if (deleteModal !== null) {
+        deleteModal.style.display = 'none';
+      }
+    };
+  }
+  var deleteButton = document.getElementById('delete');
+  if (deleteButton !== null) {
+    deleteButton.onclick = delete_btn;
+  }
+
+  // 문의 수정 모달 이벤트
+  function update_btn() {
+    var updateModal = document.getElementById('updateModal');
+    if (updateModal !== null) {
+      updateModal.style.display = 'flex';
+    }
+  }
+  var cancelUpdate = document.getElementById('cancelUPdate');
+  if (cancelUpdate !== null) {
+    cancelUpdate.onclick = function () {
+      var updateModal = document.getElementById('updateModal');
+      if (updateModal !== null) {
+        updateModal.style.display = 'none';
+      }
+    };
+  }
+  var updateButton = document.getElementById('update');
+  if (updateButton !== null) {
+    updateButton.onclick = update_btn;
+  }
+
+  // 답변 삭제 모달 이벤트
+  function answerDelete_btn() {
+    var answerDeleteModal = document.getElementById('answerDeleteModal');
+    if (answerDeleteModal !== null) {
+      answerDeleteModal.style.display = 'flex';
+    }
+  }
+  var cancelAnswerDelete = document.getElementById('cancelAnswerDelete');
+  if (cancelAnswerDelete !== null) {
+    cancelAnswerDelete.onclick = function () {
+      var answerDeleteModal = document.getElementById('answerDeleteModal');
+      if (answerDeleteModal !== null) {
+        answerDeleteModal.style.display = 'none';
+      }
+    };
+  }
+  var answerDeleteButton = document.getElementById('answerDelete');
+  if (answerDeleteButton !== null) {
+    answerDeleteButton.onclick = answerDelete_btn;
+  }
+
+  // 답변 수정 모달 이벤트
+  function answerUpdate_btn() {
+    var answerUpdateModal = document.getElementById('answerUpdateModal');
+    if (answerUpdateModal !== null) {
+      answerUpdateModal.style.display = 'flex';
+    }
+  }
+  var cancelAnswerUpdate = document.getElementById('cancelAnswerUpdate');
+  if (cancelAnswerUpdate !== null) {
+    cancelAnswerUpdate.onclick = function () {
+      var answerUpdateModal = document.getElementById('answerUpdateModal');
+      if (answerUpdateModal !== null) {
+        answerUpdateModal.style.display = 'none';
+      }
+    };
+  }
+  var answerUpdateButton = document.getElementById('answerUpdate');
+  if (answerUpdateButton !== null) {
+    answerUpdateButton.onclick = answerUpdate_btn;
+  }
+};
+    
+function submitAnswer() {
+
+    var content = document.getElementById("content").value;
+    
+    // 텍스트 필드가 빈값인지 확인
+    if (!content.trim()) {
+        alert("내용을 입력해 주세요.");
+        return;  // 텍스트 필드가 비어 있으면 함수 종료
+    }
+    
+    var formData = new FormData();
+    formData.append("content", content);  // 텍스트 필드
+    formData.append("file1MF", document.getElementById("file1MF").files[0]);  // 파일 필드
+    formData.append("inquiryno", document.getElementById("inquiryno").value);  // 파일 필드
+    
+    // fetch 요청
+    fetch('/answer/create', {
+        method: 'POST',
+        body: formData,  // FormData를 요청 본문으로 전달
+    })
+    .then(response => response.json())  // 서버 응답을 JSON으로 변환
+    .then(data => {
+      console.log(data);
+      document.getElementById('container_div').innerHTML = '';
+      // HTML 내용을 container_div에 삽입
+      document.getElementById('container_div').innerHTML = `
+        <div style="padding: 20px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-weight: bold; font-size: 16px;">${data.name}</span>
+            <span style="font-size: 14px; color: #888;">${data.rdate}</span>
+          </div>
+          
+          <hr style="border: 1px solid #ddd; margin-top: 10px; margin-bottom: 10px;">
+      
+          <div>
+            <img src="/answer/storage/${data.filename}" style="width: 100%; max-width: 450px; margin-top: 20px; display: block; margin-bottom: 20px; border-radius: 8px;">
+          </div>
+      
+          <p style="font-size: 16px; line-height: 1.6; color: #555;">${data.content}</p>
+          
+          <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;" >
+            <a href="#" id="answerUpdate" style="color: #FF4D4D; font-weight: bold; cursor: pointer; border: 1px solid #FF4D4D; padding: 5px 10px; border-radius: 4px;">수정</a>
+            <span class="menu_divide" style="color: #aaa;">│</span>
+            <a href="#" id="answerDelete" style="color: #FF4D4D; font-weight: bold; cursor: pointer; border: 1px solid #FF4D4D; padding: 5px 10px; border-radius: 4px;">삭제</a>
+          </div>
+        </div>
+      `;
+
+      
+    })
+    .catch(error => {
+        console.error("에러 발생:", error);
+        alert("에러가 발생했습니다.");
+    });
+}
+
+  // 파일 선택 시 이미지 미리보기 표시
+  function previewImage(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = document.getElementById('preview');
+      img.src = e.target.result;
+      img.style.display = 'block';
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // X 버튼 클릭 시 파일 및 미리보기 초기화
+  document.getElementById('clearFile').addEventListener('click', function () {
+    const fileInput = document.getElementById('file1MF');
+    const imgPreview = document.getElementById('preview');
+    fileInput.value = '';
+    imgPreview.src = '';
+    imgPreview.style.display = 'none';
+  });
+    
   </script>
 </div>
 

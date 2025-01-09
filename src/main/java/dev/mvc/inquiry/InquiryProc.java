@@ -79,5 +79,15 @@ public class InquiryProc implements InquiryProcInter {
     Integer cnt = this.inquiryDAO.list_search_count(map);
     return cnt;
   }
+  
+  @Override
+  public int state_update(int inquiryno, int state) {
+    HashMap<String, Object> map = new HashMap<>();
+    map.put("inquiryno", inquiryno);
+    map.put("state", state);
+    
+    int cnt = this.inquiryDAO.state_update(map);
+    return cnt;
+  }
 
 }

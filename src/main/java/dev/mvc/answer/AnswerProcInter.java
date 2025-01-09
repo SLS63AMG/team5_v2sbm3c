@@ -1,8 +1,6 @@
 package dev.mvc.answer;
 
-public interface AnswerDAOInter {
-  
-  
+public interface AnswerProcInter {
   /**
    * 답변 생성
    */
@@ -22,5 +20,4 @@ public interface AnswerDAOInter {
    * 답변 조회
    */
   public AnswerVO answer_read(int answerno);
-  
 }

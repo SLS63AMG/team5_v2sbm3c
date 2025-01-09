@@ -3,10 +3,29 @@
 <!-- SB가 자동으로 구현하여 연동하는 interface -->
 <mapper namespace="dev.mvc.answer.AnswerDAOInter"> <!-- SB가 자동으로 구현하여 연동하는 interface -->
   
-  <insert id="answer" parameterType="dev.mvc.answer.AnswerVO">
-    INSERT INTO answer(inquiryno, content, rdate, filename, inquiryno, memberno)
-    VALUES(inquiry_seq.nextval, ${content}, SYSDATE, ${filename}, ${inquiryno}, ${memberno})
+  <insert id="answer_create" parameterType="dev.mvc.answer.AnswerVO">
+    INSERT INTO answer(answerno, content, rdate, filename, inquiryno, memberno)
+    VALUES(answer_seq.nextval, #{content}, SYSDATE, #{filename, jdbcType=VARCHAR}, #{inquiryno}, #{memberno})
   </insert>
-
+  
+  <update id="answer_update" parameterType="dev.mvc.answer.AnswerVO">
+    UPDATE answer
+    SET content=#{content}, rdate=sysdate, <if test="filename != 'No'">,filename = #{filename, jdbcType=VARCHAR} </if>
+    WHERE answerno=#{answerno}
+  </update>
+  
+  <delete id="answer_delete" parameterType="int">
+    DELETE answer
+    WHERE answerno = #{answerno}
+  </delete>
+  
+  <select id="answer_read" resultType="dev.mvc.answer.AnswerVO" parameterType="int">
+    SELECT a.answerno, a.content, a.rdate, a.filename, a.inquiryno, a.memberno, m.name
+    FROM answer a INNER JOIN inquiry i
+    ON a.inquiryno = i.inquiryno
+    INNER JOIN member m
+    ON a.memberno = m.memberno
+    WHERE i.inquiryno = #{inquiryno}
+  </select>
   
 </mapper>

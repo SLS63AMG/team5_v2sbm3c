@@ -23,6 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dev.mvc.answer.AnswerProcInter;
+import dev.mvc.answer.AnswerVO;
 import dev.mvc.tool.Contents;
 import dev.mvc.tool.Tool;
 import dev.mvc.tool.Upload;
@@ -36,6 +38,10 @@ public class InquiryCont {
   @Autowired
   @Qualifier("dev.mvc.inquiry.InquiryProc")
   public InquiryProcInter inquiryProc;
+  
+  @Autowired
+  @Qualifier("dev.mvc.answer.AnswerProc")
+  private AnswerProcInter answerProc;
   
   /** 페이지당 출력할 레코드 갯수 */
   public int record_per_page = 10;
@@ -98,7 +104,7 @@ public class InquiryCont {
         } else {
           System.out.println("-> 글만 등록");
         }
-      } 
+      }
       // 파일 저장 코드 -------------------------
       
       int cnt = this.inquiryProc.inquiry_create(inquiryVO);
@@ -117,27 +123,43 @@ public class InquiryCont {
   @GetMapping(value="/read")
   public String read_form(HttpSession session, Model model, 
       @RequestParam(name="inquiryno") int inquiryno) {
-    if(Tool.isAdmin(session)) {
-      int memberno = -1;
+    
+    if(Tool.isMember(session)) {
+      // 문의 띄우기-----------------------------------
+      int memberno;
+      if(Tool.isAdmin(session)) {
+        model.addAttribute("grade", (int) session.getAttribute("grade"));
+        memberno = -1;
+      } else {
+        model.addAttribute("grade", (int) session.getAttribute("grade"));
+        memberno =  (int) session.getAttribute("memberno");
+      }
       InquiryVO inquiryVO = this.inquiryProc.inquiry_read(inquiryno, memberno);
       
       String contentWithBreaks = inquiryVO.getContent().replace("\n", "<br/>");
       inquiryVO.setContent(contentWithBreaks); // content를 변환된 값으로 업데이트
+      // 문의 띄우기-----------------------------------
+      
+      // 답변 띄우기-----------------------------------
+      AnswerVO answerVO =  this.answerProc.answer_read(inquiryno);
+      if(answerVO != null) {
+        model.addAttribute("answerVO", answerVO);
+      }
+      // 답변 띄우기-----------------------------------
       
       model.addAttribute("inquiryVO", inquiryVO);
-      return "/th/inquiry/inquiry_read";
-      
-    } else if(Tool.isMember(session)) {
-      int memberno =  (int) session.getAttribute("memberno");
-      InquiryVO inquiryVO = this.inquiryProc.inquiry_read(inquiryno, memberno);
-      
-      String contentWithBreaks = inquiryVO.getContent().replace("\n", "<br/>");
-      inquiryVO.setContent(contentWithBreaks); // content를 변환된 값으로 업데이트
-      
-      model.addAttribute("inquiryVO", inquiryVO);
-      return "/th/inquiry/inquiry_read";
+    } else {
+      return "/th/member/login";      
     }
-    return "/th/member/login";
+    
+
+    
+    return "/th/inquiry/inquiry_read";
+    
+    
+    
+    
+    
   }
   // 문의 사항 조회-------------------------------------------------------------------
   
@@ -146,6 +168,7 @@ public class InquiryCont {
   @GetMapping(value="/update")
   public String update_form(Model model, HttpSession session,
       @RequestParam(name = "inquiryno") int inquiryno) {
+    
     
     if(Tool.isMember(session)) {
       int memberno = (int) session.getAttribute("memberno");
@@ -163,7 +186,6 @@ public class InquiryCont {
       @ModelAttribute("inquiryVO") InquiryVO inquiryVO,
       @RequestParam(name="image_state") String image_state,
       RedirectAttributes ra) {
-    
     if(Tool.isMember(session)) {
       inquiryVO.setMemberno((int) session.getAttribute("memberno"));
       
