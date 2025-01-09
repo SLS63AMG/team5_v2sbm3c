@@ -13,6 +13,20 @@ public interface SurveyDAOInter {
     public int count(); // 전체 설문조사 수
     public int searchCount(String keyword);
     public List<SurveyVO> searchByPage(Map<String, Object> map);
+    /**
+     * 추천수 증가
+     * @param surveyno
+     * @return
+     */
+    public int increaseGoodCnt(int surveyno);
+
+    /**
+     * 추천수 감소
+     * @param surveyno
+     * @return
+     */
+    public int decreaseGoodCnt(int surveyno);
+    
 
 
 

@@ -15,6 +15,30 @@ public interface SurveyProcInter {
     int searchCount(String keyword);
     public List<SurveyVO> searchByPage(Map<String, Object> map);
 
+
+    /** 
+     * 추천수 증가
+     * @param surveyno
+     * @return
+     */
+    public int increaseGoodCnt(int surveyno);
+  
+    /** 
+     * 추천수 감소
+     * @param surveyno
+     * @return
+     */
+    public int decreaseGoodCnt(int surveyno);
+    
+    
+    /**
+     * 추천
+     * @param surveyno
+     * @return
+     */
+    public int good(int surveyno);
+    
+
 }
 
     

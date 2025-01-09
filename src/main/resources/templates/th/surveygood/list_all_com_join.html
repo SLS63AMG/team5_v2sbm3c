@@ -1,0 +1,57 @@
+
+<div th:fragment="list_all_fragment"> 
+  <table class="table table-hover" style="width: 100%;">
+    <colgroup>
+      <col style='width: 10%;'/>
+      <col style='width: 10%;'/>
+      <col style='width: 10%;'/>
+      <col style='width: 30%;'/>    
+      <col style='width: 10%;'/>
+      <col style='width: 10%;'/>
+      <col style='width: 10%;'/>
+      <col style='width: 10%;'/>
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="th_bs">순서</th>
+        <th class="th_bs">등록일(추천일)</th>
+        <th class="th_bs">설문 번호</th>
+        <th class="th_bs">설문 제목</th>
+        <th class="th_bs">회원 번호</th>
+        <th class="th_bs">아이디(이메일)</th>
+        <th class="th_bs">성명</th>        
+        <th class="th_bs">기타</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="surveySurveygoodMemberVO, status:${list}">
+        <td class="td_bs" th:text="|${status.index+1}|"></td>
+        <td class="td_bs" th:text="${surveySurveygoodMemberVO.rdate.substring(0, 10)}"></td>
+        <td class="td_bs" th:text="${surveySurveygoodMemberVO.surveyno}"></td>
+        <td class="td_bs_left" th:text="${surveySurveygoodMemberVO.s_topic}"></td>
+        <td class="td_bs" th:text="${surveySurveygoodMemberVO.memberno}"></td>
+        <td class="td_bs" th:text="${surveySurveygoodMemberVO.id}"></td>
+        <td class="td_bs" th:text="${surveySurveygoodMemberVO.name}"></td>
+        <td class="td_bs">
+          <a href="#" th:onclick="'delete_good(event, ' + ${surveySurveygoodMemberVO.surveygoodno} + ', ' + ${surveySurveygoodMemberVO.surveyno} + ');'">
+            <img src="/surveygood/images/delete.png" class="icon" title="삭제">
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <script>
+    function delete_good(e, surveygoodno, surveyno) {
+      let sw = confirm(surveygoodno + '번 추천을 삭제하시겠습니까?\n삭제하면 복구할 수 없습니다.');
+      if (sw == true) {
+        document.querySelector('#surveygoodno').value = surveygoodno;
+        document.querySelector('#surveyno').value = surveyno;
+        document.querySelector('#frm').submit();
+      }
+    }
+  </script>  
+  <form name='frm' id='frm' method='post' action='/th/surveygood/delete'>
+    <input type='hidden' name='surveygoodno' id='surveygoodno'>
+    <input type="hidden" name="surveyno" id="surveyno">
+  </form>
+</div>
