@@ -41,6 +41,30 @@ public interface MenuDAOInter {
      */
     public int delete(int menuno);
     
+    /**
+     * 검색 목록
+     * SQL -> CateVO 객체 레코드 수 만큼 생성 -> ArrayList<cateVO> 객체 생성되어 CateDAOInter로 리턴 
+     * select id="list_search" resultType="dev.mvc.cate.CateVO" parameterType="String"
+     * @return
+     */
+    public ArrayList<MenuVO> list_search(String word);
+    
+    /**
+     * 검색 갯수
+     * @param word
+     * @return
+     */
+    public Integer list_search_count(String word);
+    
+    /**
+     * 검색 + 페이징 목록
+     * select id="list_search_paging" resultType="dev.mvc.cate.CateVO" parameterType="Map"
+     * @param map
+     * @return
+     */
+    public ArrayList<MenuVO> list_search_paging(Map<String, Object> map);
+    
+    
     /** 추천 수 증가 */
     public int increaseRecom(int menurecomno);
 
