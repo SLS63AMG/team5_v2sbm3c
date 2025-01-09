@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{th/layout}">
+<html layout:decorate="~{th/layout}">
 <head>
     <style>
         /* 전체 제목 스타일 */
@@ -189,63 +189,24 @@
 
     </style>
 </head>
-<body>
-<main layout:fragment="content">
-    <div class="title_line">음식점 리스트</div>
 
-    <!-- 테이블 상단에 "음식점 등록" 버튼과 검색창을 가로로 배치 -->
-    <div class="table-header">
-        <div class="search-container">
-            <form th:action="@{/th/store/search}" method="get">
-                <input type="text" id="keyword" name="keyword" placeholder="음식점 이름 검색" />
-                <button type="submit">검색</button>
-            </form>
-        </div>
-        <div class="aside_right">
-            <a th:href="@{/th/store/create}">음식점 등록</a>
-        </div>
+<div layout:fragment="content">
+  <div class="title_line">음식점 리스트</div>
+
+  <!-- 테이블 상단에 "음식점 등록" 버튼과 검색창을 가로로 배치 -->
+  <div class="table-header">
+    <div class="search-container">
+      <form th:action="@{/th/store/search}" method="get">
+        <input type="text" id="keyword" name="keyword" th:value="${keyword}" placeholder="음식점 이름 검색" />
+        <button type="submit">검색</button>
+      </form>
     </div>
-
-    <table>
-        <thead>
-        <tr>
-            <th>식당 번호</th>
-            <th>식당 이름</th>
-            <th>업종</th>
-            <th>리뷰 수</th>
-            <th>도로명 주소</th>
-            <th>전화번호</th>
-            <th>평점</th>
-            <th>영업시간</th>
-            <th>작업</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="store : ${storeList}">
-            <td th:text="${store.storeno}"></td>
-            <td th:text="${store.name}"></td>
-            <td th:text="${store.distinction}"></td>
-            <td th:text="${store.reviewcnt}"></td>
-            <td th:text="${store.address1}"></td>
-            <td th:text="${store.tel}"></td>
-            <td th:text="${store.rating}"></td>
-            <td th:text="${store.busihours}"></td>
-            <td>
-                <a th:href="@{/th/store/update/{storeno}(storeno=${store.storeno})}" class="action-btn-edit">수정</a>
-                <span class="action-divider">|</span>
-                <a th:href="@{/th/store/delete/{storeno}(storeno=${store.storeno})}" class="action-btn-delete">삭제</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <!-- 페이지네이션 -->
-    <div class="pagination">
-        <a th:each="page, iterStat : ${#numbers.sequence(0, totalPages - 1)}"
-           th:href="@{/th/store/list(nowpage=${page})}"
-           th:text="${page + 1}"
-           th:classappend="${page == nowpage} ? 'active' : ''"></a>
+    <div class="aside_right">
+      <a th:href="@{/th/store/create}">음식점 등록</a>
     </div>
-</main>
-</body>
+  </div>
+
+  
+  <div th:replace="~{th/store/list_all_com::list_all_fragment}"></div>
+</div>
 </html>

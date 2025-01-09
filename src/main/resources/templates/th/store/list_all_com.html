@@ -1,43 +1,64 @@
-<!DOCTYPE html>
-<html layout:decorate="~{th/layout}">
-<div layout:fragment="content">
-  <div class="title_line">모든 음식점 리스트</div>
-  <aside class="aside_right">
-    <a href="javascript: location.reload();">새로 고침</a>
-  </aside>
-
-  <div class="menu_line"></div>
-  <div style="width: 80%; margin: 20px auto;">
-    <table border="1" style="width: 100%; text-align: center; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th>식당 번호</th>
-          <th>식당 이름</th>
-          <th>업종</th>
-          <th>리뷰 수</th>
-          <th>도로명 주소</th>
-          <th>상세 주소</th>
-          <th>영업 시간</th>
-          <th>전화번호</th>
-          <th>예약 여부</th>
-          <th>평점</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="store : ${storeList}">
-          <td th:text="${store.storeno}"></td>
-          <td th:text="${store.name}"></td>
-          <td th:text="${store.distinction}"></td>
-          <td th:text="${store.reviewcnt}"></td>
-          <td th:text="${store.address1}"></td>
-          <td th:text="${store.address2}"></td>
-          <td th:text="${store.busihours}"></td>
-          <td th:text="${store.tel}"></td>
-          <td th:text="${store.reservation}"></td>
-          <td th:text="${store.rating}"></td>
-        </tr>
-      </tbody>
+<div th:fragment="list_all_fragment">
+    <table border="1" style="width: 90%; margin: 0 auto; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th>식당 번호</th>
+                <th>식당 이름</th>
+                <th>업종</th>
+                <th>리뷰 수</th>
+                <th>도로명 주소</th>
+                <th>상세 주소</th>
+                <th>영업 시간</th>
+                <th>전화번호</th>
+                <th>예약 여부</th>
+                <th>평점</th>
+                <th>포스터</th>
+                <th>작업</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="store : ${storeList}">
+                <td th:text="${store.storeno}"></td>
+                <td>
+                    <a th:href="@{/th/store/read/{storeno}(storeno=${store.storeno})}" th:text="${store.name}"></a>
+                </td>
+                <td th:text="${store.distinction}"></td>
+                <td th:text="${store.reviewcnt}"></td>
+                <td th:text="${store.address1}"></td>
+                <td th:text="${store.address2}"></td>
+                <td th:text="${store.busihours}"></td>
+                <td th:text="${store.tel}"></td>
+                <td th:text="${store.reservation != null ? store.reservation : 'N'}"></td>
+                <td th:text="${store.rating}"></td>
+                <td>
+                    <img th:if="${store.thumb1 != null}" th:src="@{|/store/storage/${store.thumb1}|}"
+                         alt="음식점 이미지" style="max-width: 120px; height: auto;" />
+                    <span th:if="${store.thumb1 == null}">이미지 없음</span>
+                </td>
+                <td>
+                    <a th:href="@{/th/store/update/{storeno}(storeno=${store.storeno})}" title="수정">
+                        <i class="fas fa-edit" style="color: #007BFF; font-size: 20px;">수정</i>
+                    </a>
+                    |
+                    <a th:href="@{/th/store/delete/{storeno}(storeno=${store.storeno})}" title="삭제">
+                        <i class="fas fa-trash-alt" style="color: #DC3545; font-size: 20px;">삭제</i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
     </table>
-  </div>
+
+    <!-- 페이징 -->
+    <ul class="pagination" style="margin-top: 20px; text-align: center;">
+        <li th:if="${nowPage > 1}">
+            <a th:href="@{/th/store/list(nowPage=${nowPage - 1})}">이전</a>
+        </li>
+        <li th:each="page : ${#numbers.sequence(1, totalPage)}">
+            <a th:href="@{/th/store/list(nowPage=${page})}"
+               th:text="${page}" th:classappend="${page == nowPage} ? 'active' : ''"></a>
+        </li>
+        <li th:if="${nowPage < totalPage}">
+            <a th:href="@{/th/store/list(nowPage=${nowPage + 1})}">다음</a>
+        </li>
+    </ul>
 </div>
-</html>
