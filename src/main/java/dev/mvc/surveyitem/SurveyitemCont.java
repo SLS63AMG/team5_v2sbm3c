@@ -17,21 +17,20 @@ import java.util.List;
 @Controller
 @RequestMapping("/th/surveyitem")
 public class SurveyitemCont {
-  
-  private final SurveyProcInter surveyProc;
-  private final SurveyitemProcInter surveyitemProc;
-  
-  @Autowired
-  private SurveymemberService surveymemberService;
-  
 
-    // surveyProc와 surveyitemProc에 각각 @Qualifier를 사용
     @Autowired
-    public SurveyitemCont(
-        @Qualifier("surveyProc") SurveyProcInter surveyProc,  // surveyProc 빈을 명시적으로 지정
-        @Qualifier("dev.mvc.surveyitem.SurveyitemProc") SurveyitemProcInter surveyitemProc) {
-        this.surveyProc = surveyProc;
-        this.surveyitemProc = surveyitemProc;
+    @Qualifier("dev.mvc.survey.SurveyProc") // surveyProc 빈을 명시적으로 지정
+    private SurveyProcInter surveyProc;
+
+    @Autowired
+    @Qualifier("dev.mvc.surveyitem.SurveyitemProc") // surveyitemProc 빈을 명시적으로 지정
+    private SurveyitemProcInter surveyitemProc;
+
+    @Autowired
+    private SurveymemberService surveymemberService;
+
+    public SurveyitemCont() {
+        System.out.println("-> SurveyitemCont created.");
     }
 
 
@@ -133,5 +132,33 @@ public class SurveyitemCont {
         surveyitemProc.moveDown(surveyitemno);
         return "redirect:/th/surveyitem/list/" + surveyno;
     }
+    
+    
+    /**
+     * 설문 결과 차트, http://localhost:9091/th/surveyitem/chart_results/{surveyno}
+     * @param surveyno
+     * @param model
+     * @return
+     */
+    @GetMapping("/chart_results/{surveyno}")
+    public String chartResults(@PathVariable("surveyno") int surveyno, Model model) {
+        List<SurveyitemVO> items = surveyitemProc.list(surveyno);
+        
+        // 차트 데이터 생성
+        StringBuilder chartData = new StringBuilder("[['항목', '투표수'],");
+        for (SurveyitemVO item : items) {
+            chartData.append("['").append(item.getItem()).append("', ").append(item.getItemcnt()).append("],");
+        }
+        chartData.deleteCharAt(chartData.length() - 1); // 마지막 콤마 제거
+        chartData.append("]");
+        
+        model.addAttribute("chart_data", chartData.toString());
+        model.addAttribute("title", "설문 결과 차트");
+        model.addAttribute("xlabel", "항목");
+        model.addAttribute("ylabel", "투표수");
+        
+        return "/th/surveyitem/chart_results";
+    }
+
 
 }

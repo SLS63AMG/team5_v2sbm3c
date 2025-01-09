@@ -1,4 +1,5 @@
 <div th:fragment="list_all_fragment">
+
   <table class="table table-hover">
     <thead>
       <tr>
@@ -14,7 +15,19 @@
     <tbody>
       <tr th:each="survey : ${list}">
         <td th:text="${survey.surveyno}"></td>
-        <td><a th:href="@{/th/surveyitem/list/{surveyno}(surveyno=${survey.surveyno})}" th:text="${survey.topic}"></a></td>
+        <td><a th:href="@{/th/surveyitem/list/{surveyno}(surveyno=${survey.surveyno})}" th:text="${survey.topic}"></a>
+          <span th:id="'hart_panel_' + ${survey.surveyno}" style="margin-left: 10px;">
+                <a th:if="${survey.hartCnt == 1}" href="javascript:good(${survey.surveyno})">
+                    <!-- hartCnt == 1: 추천된 상태 (하트 On) -->
+                    <img src="/survey/images/hart_on_50.png" style="width: 22px" title="추천 취소">
+                </a>
+                <a th:if="${survey.hartCnt == 0}" href="javascript:good(${survey.surveyno})">
+                    <!-- hartCnt == 0: 추천되지 않은 상태 (하트 Off) -->
+                    <img src="/survey/images/hart_off_50.png" style="width: 22px" title="추천">
+                </a>
+          </span>
+          <span th:id="'goodcnt_panel_' + ${survey.surveyno}" style="margin-left: 5px;"></span>
+        </td>
         <td>
           <img th:if="${survey.posterthumb != null}" th:src="@{|/survey/storage/${survey.posterthumb}|}" alt="포스터 이미지" style="width: 100px; height: auto;">
           <span th:if="${survey.posterthumb == null}">이미지 없음</span>
@@ -23,6 +36,11 @@
         <td th:text="${survey.enddate}"></td>
         <td th:text="${survey.cnt}"></td>
         <td>
+        <!-- 투표 결과 보기 -->
+          <!-- 투표 결과 보기 -->
+          <a th:href="@{/th/surveyitem/results/{surveyno}(surveyno=${survey.surveyno})}">투표 결과 보기</a> |
+          <!-- 투표 차트 보기 -->
+          <a th:href="@{/th/surveyitem/chart_results/{surveyno}(surveyno=${survey.surveyno})}">투표 차트 보기</a> |
           <a th:href="@{/th/survey/update/{surveyno}(surveyno=${survey.surveyno})}">수정</a> |
           <a th:href="@{/th/survey/delete/{surveyno}(surveyno=${survey.surveyno})}">삭제</a>
         </td>
@@ -31,18 +49,20 @@
   </table>
   
   <!-- 페이지 네비게이션 -->
-  <div style="text-align: center; margin-top: 20px;">
-    <ul>
-      <li th:if="${nowPage > 1}">
-        <a th:href="@{/th/survey/search(keyword=${keyword}, nowPage=${nowPage - 1})}">이전</a>
-      </li>
-      <li th:each="page : ${#numbers.sequence(1, totalPage)}">
-        <a th:href="@{/th/survey/search(keyword=${keyword}, nowPage=${page})}" th:text="${page}" 
-           th:classappend="${page == nowPage} ? 'active' : ''"></a>
-      </li>
-      <li th:if="${nowPage < totalPage}">
-        <a th:href="@{/th/survey/search(keyword=${keyword}, nowPage=${nowPage + 1})}">다음</a>
-      </li>
-    </ul>
-  </div> 
+  <div class="pagination-container">
+    <div class="pagination">
+      <ul>
+        <li th:if="${nowPage > 1}">
+          <a th:href="@{/th/survey/search(keyword=${keyword}, nowPage=${nowPage - 1})}">이전</a>
+        </li>
+        <li th:each="page : ${#numbers.sequence(1, totalPage)}">
+          <a th:href="@{/th/survey/search(keyword=${keyword}, nowPage=${page})}" th:text="${page}" 
+             th:classappend="${page == nowPage} ? 'active' : ''"></a>
+        </li>
+        <li th:if="${nowPage < totalPage}">
+          <a th:href="@{/th/survey/search(keyword=${keyword}, nowPage=${nowPage + 1})}">다음</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

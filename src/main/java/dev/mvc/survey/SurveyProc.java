@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
-@Service
+@Service("dev.mvc.survey.SurveyProc")
 public class SurveyProc implements SurveyProcInter {
 
     @Autowired
@@ -61,6 +61,28 @@ public class SurveyProc implements SurveyProcInter {
     public List<SurveyVO> searchByPage(Map<String, Object> map) {
         return surveyDAO.searchByPage(map);
     }
+    
+    @Override
+    public int increaseGoodCnt(int surveyno) {
+      int cnt = this.surveyDAO.increaseGoodCnt(surveyno);
+      return cnt;
+    }
+
+    @Override
+    public int decreaseGoodCnt(int surveyno) {
+      int cnt = this.surveyDAO.decreaseGoodCnt(surveyno);
+      return cnt;
+    }
+    
+    @Override
+    public int good(int surveyno) {
+      
+      return 0;
+    }
+    
+    
+
+    
 
     
     
