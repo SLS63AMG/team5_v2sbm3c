@@ -178,65 +178,71 @@ public class SurveyCont {
 
 
     @PostMapping("/update")
-    public String update(@ModelAttribute SurveyVO surveyVO) {
+    public String update(@ModelAttribute SurveyVO surveyVO, HttpSession session, RedirectAttributes ra) {
+        if (Tool.isMember(session)) {
+            String poster = "";
+            String postersaved = "";
+            String posterthumb = "";
 
-        String poster = "";
-        String postersaved = "";
-        String posterthumb = "";
+            // Survey.java에서 정의한 업로드 경로 사용
+            String upDir = Survey.getUploadDir();
+            System.out.println("-> 업로드 경로: " + upDir);
 
-        // Survey.java에서 정의한 업로드 경로 사용
-        String upDir = Survey.getUploadDir();
-        System.out.println("-> upDir: " + upDir);
+            MultipartFile mf = surveyVO.getPosterFile();
+            poster = mf.getOriginalFilename();
+            long postersize = mf.getSize();
 
-        MultipartFile mf = surveyVO.getPosterFile();
-        poster = mf.getOriginalFilename();
-        System.out.println("-> 원본 파일명: " + poster);
-        long postersize = mf.getSize();
+            // 기존 데이터 조회 (기존 파일 삭제를 위해 필요)
+            SurveyVO existingSurvey = surveyProc.read(surveyVO.getSurveyno());
 
-        // 기존 데이터 조회 (기존 파일 삭제를 위해 필요)
-        SurveyVO existingSurvey = surveyProc.read(surveyVO.getSurveyno());
-
-        if (postersize > 0) {
-            if (Tool.checkUploadFile(poster)) {
-                postersaved = Upload.saveFileSpring(mf, upDir);
-
-                if (Tool.isImage(postersaved)) {
-                    posterthumb = Tool.preview(upDir, postersaved, 200, 150);
-                }
-
-                // 기존 파일 삭제
+            // -------------------------------------------------------------------
+            // 기존 파일 삭제 처리
+            // -------------------------------------------------------------------
+            if (postersize > 0) {
+                // 새 파일이 업로드된 경우 기존 파일 삭제
                 if (existingSurvey.getPostersaved() != null && !existingSurvey.getPostersaved().isEmpty()) {
-                    File savedFile = new File(upDir + existingSurvey.getPostersaved());
-                    if (savedFile.exists() && savedFile.isFile()) {
-                        savedFile.delete();
-                    }
+                    Tool.deleteFile(upDir, existingSurvey.getPostersaved());
                 }
-
                 if (existingSurvey.getPosterthumb() != null && !existingSurvey.getPosterthumb().isEmpty()) {
-                    File thumbFile = new File(upDir + existingSurvey.getPosterthumb());
-                    if (thumbFile.exists() && thumbFile.isFile()) {
-                        thumbFile.delete();
-                    }
+                    Tool.deleteFile(upDir, existingSurvey.getPosterthumb());
                 }
 
-                surveyVO.setPoster(poster);
-                surveyVO.setPostersaved(postersaved);
-                surveyVO.setPosterthumb(posterthumb);
-                surveyVO.setPostersize(postersize);
+                // 새 파일 저장
+                if (Tool.checkUploadFile(poster)) {
+                    postersaved = Upload.saveFileSpring(mf, upDir);
+
+                    if (Tool.isImage(postersaved)) {
+                        posterthumb = Tool.preview(upDir, postersaved, 200, 150);
+                    }
+
+                    surveyVO.setPoster(poster);
+                    surveyVO.setPostersaved(postersaved);
+                    surveyVO.setPosterthumb(posterthumb);
+                    surveyVO.setPostersize(postersize);
+                } else {
+                    // 파일 형식이 잘못된 경우 메시지 페이지로 이동
+                    ra.addAttribute("url", "/survey/msg");
+                    return "redirect:/survey/msg";
+                }
             } else {
-                return "redirect:/th/survey/msg";
+                // 파일 업로드가 없는 경우 기존 파일 유지
+                surveyVO.setPoster(existingSurvey.getPoster());
+                surveyVO.setPostersaved(existingSurvey.getPostersaved());
+                surveyVO.setPosterthumb(existingSurvey.getPosterthumb());
+                surveyVO.setPostersize(existingSurvey.getPostersize());
             }
+
+            // -------------------------------------------------------------------
+            // 데이터베이스 업데이트
+            // -------------------------------------------------------------------
+            surveyProc.update(surveyVO);
+
+            return "redirect:/th/survey/list"; // 업데이트 후 리스트로 이동
         } else {
-            // 파일을 업로드하지 않은 경우, 기존 파일 정보를 유지
-            surveyVO.setPoster(existingSurvey.getPoster());
-            surveyVO.setPostersaved(existingSurvey.getPostersaved());
-            surveyVO.setPosterthumb(existingSurvey.getPosterthumb());
-            surveyVO.setPostersize(existingSurvey.getPostersize());
+            // 비회원 또는 권한 없는 사용자의 경우 로그인 페이지로 이동
+            ra.addAttribute("url", "/th/member/login_cookie_need");
+            return "redirect:/contents/msg"; // 메시지 페이지로 이동
         }
-
-        surveyProc.update(surveyVO); // 데이터베이스 업데이트
-
-        return "redirect:/th/survey/list"; // 파일 처리 후 리스트로 이동
     }
 
 
@@ -306,7 +312,17 @@ public class SurveyCont {
 
     @PostMapping("/delete")
     public String delete(@RequestParam("surveyno") int surveyno) {
-        surveyProc.delete(surveyno); // 설문조사 삭제
+      
+      
+      SurveyVO surveyVO_read = surveyProc.read(surveyno);
+      
+      String postersaved = surveyVO_read.getPostersaved();
+      String posterthumb = surveyVO_read.getPosterthumb();
+      
+      String uploadDir = Survey.getUploadDir();
+      Tool.deleteFile(uploadDir, postersaved);  // 실제 저장된 파일삭제
+      Tool.deleteFile(uploadDir, posterthumb);     // preview 이미지 삭제
+       this.surveyProc.delete(surveyno); // 설문조사 삭제
         return "redirect:/th/survey/list";
     }
     
