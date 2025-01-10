@@ -57,19 +57,19 @@
         <table>
             <thead>
                 <tr>
-                    <th>순번</th>
+                    <th th:if="${session.grade == 1}">순번</th>
                     <th>항목</th>
-                    <th>투표수</th>
-                    <th>작업</th>
+                    <th th:if="${session.grade == 1}">투표수</th>
+                    <th th:if="${session.grade == 1}">작업</th>
                     <th>선택</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="item : ${items}">
-                    <td>
+                    <td th:if="${session.grade == 1}">
                         <div th:text="${item.itemseq}"></div>
                         <!-- 올리기/내리기 버튼 -->
-                        <div class="action-buttons">
+                        <div class="action-buttons" th:if="${session.grade == 1}">
                             <form th:action="@{/th/surveyitem/moveUp}" method="post" style="display:inline;">
                                 <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
                                 <input type="hidden" name="surveyno" th:value="${surveyno}" />
@@ -83,8 +83,8 @@
                         </div>
                     </td>
                     <td th:text="${item.item}"></td>
-                    <td th:text="${item.itemcnt}"></td>
-                    <td>
+                    <td th:if="${session.grade == 1}" th:text="${item.itemcnt}"></td>
+                    <td th:if="${session.grade == 1}">
                         <!-- 수정/삭제 버튼 -->
                         <a th:href="@{/th/surveyitem/update/{surveyitemno}(surveyitemno=${item.surveyitemno})}">수정</a> |
                         <a th:href="@{/th/surveyitem/delete/{surveyitemno}(surveyitemno=${item.surveyitemno}, surveyno=${surveyno})}">삭제</a>
@@ -95,6 +95,7 @@
                     </td>
                 </tr>
             </tbody>
+
         </table>
         
         <!-- 하단 투표 버튼 -->
@@ -104,6 +105,6 @@
             <button type="submit">투표</button>
         </div>
     </form>
-    <a th:href="@{/th/surveyitem/create/{surveyno}(surveyno=${surveyno})}">항목 등록</a>
+    <a th:if="${session.grade == 1}" th:href="@{/th/surveyitem/create/{surveyno}(surveyno=${surveyno})}">항목 등록</a>
 </div>
 </html>

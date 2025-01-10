@@ -126,11 +126,11 @@
   <aside class="aside_right">
     <a href="javascript: location.reload();">새로 고침</a>
     <span class="menu_divide">|</span>
-    <a href="/th/survey/create"  style="font-size: 14px;">등록</a>
-    <span class="menu_divide">|</span>
-    <a href="/th/surveygood/list_all"  style="font-size: 14px;">설문 추천 목록</a>
-    <span class="menu_divide">|</span>
-    <a href="/th/surveymember/list"  style="font-size: 14px;">설문 참여자 리스트</a>
+    <a th:if="${session.grade == 1}" href="/th/survey/create" style="font-size: 14px;">등록</a>
+    <span class="menu_divide" th:if="${session.grade == 1}">|</span>
+    <a th:if="${session.grade == 1}" href="/th/surveygood/list_all" style="font-size: 14px;">설문 추천 목록</a>
+    <span class="menu_divide" th:if="${session.grade == 1}">|</span>
+    <a th:if="${session.grade == 1}" href="/th/surveymember/list" style="font-size: 14px;">설문 참여자 리스트</a>
     
     <!-- 검색 폼 -->
     <form method="get" action="/th/survey/search" style="display: inline-block; margin-right: 10px;">

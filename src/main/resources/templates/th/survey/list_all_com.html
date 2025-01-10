@@ -36,13 +36,17 @@
         <td th:text="${survey.enddate}"></td>
         <td th:text="${survey.cnt}"></td>
         <td>
-        <!-- 투표 결과 보기 -->
-          <!-- 투표 결과 보기 -->
-          <a th:href="@{/th/surveyitem/results/{surveyno}(surveyno=${survey.surveyno})}">투표 결과 보기</a> |
-          <!-- 투표 차트 보기 -->
-          <a th:href="@{/th/surveyitem/chart_results/{surveyno}(surveyno=${survey.surveyno})}">투표 차트 보기</a> |
-          <a th:href="@{/th/survey/update/{surveyno}(surveyno=${survey.surveyno})}">수정</a> |
-          <a th:href="@{/th/survey/delete/{surveyno}(surveyno=${survey.surveyno})}">삭제</a>
+            <!-- 투표 결과 보기 -->
+            <a th:href="@{/th/surveyitem/results/{surveyno}(surveyno=${survey.surveyno})}">투표 결과 보기</a>
+            <span>|</span>
+            <!-- 투표 차트 보기 -->
+            <a th:href="@{/th/surveyitem/chart_results/{surveyno}(surveyno=${survey.surveyno})}">투표 차트 보기</a>
+            <span th:if="${session.grade == 1}">|</span>
+            <!-- 수정: 관리자만 표시 -->
+            <a th:if="${session.grade == 1}" th:href="@{/th/survey/update/{surveyno}(surveyno=${survey.surveyno})}">수정</a>
+            <span th:if="${session.grade == 1}">|</span>
+            <!-- 삭제: 관리자만 표시 -->
+            <a th:if="${session.grade == 1}" th:href="@{/th/survey/delete/{surveyno}(surveyno=${survey.surveyno})}">삭제</a>
         </td>
       </tr>
     </tbody>

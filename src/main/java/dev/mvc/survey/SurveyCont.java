@@ -17,6 +17,7 @@ import dev.mvc.surveygood.SurveygoodProcInter;
 import dev.mvc.surveygood.SurveygoodVO;
 import dev.mvc.tool.Tool;
 import dev.mvc.tool.Upload;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import dev.mvc.member.MemberProcInter;
 
@@ -56,7 +57,17 @@ public class SurveyCont {
     @GetMapping("/list")
     public String list(
             @RequestParam(value = "nowPage", defaultValue = "1") int nowPage,
-            Model model, HttpSession session) {
+            Model model, HttpSession session, HttpServletResponse response) throws IOException {
+
+        // 멤버 여부 확인
+        boolean isMember = Tool.isMember(session);
+
+        if (!isMember) {
+            // 비회원인 경우 로그인 페이지로 리다이렉트
+            response.sendRedirect("/member/login");
+            return null;
+        }
+
         int recordPerPage = 3; // 페이지당 3개 항목
         int totalRecords = surveyProc.count(); // 전체 설문조사 수
         int totalPage = (int) Math.ceil((double) totalRecords / recordPerPage);
@@ -73,32 +84,23 @@ public class SurveyCont {
         // 데이터 가져오기
         List<SurveyVO> list = surveyProc.list_by_page(map);
 
-        // 회원별 처리
-        boolean isMember = Tool.isMember(session);
-        int memberno = isMember ? (int) session.getAttribute("memberno") : 0;
+        int memberno = (int) session.getAttribute("memberno");
 
         for (SurveyVO surveyVO : list) {
-          int surveyno = surveyVO.getSurveyno();
+            int surveyno = surveyVO.getSurveyno();
 
-          // 전체 추천 수 설정
-          int totalGoodCnt = surveygoodProc.hartCntTotal(surveyno);
-          surveyVO.setGoodcnt(totalGoodCnt);
-          System.out.println("Survey No: " + surveyno + ", Total Good Count: " + totalGoodCnt);
+            // 전체 추천 수 설정
+            int totalGoodCnt = surveygoodProc.hartCntTotal(surveyno);
+            surveyVO.setGoodcnt(totalGoodCnt);
 
-          // 회원별 추천 여부 설정
-          if (isMember) {
-              HashMap<String, Object> param = new HashMap<>();
-              param.put("surveyno", surveyno);
-              param.put("memberno", memberno);
+            // 회원별 추천 여부 설정
+            HashMap<String, Object> param = new HashMap<>();
+            param.put("surveyno", surveyno);
+            param.put("memberno", memberno);
 
-              int userHartCnt = surveygoodProc.hartCnt(param);
-              surveyVO.setHartCnt(userHartCnt);
-              System.out.println("Survey No: " + surveyno + ", Member No: " + memberno + ", User Hart Count: " + userHartCnt);
-          } else {
-              surveyVO.setHartCnt(0); // 비회원은 추천 여부 없음
-              System.out.println("Survey No: " + surveyno + ", Non-member access");
-          }
-      }
+            int userHartCnt = surveygoodProc.hartCnt(param);
+            surveyVO.setHartCnt(userHartCnt);
+        }
 
         model.addAttribute("list", list);
         model.addAttribute("nowPage", nowPage);
@@ -106,7 +108,6 @@ public class SurveyCont {
 
         return "/th/survey/list";
     }
-
 
     
     @GetMapping("/create")

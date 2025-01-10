@@ -7,16 +7,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import dev.mvc.member.MemberProcInter;
 import dev.mvc.survey.SurveyProcInter;
 import dev.mvc.survey.SurveyVO;
 import dev.mvc.surveymember.SurveymemberService;
-
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/th/surveyitem")
 public class SurveyitemCont {
+    @Autowired
+    @Qualifier("dev.mvc.member.MemberProc") // @Service("dev.mvc.member.MemberProc")
+    private MemberProcInter memberProc;
 
     @Autowired
     @Qualifier("dev.mvc.survey.SurveyProc") // surveyProc 빈을 명시적으로 지정
@@ -49,7 +53,7 @@ public class SurveyitemCont {
     }
 
     @GetMapping("/list/{surveyno}")
-    public String list(@PathVariable("surveyno") int surveyno, Model model) {
+    public String list(@PathVariable("surveyno") int surveyno, Model model, HttpSession session) {
         List<SurveyitemVO> items = surveyitemProc.list(surveyno);
         SurveyVO survey = surveyProc.read(surveyno);  // surveyProc를 통해 해당 surveyno에 맞는 SurveyVO 객체를 가져옴
         model.addAttribute("items", items);
