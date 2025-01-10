@@ -36,13 +36,23 @@
                     <span th:if="${store.thumb1 == null}">이미지 없음</span>
                 </td>
                 <td>
-                    <a th:href="@{/th/store/update/{storeno}(storeno=${store.storeno})}" title="수정">
-                        <i class="fas fa-edit" style="color: #007BFF; font-size: 20px;">수정</i>
-                    </a>
-                    |
-                    <a th:href="@{/th/store/delete/{storeno}(storeno=${store.storeno})}" title="삭제">
-                        <i class="fas fa-trash-alt" style="color: #DC3545; font-size: 20px;">삭제</i>
-                    </a>
+                
+                <!-- 수정 및 삭제 버튼: 회원(관리자) 전용 -->
+                <div>
+                    <div th:if="${session.grade == 1}">
+                        <a th:href="@{/th/store/update/{storeno}(storeno=${store.storeno})}" title="수정">
+                            <i class="fas fa-edit" style="color: #007BFF; font-size: 20px;">수정</i>
+                        </a>
+                        |
+                        <a th:href="@{/th/store/delete/{storeno}(storeno=${store.storeno})}" title="삭제">
+                            <i class="fas fa-trash-alt" style="color: #DC3545; font-size: 20px;">삭제</i>
+                        </a>
+                    </div>
+                    <div th:if="${session.grade != 1}" style="text-align: center; color: red; font-weight: bold; margin-top: 10px;">
+                        권한 X
+                    </div>
+                </div>
+
                 </td>
             </tr>
         </tbody>

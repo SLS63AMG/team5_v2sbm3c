@@ -17,6 +17,7 @@ public class StoreVO {
     private String rsite;
     private String msite;
     private double rating;
+    private Integer recom = 0;
 
     // 파일 업로드 관련 필드
     private MultipartFile file1MF=null;  // 업로드된 파일

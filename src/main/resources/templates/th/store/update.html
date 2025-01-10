@@ -20,21 +20,21 @@
             transform: scale(1.05);
         }
 
-        /* 수정취소 버튼 스타일 */
+ /* 수정취소 버튼 스타일 */
         .action-btn-cancel {
+            background-color: #f8d7da; /* 밝은 빨간색 */
+            color: black; /* 글자 색 검정 유지 */
+            border: 1px solid #f5c6cb;
             padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-            background-color: #6c757d;
-            border: none;
+            font-size: 16px; /* 글씨 크기 수정과 동일 */
+            font-weight: bold; /* 글씨 굵기 수정과 동일 */
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         .action-btn-cancel:hover {
-            background-color: #5a6268;
+            background-color: #f1b0b7; /* 호버 시 조금 더 어두운 밝은 빨간색 */
             transform: scale(1.05);
         }
 
@@ -44,10 +44,7 @@
             margin-top: 20px;
         }
 
-        .button-container form {
-            display: inline;
-        }
-
+        .button-container a,
         .button-container button {
             margin-right: 10px;
         }
@@ -58,77 +55,101 @@
   <div class="title_line">음식점 수정</div>
   <div class="menu_line"></div>
 
-  <div style="width: 60%; margin: 0px auto;">
-    <form th:action="@{/th/store/update}" method="post" enctype="multipart/form-data"> <!-- enctype 추가 -->
-      <ul class="list-group">
-        <input type="hidden" id="storeno" name="storeno" th:value="${store.storeno}">
+  <div style="width: 60%; margin: 0 auto;">
+    <form th:action="@{/th/store/update/{storeno}(storeno=${storeVO.storeno})}" method="post" enctype="multipart/form-data">
+      <ul class="list-group" style="list-style-type: none; padding: 0;">
+        <!-- Hidden Field for 식당 번호 -->
+        <input type="hidden" id="storeno" name="storeno" th:value="${storeVO.storeno}">
 
+        <!-- 식당 이름 -->
         <li class="list-group-item">
           <label for="name">식당 이름:</label>
-          <input type="text" id="name" name="name" th:value="${store.name}" required>
+          <input type="text" id="name" name="name" th:value="${storeVO.name}" required>
         </li>
 
+        <!-- 업종 -->
         <li class="list-group-item">
           <label for="distinction">업종:</label>
-          <input type="text" id="distinction" name="distinction" th:value="${store.distinction}" required>
+          <input type="text" id="distinction" name="distinction" th:value="${storeVO.distinction}" required>
         </li>
 
+        <!-- 리뷰 수 -->
         <li class="list-group-item">
           <label for="reviewcnt">리뷰 수:</label>
-          <input type="number" id="reviewcnt" name="reviewcnt" th:value="${store.reviewcnt}" required>
+          <input type="number" id="reviewcnt" name="reviewcnt" th:value="${storeVO.reviewcnt}" min="0" required>
         </li>
 
+        <!-- 도로명 주소 -->
         <li class="list-group-item">
           <label for="address1">도로명 주소:</label>
-          <input type="text" id="address1" name="address1" th:value="${store.address1}" required>
+          <input type="text" id="address1" name="address1" th:value="${storeVO.address1}" required>
+        </li>
+               
+        <!-- 상세주소 -->
+        <li class="list-group-item">
+          <label for="address2">상세 주소:</label>
+          <input type="text" id="address2" name="address2" th:value="${storeVO.address2}" required>
         </li>
 
+        <!-- 영업 시간 -->
         <li class="list-group-item">
           <label for="busihours">영업 시간:</label>
-          <input type="text" id="busihours" name="busihours" th:value="${store.busihours}">
+          <input type="text" id="busihours" name="busihours" th:value="${storeVO.busihours}">
         </li>
 
+        <!-- 전화번호 -->
         <li class="list-group-item">
           <label for="tel">전화번호:</label>
-          <input type="text" id="tel" name="tel" th:value="${store.tel}">
+          <input type="text" id="tel" name="tel" th:value="${storeVO.tel}">
         </li>
 
+        <!-- 예약 가능 여부 -->
         <li class="list-group-item">
-          <label for="reservation">예약 여부 (Y/N):</label>
-          <input type="text" id="reservation" name="reservation" maxlength="1" th:value="${store.reservation}">
+          <label for="reservation">예약 가능 여부:</label>
+          <select id="reservation" name="reservation" required>
+              <option value="Y" th:selected="${storeVO.reservation == 'Y'}">Y</option>
+              <option value="N" th:selected="${storeVO.reservation == 'N'}">N</option>
+          </select>
+        </li>
+        
+        <!-- 가게 등록 주소 -->
+        <li class="list-group-item">
+          <label for="rsite">가게 등록 주소:</label>
+          <input type="text" id="rsite" name="rsite" th:value="${storeVO.rsite}" placeholder="http://example.com" required>
         </li>
 
+
+        <!-- 지도 페이지 주소 -->
         <li class="list-group-item">
           <label for="msite">지도 페이지 주소:</label>
-          <input type="text" id="msite" name="msite" th:value="${store.msite}" required>
+          <input type="text" id="msite" name="msite" th:value="${storeVO.msite}" required>
         </li>
 
+        <!-- 평점 -->
         <li class="list-group-item">
           <label for="rating">평점:</label>
-          <input type="number" id="rating" name="rating" step="0.01" th:value="${store.rating}">
+          <input type="number" id="rating" name="rating" step="0.01" th:value="${storeVO.rating}" min="0" max="5" required>
         </li>
 
-        <!-- 파일 업로드 필드 추가 -->
+        <!-- 이미지 업로드 -->
         <li class="list-group-item">
           <label for="file1MF">이미지 업로드:</label>
           <input type="file" id="file1MF" name="file1MF">
           
-          <!-- 기존 썸네일 이미지 표시 -->
-          <div th:if="${store.thumb1 != null}">
-            <img th:src="@{/store/images/{thumb1}(thumb1=${store.thumb1})}" alt="현재 이미지" style="max-width: 150px;">
-            <p>현재 이미지 파일: <span th:text="${store.file1saved}"></span></p>
+          <!-- 기존 이미지 -->
+          <div th:if="${storeVO.thumb1 != null}">
+            <img th:src="@{/store/storage/{thumb1}(thumb1=${storeVO.thumb1})}" alt="현재 이미지" style="max-width: 150px;">
+            <p>현재 이미지 파일: <span th:text="${storeVO.file1saved}"></span></p>
           </div>
-          <div th:if="${store.thumb1 == null}">
+          <div th:if="${storeVO.thumb1 == null}">
             <p>등록된 이미지가 없습니다.</p>
           </div>
         </li>
       </ul>
 
-      <!-- 수정 버튼과 수정취소 버튼 -->
+      <!-- 버튼 영역 -->
       <div class="button-container">
-        <form th:action="@{/th/store/list}" method="get">
-          <button type="submit" class="action-btn-cancel">수정취소</button>
-        </form>
+        <a th:href="@{/th/store/list}" class="action-btn-cancel">수정취소</a>
         <button type="submit" class="action-btn-update">수정</button>
       </div>
     </form>
@@ -136,4 +157,3 @@
 </div>
 </body>
 </html>
-

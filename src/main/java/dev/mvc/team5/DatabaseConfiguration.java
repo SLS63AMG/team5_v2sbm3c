@@ -32,7 +32,8 @@ import com.zaxxer.hikari.HikariDataSource;
                                        "dev.mvc.surveymember",
                                        "dev.mvc.menurecom",   
                                        "dev.mvc.storec",             
-                                       "dev.mvc.surveygood"})
+                                       "dev.mvc.surveygood",
+                                       "dev.mvc.storegood"})
 
 public class DatabaseConfiguration {
     

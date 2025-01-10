@@ -5,12 +5,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class StorecVO {
-    private int storecno;             // 음식점 번호
+    private int storecno;                 // 음식점 번호
     private String storename;         // 음식점 이름
-    private String distinction;       // 업종
-    private String address1;          // 도로명 주소
-    private String address2;          // 상세 주소
-    private String tel;               // 전화번호
+    private String distinction;         // 업종
+    private String address1;           // 도로명 주소
+    private String address2;           // 상세 주소
+    private String tel;                    // 전화번호
+    private String reservation;       // Y 또는 N 값을 저장
     private String busihours;         // 영업 시간
     private String description;       // 설명
 
