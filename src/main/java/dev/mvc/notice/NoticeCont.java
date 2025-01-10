@@ -262,14 +262,14 @@ public class NoticeCont {
       // 파일 전송 코드 시작
       // ------------------------------------------------------------------------------
       if(image_state.equals("images")) {
+        // 파일 삭제 시작
         NoticeVO delVO = this.noticeProc.notice_read(noticeno);
         if(delVO.getFilename() != null) {
-          // 파일 삭제 시작
           String filename = delVO.getFilename();
           String uploadDir = Contents.getUploadDir_inquiry();
           Tool.deleteFile(uploadDir, filename);
-          // 파일 삭제 끝
         }
+        // 파일 삭제 끝
         
         
         String file1 = ""; // 원본 파일명 image

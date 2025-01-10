@@ -122,7 +122,8 @@ public class InquiryCont {
   // 문의 사항 조회-------------------------------------------------------------------
   @GetMapping(value="/read")
   public String read_form(HttpSession session, Model model, 
-      @RequestParam(name="inquiryno") int inquiryno) {
+      @RequestParam(name="inquiryno") int inquiryno, 
+      @RequestParam(name="updatestate", defaultValue = "0") int updatestate) {
     
     if(Tool.isMember(session)) {
       // 문의 띄우기-----------------------------------
@@ -143,13 +144,20 @@ public class InquiryCont {
       // 답변 띄우기-----------------------------------
       AnswerVO answerVO =  this.answerProc.answer_read(inquiryno);
       if(answerVO != null) {
+        contentWithBreaks = answerVO.getContent().replace("\n", "<br/>");
+        answerVO.setContent(contentWithBreaks);
         model.addAttribute("answerVO", answerVO);
+      }
+      if(updatestate == 1) {
+        AnswerVO upansVO =  this.answerProc.answer_read(inquiryno);
+        model.addAttribute("updatestate", updatestate);
+        model.addAttribute("upansVO", upansVO);
       }
       // 답변 띄우기-----------------------------------
       
       model.addAttribute("inquiryVO", inquiryVO);
     } else {
-      return "/th/member/login";      
+      return "redirect:/member/login";
     }
     
 
@@ -216,7 +224,6 @@ public class InquiryCont {
             //공사중
             ra.addFlashAttribute("code", "check_upload_file_fail"); // 업로드 할 수 없는 파일
             ra.addFlashAttribute("cnt", 0); // 업로드 실패
-            ra.addFlashAttribute("url", "/review/msg"); // msg.html, redirect parameter 적용
           }
         } else {
           System.out.println("글만 등록");
