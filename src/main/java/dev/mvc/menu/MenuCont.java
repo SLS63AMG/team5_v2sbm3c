@@ -1,5 +1,6 @@
 package dev.mvc.menu;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,18 +107,18 @@ public class MenuCont {
     }
 
 
-    // [2] 메뉴 목록 조회
-    @GetMapping("/list_all")
-    public String listAll(Model model) {
-        List<MenuVO> list = this.menuProc.list();
-        model.addAttribute("list", list);
-
-        // menuVO 객체를 추가하여 Thymeleaf에서 참조 가능하도록 설정
-        MenuVO menuVO = new MenuVO();
-        model.addAttribute("menuVO", menuVO);
-
-        return "/th/menu/list_all";
-    }
+//    // [2] 메뉴 목록 조회
+//    @GetMapping("/list_all")
+//    public String listAll(Model model) {
+//        List<MenuVO> list = this.menuProc.list();
+//        model.addAttribute("list", list);
+//
+//        // menuVO 객체를 추가하여 Thymeleaf에서 참조 가능하도록 설정
+//        MenuVO menuVO = new MenuVO();
+//        model.addAttribute("menuVO", menuVO);
+//
+//        return "/th/menu/list_all";
+//    }
 
     // [3] 메뉴 상세 조회
     @GetMapping("/read/{menuno}")
@@ -214,6 +215,37 @@ public class MenuCont {
             model.addAttribute("code", "delete_fail");
             return "/th/menu/msg";
         }
+    }
+    
+    // 페이징 + 검색
+    @GetMapping("/list_all")
+    public String listSearch(
+        @RequestParam(name = "word", defaultValue = "") String word,
+        @RequestParam(name = "now_page", defaultValue = "1") int nowPage,
+        Model model, HttpSession session
+    ) {
+
+        // 검색 결과 가져오기
+        ArrayList<MenuVO> searchResults = this.menuProc.list_search_paging(word, nowPage, 10);
+        model.addAttribute("list", searchResults);
+
+        // 검색된 결과 개수
+        int searchCnt = this.menuProc.list_search_count(word);
+        model.addAttribute("search_cnt", searchCnt);
+
+        // 페이징 처리
+        String paging = this.menuProc.pagingBox(nowPage, word, "list_all", searchCnt, 10, 90);
+        model.addAttribute("paging", paging);
+
+        // **menuVO 초기화 추가**
+        MenuVO menuVO = new MenuVO();
+        model.addAttribute("menuVO", menuVO);
+
+        // 검색어 및 현재 페이지 모델에 추가
+        model.addAttribute("word", word);
+        model.addAttribute("now_page", nowPage);
+
+        return "/th/menu/list_all"; // -> /templates/th/menu/list_search.html
     }
     
     /**

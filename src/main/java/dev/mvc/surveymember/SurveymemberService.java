@@ -22,7 +22,7 @@ public class SurveymemberService {
 
         // 이미 투표한 경우
         if (existingParticipation != null) {
-            return "You have already voted in this survey."; // 투표 제한 메시지
+            return "이미 설문에 참여하셨습니다."; // 투표 제한 메시지
         }
 
         // 설문 참여 데이터 저장
@@ -31,7 +31,7 @@ public class SurveymemberService {
         surveymemberVO.setMemberno(memberno);
         surveymemberVO.setRdate(new Date()); // 현재 시간 설정
         surveymemberMapper.insertSurveymember(surveymemberVO);
-        return "Vote registered successfully"; // 성공 메시지 반환
+        return "설문 참여가 완료됬습니다."; // 성공 메시지 반환
     }
 
     // 설문 참여자 리스트 조회

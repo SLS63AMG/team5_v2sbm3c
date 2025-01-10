@@ -41,6 +41,16 @@ public interface MenuProcInter {
      */
     public int delete(int menuno);
     
+    public Integer list_search_count(String word);
+
+    public ArrayList<MenuVO> list_search(String word);
+
+    public ArrayList<MenuVO> list_search_paging(String word, int now_page, int record_per_page);
+
+    public String pagingBox(int now_page, String word, String list_file_name, int search_count, int record_per_page,
+        int page_per_block);
+    
+    
     /** 추천 수 증가 */
     public int increaseRecom(int menurecomno);
 
@@ -48,5 +58,6 @@ public interface MenuProcInter {
     public int decreaseRecom(int menurecomno);
 
     public int good(int menuno);
+    
 
 }

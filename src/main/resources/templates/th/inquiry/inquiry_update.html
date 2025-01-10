@@ -36,8 +36,9 @@
     <!-- 미리보기 -->
     <div id="imagePreview" style="text-align: center; margin-bottom: 20px;">
       <img id="preview" alt="미리보기 이미지" 
-           style="max-width: 600px; display: {{inquiryVO.filename != null ? 'block' : 'none'}};" 
-           th:src="@{'/images/' + ${inquiryVO.filename}}" >
+           th:style="'max-width: 600px;' + (${inquiryVO.filename == null ? ' display: none;' : ''})"
+           th:src="@{|/inquiry/storage/${inquiryVO.filename}|}" >
+      <p th:text="${inquiryVO.filename}"></p>
     </div>
 
     <script>

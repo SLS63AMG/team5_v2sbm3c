@@ -60,13 +60,6 @@ public class CartProc implements CartProcInter {
         // DAO 호출
         ArrayList<CartVO> list = this.cartDAO.list_search_paging(map);
 
-        // 날짜 형식 변환 (필요 시)
-        list.forEach(cart -> {
-            if (cart.getCartdate() != null) {
-                cart.setCartdate(Tool.formatDate(cart.getCartdate())); // Tool.formatDate()는 날짜 형식 변환 유틸
-            }
-        });
-
         return list;
     }
 

@@ -22,6 +22,7 @@ import com.zaxxer.hikari.HikariDataSource;
                                        "dev.mvc.notice",
                                        "dev.mvc.loginlog",
                                        "dev.mvc.inquiry",
+                                       "dev.mvc.answer",
                                        "dev.mvc.survey",
                                        "dev.mvc.surveyitem",
                                        "dev.mvc.menu",

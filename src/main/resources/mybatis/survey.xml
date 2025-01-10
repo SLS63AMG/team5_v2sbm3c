@@ -87,8 +87,21 @@
         )
         WHERE rn &gt;= #{startRow}
     </select>
-
-
+    
+    
+       <!-- 설문 추천 수 증가 -->
+   <update id="increaseGoodCnt" parameterType="int">
+     UPDATE survey
+     SET goodcnt = goodcnt + 1
+     WHERE surveyno = #{surveyno}
+   </update>
+      
+   <!-- 설문 추천 수 감소 -->
+   <update id="decreaseGoodCnt" parameterType="int">
+     UPDATE survey
+     SET goodcnt = goodcnt - 1
+     WHERE surveyno = #{surveyno}
+   </update>
 
 
 

@@ -115,4 +115,13 @@
   </select>
   
   
+  
+  <!-- 문의 처리 상태 -->
+  <update id="state_update"  parameterType="HashMap">
+    UPDATE inquiry
+    SET 
+    <if test="state == 1">state = 1</if> 
+    <if test="state == 2">state = 2</if>
+    WHERE inquiryno = #{inquiryno}
+  </update>
 </mapper>

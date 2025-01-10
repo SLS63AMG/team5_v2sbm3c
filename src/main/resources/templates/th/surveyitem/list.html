@@ -4,84 +4,107 @@
     <title>설문조사 항목</title>
     <style>
         table {
-            width: 100%; /* 테이블 전체 너비 */
-            border-collapse: collapse; /* 테두리 중복 제거 */
-            margin-top: 20px; /* 제목과 테이블 간격 */
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
 
         th, td {
-            padding: 15px; /* 셀 내부 여백 */
-            text-align: center; /* 텍스트 중앙 정렬 */
-            font-size: 16px; /* 글씨 크기 */
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
         }
 
         th {
-            background-color: #f2f2f2; /* 헤더 배경색 */
-            font-weight: bold; /* 헤더 글씨 굵게 */
+            background-color: #f2f2f2;
+            font-weight: bold;
         }
 
         td {
-            border: 1px solid #ddd; /* 셀 테두리 */
+            border: 1px solid #ddd;
         }
 
         button {
-            padding: 10px 20px; /* 버튼 크기 조정 */
-            font-size: 14px; /* 버튼 글씨 크기 */
-            background-color: #4CAF50; /* 버튼 배경색 */
-            color: white; /* 버튼 글씨색 */
-            border: none; /* 버튼 테두리 제거 */
-            border-radius: 5px; /* 버튼 모서리 둥글게 */
-            cursor: pointer; /* 마우스 커서 변경 */
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
         button:hover {
-            background-color: #45a049; /* 버튼 호버 색상 */
+            background-color: #45a049;
+        }
+
+        .vote-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
         }
     </style>
-
 </head>
 
 <div layout:fragment="content">
     <div class="title_line" th:text="${survey.topic}"></div>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>순번</th>
-                <th>항목</th>
-                <th>투표수</th>
-                <th>작업</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="item : ${items}">
-                <td>
-                    <div th:text="${item.itemseq}"></div>
-                    <form th:action="@{/th/surveyitem/moveUp}" method="post" style="display:inline;">
-                        <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
-                        <input type="hidden" name="surveyno" th:value="${surveyno}" />
-                        <button type="submit">⬆</button>
-                    </form>
-                    <form th:action="@{/th/surveyitem/moveDown}" method="post" style="display:inline;">
-                        <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
-                        <input type="hidden" name="surveyno" th:value="${surveyno}" />
-                        <button type="submit">⬇</button>
-                    </form>
-                </td>
-                <td th:text="${item.item}"></td>
-                <td th:text="${item.itemcnt}"></td>
-                <td>
-                    <a th:href="@{/th/surveyitem/update/{surveyitemno}(surveyitemno=${item.surveyitemno})}">수정</a> |
-                    <a th:href="@{/th/surveyitem/delete/{surveyitemno}(surveyitemno=${item.surveyitemno}, surveyno=${surveyno})}">삭제</a> |
-                    <form th:action="@{/th/surveyitem/vote}" method="post" style="display:inline;">
-                        <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
-                        <input type="hidden" name="surveyno" th:value="${surveyno}" />
-                        <input type="hidden" name="memberno" th:value="${session.memberno}" />
-                        <button type="submit">투표</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <a th:href="@{/th/surveyitem/create/{surveyno}(surveyno=${surveyno})}">항목 등록</a>
+    <form th:action="@{/th/surveyitem/vote}" method="post">
+        <table>
+            <thead>
+                <tr>
+                    <th th:if="${session.grade == 1}">순번</th>
+                    <th>항목</th>
+                    <th th:if="${session.grade == 1}">투표수</th>
+                    <th th:if="${session.grade == 1}">작업</th>
+                    <th>선택</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:if="${session.grade == 1}">
+                        <div th:text="${item.itemseq}"></div>
+                        <!-- 올리기/내리기 버튼 -->
+                        <div class="action-buttons" th:if="${session.grade == 1}">
+                            <form th:action="@{/th/surveyitem/moveUp}" method="post" style="display:inline;">
+                                <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
+                                <input type="hidden" name="surveyno" th:value="${surveyno}" />
+                                <button type="submit">⬆</button>
+                            </form>
+                            <form th:action="@{/th/surveyitem/moveDown}" method="post" style="display:inline;">
+                                <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
+                                <input type="hidden" name="surveyno" th:value="${surveyno}" />
+                                <button type="submit">⬇</button>
+                            </form>
+                        </div>
+                    </td>
+                    <td th:text="${item.item}"></td>
+                    <td th:if="${session.grade == 1}" th:text="${item.itemcnt}"></td>
+                    <td th:if="${session.grade == 1}">
+                        <!-- 수정/삭제 버튼 -->
+                        <a th:href="@{/th/surveyitem/update/{surveyitemno}(surveyitemno=${item.surveyitemno})}">수정</a> |
+                        <a th:href="@{/th/surveyitem/delete/{surveyitemno}(surveyitemno=${item.surveyitemno}, surveyno=${surveyno})}">삭제</a>
+                    </td>
+                    <td>
+                        <!-- 라디오 버튼 -->
+                        <input type="radio" name="surveyitemno" th:value="${item.surveyitemno}" required>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+        
+        <!-- 하단 투표 버튼 -->
+        <div class="vote-button-container">
+            <input type="hidden" name="surveyno" th:value="${surveyno}" />
+            <input type="hidden" name="memberno" th:value="${session.memberno}" />
+            <button type="submit">투표</button>
+        </div>
+    </form>
+    <a th:if="${session.grade == 1}" th:href="@{/th/surveyitem/create/{surveyno}(surveyno=${surveyno})}">항목 등록</a>
 </div>
 </html>

@@ -2,40 +2,137 @@
 <html layout:decorate="~{th/layout}">
 <head>
   <style>
-    ul {
-        display: flex;
-        justify-content: center;
+    /* 부모 컨테이너: 전체 네비게이션을 가운데 정렬 */
+    .pagination-container {
+        display: flex; /* Flexbox 사용 */
+        justify-content: center; /* 가로로 중앙 정렬 */
+        align-items: center; /* 세로로 중앙 정렬 */
+        margin-top: 20px; /* 상단 여백 */
+    }
+  
+    /* 네비게이션 리스트 */
+    .pagination ul {
+        display: flex; /* 리스트를 가로로 정렬 */
+        justify-content: center; /* 내부 요소 중앙 정렬 */
         padding: 0;
-        list-style-type: none;
+        list-style-type: none; /* 기본 불릿 제거 */
+        margin: 0; /* 기본 여백 제거 */
     }
-
-    ul li {
-        margin: 0 5px;
+  
+    .pagination ul li {
+        margin: 0 5px; /* 각 페이지 버튼 간격 */
     }
-
-    ul li a {
-        text-decoration: none;
-        color: #007bff;
-        padding: 5px 10px;
-        border-bottom: 2px solid transparent;
-        transition: border-bottom 0.3s ease, font-weight 0.3s ease;
+  
+    .pagination ul li a {
+        text-decoration: none; /* 밑줄 제거 */
+        color: #007bff; /* 링크 색상 */
+        padding: 5px 10px; /* 내부 여백 */
+        border-bottom: 2px solid transparent; /* 기본 하단선 */
+        transition: border-bottom 0.3s ease, font-weight 0.3s ease; /* 애니메이션 */
     }
-
-    ul li a:hover {
-        border-bottom: 2px solid #007bff;
+  
+    .pagination ul li a:hover {
+        border-bottom: 2px solid #007bff; /* 호버 시 하단선 */
     }
-
-    ul li a.active {
-        font-weight: bold;
-        border-bottom: 2px solid #007bff;
+  
+    .pagination ul li a.active {
+        font-weight: bold; /* 현재 페이지 강조 */
+        border-bottom: 2px solid #007bff; /* 활성화된 페이지 하단선 */
     }
   </style>
+
 </head>
 
 <div layout:fragment="content">
+  <script th:inline="javascript">
+      document.addEventListener("DOMContentLoaded", function () {
+      console.log("JavaScript 실행됨!");
+      const surveys = /*[[${list}]]*/ []; // 설문조사 목록 데이터 가져오기
+  
+      surveys.forEach((survey) => {
+          const hartPanel = document.querySelector(`#hart_panel_${survey.surveyno}`);
+          const goodCntPanel = document.querySelector(`#goodcnt_panel_${survey.surveyno}`);
+  
+          // 추천 여부에 따라 초기 UI 설정
+          if (hartPanel) {
+              if (survey.hartCnt == 1) {
+                  hartPanel.innerHTML = `
+                      <a href="javascript:good(${survey.surveyno})">
+                          <img src="/survey/images/hart_on_50.png" style="width: 22px" title="추천">
+                      </a>`;
+              } else {
+                  hartPanel.innerHTML = `
+                      <a href="javascript:good(${survey.surveyno})">
+                          <img src="/survey/images/hart_off_50.png" style="width: 22px" title="추천">
+                      </a>`;
+              }
+          }
+  
+          if (goodCntPanel) {
+              goodCntPanel.textContent = `(${survey.goodcnt})`;
+          }
+      });
+  });
+  
+  // 추천 처리
+  function good(surveyno) {
+      console.log(`추천 버튼 클릭됨! surveyno: ${surveyno}`);
+  
+      fetch("/th/survey/good", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ surveyno })
+      })
+      .then((response) => {
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+      })
+      .then((data) => {
+          console.log("서버 응답 데이터:", data);
+  
+          if (data.hartCnt !== undefined && data.goodCnt !== undefined) {
+              const hartPanel = document.querySelector(`#hart_panel_${surveyno}`);
+              const goodCntPanel = document.querySelector(`#goodcnt_panel_${surveyno}`);
+  
+              // 하트 상태 업데이트
+              if (hartPanel) {
+                  if (data.hartCnt == 1) {
+                      hartPanel.innerHTML = `
+                          <a href="javascript:good(${surveyno})">
+                              <img src="/survey/images/hart_on_50.png" style="width: 22px" title="추천">
+                          </a>`;
+                  } else {
+                      hartPanel.innerHTML = `
+                          <a href="javascript:good(${surveyno})">
+                              <img src="/survey/images/hart_off_50.png" style="width: 22px" title="추천">
+                          </a>`;
+                  }
+              }
+  
+              // 추천 수 업데이트
+              if (goodCntPanel) {
+                  goodCntPanel.textContent = `(${data.goodCnt})`;
+              }
+          }
+      })
+      .catch((error) => console.error("Error 발생:", error));
+  }
+
+</script>
+
   <div class="title_line">설문조사 목록</div>
   <aside class="aside_right">
-          <!-- 검색 폼 -->
+    <a href="javascript: location.reload();">새로 고침</a>
+    <span class="menu_divide">|</span>
+    <a th:if="${session.grade == 1}" href="/th/survey/create" style="font-size: 14px;">등록</a>
+    <span class="menu_divide" th:if="${session.grade == 1}">|</span>
+    <a th:if="${session.grade == 1}" href="/th/surveygood/list_all" style="font-size: 14px;">설문 추천 목록</a>
+    <span class="menu_divide" th:if="${session.grade == 1}">|</span>
+    <a th:if="${session.grade == 1}" href="/th/surveymember/list" style="font-size: 14px;">설문 참여자 리스트</a>
+    
+    <!-- 검색 폼 -->
     <form method="get" action="/th/survey/search" style="display: inline-block; margin-right: 10px;">
       <input type="text" name="keyword" th:value="${keyword}" placeholder="검색" 
              style="padding: 5px; font-size: 12px; border: 1px solid #ccc; border-radius: 3px;">
@@ -46,10 +143,6 @@
          style="font-size: 12px; text-decoration: none; color: #fff; background-color: #6c757d; border: 1px solid #6c757d; padding: 5px 10px; border-radius: 3px; margin-left: 5px;"
          th:if="${keyword != null && keyword != ''}">검색 취소</a>
     </form>
-
-    <a href="javascript: location.reload();">새로 고침</a>
-    <span class="menu_divide">|</span>
-    <a href="/th/survey/create"  style="font-size: 14px;">등록</a>
   </aside>
 
   <div class="menu_line"></div>
