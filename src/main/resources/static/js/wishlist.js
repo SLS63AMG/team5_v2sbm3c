@@ -4,9 +4,16 @@
 
 function wishlist_admi(){
   
-  const wishBtn = document.getElementById('wishbtn').value;
-  const data = {sish_state : wishBtn};
+  // 버튼 상태
+  // const wishBtn = document.getElementById('wishbtn').value;
   
+  // url가져오기
+  const url = window.location.href;
+  const storeId = url.match(/\/read\/(\d+)$/)?.[1];
+  
+  const data = 
+  {store : storeId
+  };
   
   // ajax 기본 형식
   fetch('/wishlist/wish_work', {
@@ -25,12 +32,20 @@ function wishlist_admi(){
     console.log(data);
     
     
-    
     if (data.url) {
       alert("로그인 후 추천 가능합니다.");
       window.location.href = data.url;  // 해당 URL로 페이지 이동
+    } else {
+      // data.state가 0이면 버튼 텍스트 변경
+      const wishBtn = document.getElementById("wishbtn");
+      const wishImg = document.getElementById("wishlistImage");
+  
+      if (data.state === 0) {
+        wishImg.src = "/wishlist/images/empstar.png";  // 이미지 변경
+      } else if (data.state === 1) {
+        wishImg.src = "/wishlist/images/star.png";  // 이미지 변경
+      }
     }
-
 
     
   })

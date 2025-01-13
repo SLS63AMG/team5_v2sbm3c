@@ -2,8 +2,61 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- SB가 자동으로 구현하여 연동하는 interface -->
 <mapper namespace="dev.mvc.wishlist.WishlistDAOInter"> <!-- SB가 자동으로 구현하여 연동하는 interface -->
-
+  
+  <!-- 즐겨찾기 확인(1: 있음, 0:없음) -->
   <select id="wish_check" parameterType="dev.mvc.wishlist.WishlistVO">
+    SELECT count(*) AS cnt
+    FROM wishlist
+    WHERE storeno=#{storeno} AND memberno=#{memberno}
   </select>
 
+  <!-- 즐겨찾기 추가 -->
+  <insert id="wish_insert" parameterType="dev.mvc.wishlist.WishlistVO">
+    INSERT INTO wishlist(storeno, memberno)
+    VALUES (#{storeno}, #{memberno})
+  </insert>
+
+  <!-- 즐겨찾기 취소 -->
+  <delete id="wish_delete" parameterType="dev.mvc.wishlist.WishlistVO">
+    DELETE FROM wishlist 
+    WHERE storeno=#{storeno} AND memberno=#{memberno}
+  </delete>
+  
+  
+  
+   <!-- 검색된 즐겨찾기 목록 갯수 -->
+   <select id="list_search_count" resultType="Integer" parameterType="Map">
+     SELECT count(*) as cnt
+     
+     FROM wishlist w INNER JOIN store s 
+     ON w.storeno = s.storeno
+     INNER JOIN member m 
+     ON w.memberno = m.memberno
+     WHERE w.memberno = #{memberno}
+     <if test="word != null and word != ''">
+     AND (UPPER(s.name) LIKE '%' || UPPER(#{word}) || '%')
+     </if>
+   </select>
+   
+  <!-- 즐겨찾기 목록(검색 + 페이징) -->
+  <select id="wish_list_search_paging" resultType="dev.mvc.wishlist.WishlistVO" parameterType="Map">
+    SELECT name, distinction, reviewcnt, address1, tel, rating, storeno, memberno, r
+    FROM (
+        SELECT name, distinction, reviewcnt, address1, tel, rating, storeno, memberno, rownum as r
+        FROM (
+            SELECT s.name, s.distinction, s.reviewcnt, s.address1, s.tel, s.rating, s.storeno, m.memberno
+            FROM wishlist w INNER JOIN store s 
+            ON w.storeno = s.storeno
+            INNER JOIN member m 
+            ON w.memberno = m.memberno
+            WHERE w.memberno = #{memberno}
+            <if test="word != null and word != ''">
+            AND (UPPER(s.name) LIKE '%' || UPPER(#{word}) || '%')
+            </if>
+        )
+    )
+    WHERE r &gt;=#{start_num} AND r &lt;=#{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
+    ORDER BY r ASC
+  </select>
+  
 </mapper>

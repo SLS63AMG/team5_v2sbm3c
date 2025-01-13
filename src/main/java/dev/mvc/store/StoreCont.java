@@ -29,6 +29,7 @@ import dev.mvc.storegood.StoregoodVO;
 
 import dev.mvc.tool.Tool;
 import dev.mvc.tool.Upload;
+import dev.mvc.wishlist.WishlistProcInter;
 import jakarta.servlet.http.HttpSession;
 
 
@@ -55,6 +56,10 @@ public class StoreCont {
     @Qualifier("dev.mvc.member.MemberProc") // 빈 이름 일치
     private MemberProcInter memberProc;
 
+    @Qualifier("dev.mvc.wishlist.WishlistProc")
+    @Autowired
+    private WishlistProcInter wishlistProc;
+    
     @GetMapping("/list")
     public String list(
             @RequestParam(value = "nowPage", defaultValue = "1") int nowPage,
@@ -149,7 +154,8 @@ public class StoreCont {
      * 특정 음식점을 조회하는 메서드 (GET 방식)
      */
     @GetMapping("/read/{storeno}")
-    public String read(@PathVariable("storeno") int storeno, Model model) {
+    public String read(@PathVariable("storeno") int storeno, Model model,
+        HttpSession session) {
         StoreVO storeVO = this.storeProc.read(storeno); // DB 조회
         if (storeVO == null) {
             model.addAttribute("code");
@@ -157,6 +163,21 @@ public class StoreCont {
         }
         System.out.println("가게 등록 주소: " + storeVO.getMsite()); // 디버깅 로그
         model.addAttribute("storeVO", storeVO); // "store"라는 이름으로 모델에 데이터 추가
+        
+        // 즐겨찾기 상태
+        if(session.getAttribute("memberno") != null) {
+          HashMap<String, Object> map = new HashMap<>();
+          map.put("store", storeVO.getStoreno());
+          map.put("memberno", (int)session.getAttribute("memberno"));
+          map.put("check", "check");
+          int state = this.wishlistProc.wish_check(map);
+          model.addAttribute("state", state);
+        } else {
+          model.addAttribute("state", 0);
+        }
+        // 즐겨찾기 상태
+        
+        
         return "/th/store/read"; // read.html로 이동
     }
 

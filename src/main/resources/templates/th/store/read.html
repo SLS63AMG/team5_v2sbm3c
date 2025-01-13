@@ -206,13 +206,21 @@
         <a th:href="@{/th/store/delete/{storeno}(storeno=${storeVO.storeno})}" class="btn btn-danger">삭제</a>
       </div>
       
+      
+      
       <!--/* 즐겨찾기 (찜목록) 등록 */-->
       <script src="/js/wishlist.js" type="text/javascript"></script>
       <link href="/css/wishlist.css" rel="stylesheet" type="text/css">
       <div class="centered-container">
-        <button id="wishbtn" name="wishbtn" onclick="wishlist_admi()" value="1">즐겨찾기</button>
+        <button id="wishbtn" name="wishbtn" onclick="wishlist_admi()">
+            <img id="wishlistImage" name="wishlistImage"
+            th:src="@{/wishlist/images/{file}(file=${state == 0 ? 'empstar.png' : 'star.png'})}" 
+            class="icon" alt="wishlist">
+        </button>
       </div>
       <!--/* 즐겨찾기 (찜목록) 등록 */-->
+      
+      
       
     </div>
   </div>
