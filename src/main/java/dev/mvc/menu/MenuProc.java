@@ -213,6 +213,11 @@ public class MenuProc implements MenuProcInter {
       return str.toString(); 
     }
     
+    @Override
+    public List<MenuVO> listByStore(int storeno) {
+        return this.menuDAO.listByStore(storeno);
+    }
+    
     
     @Override
     public int increaseRecom(int menurecomno) {

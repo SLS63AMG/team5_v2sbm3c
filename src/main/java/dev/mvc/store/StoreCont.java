@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.File;
 import java.util.HashMap;
 import dev.mvc.menu.MenuProcInter;
+import dev.mvc.menu.MenuVO;
 
 import java.util.List;
 import java.util.Map;
@@ -114,14 +115,21 @@ public class StoreCont {
      */
     @GetMapping("/read/{storeno}")
     public String read(@PathVariable("storeno") int storeno, Model model) {
-        StoreVO storeVO = this.storeProc.read(storeno); // DB 조회
+        // [1] 음식점 정보 조회
+        StoreVO storeVO = this.storeProc.read(storeno);
         if (storeVO == null) {
-            model.addAttribute("code");
-            return "/th/menu/msg"; // 데이터가 없으면 404로 리다이렉트
+            model.addAttribute("code", "404");
+            return "/th/menu/msg"; // 데이터가 없으면 404 페이지로 리다이렉트
         }
-        model.addAttribute("storeVO", storeVO); // "store"라는 이름으로 모델에 데이터 추가
+        model.addAttribute("storeVO", storeVO);
+
+        // [2] 특정 음식점의 메뉴 목록 조회
+        List<MenuVO> menuList = this.menuProc.listByStore(storeno);
+        model.addAttribute("list", menuList);
+
         return "/th/store/read"; // read.html로 이동
     }
+
 
     /**
      * 음식점 정보를 수정하는 메서드 (GET 방식)
