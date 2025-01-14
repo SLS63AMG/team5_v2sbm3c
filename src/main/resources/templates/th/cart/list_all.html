@@ -23,10 +23,11 @@
           <span th:text="${cart.name}" style="margin-left: 10px; vertical-align: middle;"></span>
         </td>
         <!-- 수량 조절 -->
+        <!-- 수량 조절 버튼 -->
         <td style="text-align: center;">
-            <button data-cartno="[[${cart.cartno}]]" onclick="updatecnt(this, 'minus')"> - </button>
-            <span id="quantity-[[${cart.cartno}]]" th:text="${cart.cnt}" style="margin: 0 10px;"></span>
-            <button data-cartno="[[${cart.cartno}]]" onclick="updatecnt(this, 'plus')">+</button>
+            <button th:value="${cart.cartno}" th:onclick="'updatecnt(\'minus\', ' + ${cart.cartno} + ')'"> - </button>
+            <span id="quantity-${cart.cartno}" th:text="${cart.cnt}" style="margin: 0 10px;"></span>
+            <button th:value="${cart.cartno}" th:onclick="'updatecnt(\'plus\', ' + ${cart.cartno} + ')'"> + </button>
         </td>
         <!-- 판매가 -->
         <td style="text-align: right;" th:text="${cart.saleprice + '원'}"></td>
@@ -66,46 +67,40 @@
       주문하기
     </button>
   </div>
-
-</div>
-
-<!-- JavaScript 코드 -->
-<script>
-function updatecnt(button, operation) {
-    const cartno = button.getAttribute('data-cartno'); // 버튼에서 cartno 추출
-    const quantityElement = document.querySelector(`#quantity-${cartno}`);
-    let currentQuantity = parseInt(quantityElement.textContent);
-
-    if (operation === 'minus' && currentQuantity <= 1) {
-        alert('수량은 최소 1개 이상이어야 합니다.');
-        return;
+  
+  <!-- JavaScript 코드 -->
+  <script>
+  df
+  function updatecnt(operation, cartno) { 
+    data={
+      operation : operation,
+      cartno : cartno
     }
-
+  
+    // ajax 기본 형식
     fetch('/th/cart/updatecnt', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            cartno: cartno,
-            cnt: operation === 'plus' ? currentQuantity + 1 : currentQuantity - 1,
-        }),
+      method : 'POST',
+      headers : {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     })
-        .then((response) => response.text())
-        .then((result) => {
-            if (result === 'success') {
-                const updatedQuantity =
-                    operation === 'plus' ? currentQuantity + 1 : currentQuantity - 1;
-                quantityElement.textContent = updatedQuantity;
-            } else {
-                alert('수량 변경에 실패했습니다.');
-            }
-        })
-        .catch((error) => {
-            console.error('수량 업데이트 오류:', error);
-            alert('서버와의 통신 중 문제가 발생했습니다.');
-        });
- }
-</script>
+    .then(response => response.json())
+    .then(data => {
+      
+      console.log(data);
+  
+    })
+    .catch(error => { // 통신 자체를 실패
+      console.error('추가 실패 : ', error);
+    });
+    
+  }
+  
+}
+  
+  </script>
+  <!-- JavaScript 코드 -->
+</div>
 
 </html>

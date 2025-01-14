@@ -27,4 +27,13 @@ public class CartProc implements CartProcInter {
     public int delete(int cartno) {
         return cartDAO.delete(cartno);
     }
+    
+    @Override
+    public int updatecnt(int cartno, int cnt) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("cartno", cartno);
+        map.put("cnt", cnt);
+        return this.cartDAO.updatecnt(map);
+    }
+
 }

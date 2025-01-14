@@ -48,7 +48,7 @@ public class CartCont {
         Integer memberno = (Integer) session.getAttribute("memberno");
         if (memberno == null) {
             // 세션에 memberno가 없을 경우 로그인 페이지로 리다이렉트
-            return "redirect:/th/member/login";
+            return "redirect:/member/login";
         }
 
         List<CartVO> cartList = this.cartProc.list(memberno);
@@ -79,5 +79,31 @@ public class CartCont {
             return "/th/cart/delete_fail"; // 삭제 실패 시 오류 페이지
         }
     }
+    
+    @PostMapping(value = "/updatecnt")
+    @ResponseBody
+    public String updatecnt(@RequestBody Map<String, Object> map) {
+        try {
+            int cartno = Integer.parseInt(map.get("cartno").toString());
+            int cnt = Integer.parseInt(map.get("cnt").toString());
+            System.out.println(map);
+            // 수량 검증
+            if (cnt <= 0) {
+                return "fail"; // 수량이 0 이하일 경우
+            }
+
+            // DB 업데이트
+            int result = this.cartProc.updatecnt(cartno, cnt);
+            return result > 0 ? "success" : "fail";
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return "fail"; // 잘못된 형식의 데이터 처리
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail"; // 기타 예외 처리
+        }
+    }
+
     
 }

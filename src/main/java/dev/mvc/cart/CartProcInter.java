@@ -24,4 +24,7 @@ public interface CartProcInter {
      * @return 삭제된 레코드 수
      */
     public int delete(int cartno);
+    
+    public int updatecnt(int cartno, int cnt);
+
 }
