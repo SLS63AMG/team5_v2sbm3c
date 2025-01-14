@@ -37,6 +37,7 @@ import java.io.File;
 import java.util.HashMap;
 import dev.mvc.menu.MenuProcInter;
 import dev.mvc.menu.MenuVO;
+import dev.mvc.rating.RatingProcInter;
 
 import java.util.List;
 import java.util.Map;
@@ -64,6 +65,10 @@ public class StoreCont {
     @Autowired
     @Qualifier("dev.mvc.menu.MenuProc") // 빈 이름 일치
     private MenuProcInter menuProc;
+    
+    @Autowired
+    @Qualifier("dev.mvc.rating.RatingProc")
+    private RatingProcInter ratingProc;
     
     @GetMapping("/list")
     public String list(
@@ -179,7 +184,14 @@ public class StoreCont {
         } else {
             model.addAttribute("state", 0);
         }
-
+        
+        if(session.getAttribute("memberno") != null) {
+          double rating = this.ratingProc.rating_read(storeno, (int) session.getAttribute("memberno"));
+          model.addAttribute("mrating", rating);
+        } else {
+          model.addAttribute("mrating", -1);
+        }
+        
         return "/th/store/read";
     }
 

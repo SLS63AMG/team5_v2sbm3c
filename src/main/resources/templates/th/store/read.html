@@ -185,7 +185,7 @@
         </tr>
         <tr>
           <td>평점</td>
-          <td th:text="${storeVO.rating}"></td>
+          <td th:text="${storeVO.rating}" id="store_rating"></td>
         </tr>
         <tr>
           <td>포스터</td>
@@ -207,6 +207,19 @@
       </div>
       
       <!-- 즐겨찾기 (찜목록) 등록 -->
+      <div class="rating-container" th:if="${mrating != -1}">
+        <div class="input-wrapper">
+          <input type="number" id="mrating" name="mrating" th:value="${mrating == -1 ? 0.0 : mrating}"  placeholder="평점 입력" min="0" max="10" step="0.1" 
+          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+          <button id="ratingbtn" name="ratingbtn" onclick="rating_btn()">
+            평점 남기기
+          </button>
+        </div>
+        <div id="rating_msg" name="rating_msg">
+        <span>※0점은 평점 삭제</span>
+        </div>
+      </div>
+      
       <script src="/js/wishlist.js" type="text/javascript"></script>
       <link href="/css/wishlist.css" rel="stylesheet" type="text/css">
       <div class="centered-container">
@@ -216,6 +229,7 @@
             class="icon" alt="wishlist">
         </button>
       </div>
+
       <!-- 즐겨찾기 (찜목록) 등록 -->
 
      <!-- 메뉴목록 -->
