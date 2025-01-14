@@ -27,7 +27,6 @@ public class WishlistProc implements WishlistProcInter {
     int state = this.wishlistDAO.wish_check(wishlistVO);
     
     if(map.get("check") != null && map.get("check").equals("check")) {
-      System.out.println("여기다");
       return state;
       
     } else if(state == 0) { // 추가 ------------------------

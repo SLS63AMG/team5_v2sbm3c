@@ -61,6 +61,10 @@ public class StoreCont {
     @Autowired
     private WishlistProcInter wishlistProc;
     
+    @Autowired
+    @Qualifier("dev.mvc.menu.MenuProc") // 빈 이름 일치
+    private MenuProcInter menuProc;
+    
     @GetMapping("/list")
     public String list(
             @RequestParam(value = "nowPage", defaultValue = "1") int nowPage,
@@ -151,52 +155,33 @@ public class StoreCont {
     }
 
 
-    /**
-     * 특정 음식점을 조회하는 메서드 (GET 방식)
-     */
     @GetMapping("/read/{storeno}")
-<<<<<<< HEAD
-    public String read(@PathVariable("storeno") int storeno, Model model) {
-        // [1] 음식점 정보 조회
+    public String read(@PathVariable("storeno") int storeno, Model model, HttpSession session) {
         StoreVO storeVO = this.storeProc.read(storeno);
-=======
-    public String read(@PathVariable("storeno") int storeno, Model model,
-        HttpSession session) {
-        StoreVO storeVO = this.storeProc.read(storeno); // DB 조회
->>>>>>> 5745125b5da064d8b7866751d1daaabdf486b927
+
         if (storeVO == null) {
             model.addAttribute("code", "404");
-            return "/th/menu/msg"; // 데이터가 없으면 404 페이지로 리다이렉트
+            return "/th/menu/msg";
         }
-<<<<<<< HEAD
+
         model.addAttribute("storeVO", storeVO);
 
-        // [2] 특정 음식점의 메뉴 목록 조회
         List<MenuVO> menuList = this.menuProc.listByStore(storeno);
-        model.addAttribute("list", menuList);
+        model.addAttribute("menulist", menuList);
 
-=======
-        System.out.println("가게 등록 주소: " + storeVO.getMsite()); // 디버깅 로그
-        model.addAttribute("storeVO", storeVO); // "store"라는 이름으로 모델에 데이터 추가
-        
-        // 즐겨찾기 상태
-        if(session.getAttribute("memberno") != null) {
-          HashMap<String, Object> map = new HashMap<>();
-          map.put("store", storeVO.getStoreno());
-          map.put("memberno", (int)session.getAttribute("memberno"));
-          map.put("check", "check");
-          int state = this.wishlistProc.wish_check(map);
-          model.addAttribute("state", state);
+        if (session.getAttribute("memberno") != null) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("store", storeVO.getStoreno());
+            map.put("memberno", (int) session.getAttribute("memberno"));
+            map.put("check", "check");
+            int state = this.wishlistProc.wish_check(map);
+            model.addAttribute("state", state);
         } else {
-          model.addAttribute("state", 0);
+            model.addAttribute("state", 0);
         }
-        // 즐겨찾기 상태
-        
-        
->>>>>>> 5745125b5da064d8b7866751d1daaabdf486b927
-        return "/th/store/read"; // read.html로 이동
-    }
 
+        return "/th/store/read";
+    }
 
     /**
      * 음식점 정보를 수정하는 메서드 (GET 방식)
@@ -217,8 +202,6 @@ public class StoreCont {
         // View 이름 반환 (update.html로 이동)
         return "/th/store/update"; 
     }
-
-
 
     /**
      * 음식점 정보 수정을 처리하는 메서드 (POST 방식)

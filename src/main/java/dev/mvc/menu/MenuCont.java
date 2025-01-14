@@ -185,7 +185,7 @@ public class MenuCont {
 
         int cnt = menuProc.update(menuVO);
         if (cnt == 1) {
-            return "redirect:/th/menu/list_all";
+            return "redirect:/th/store/list";
         } else {
             model.addAttribute("code", "update_fail");
             return "/th/menu/msg";
