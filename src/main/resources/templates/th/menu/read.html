@@ -25,7 +25,7 @@
     function good(menuno) {
       console.log('-> menuno: ' + menuno);
 
-      fetch("http://localhost:9093/th/menu/good", {
+      fetch("/th/menu/good", {
           "method": "post",
           "headers": {
               "Content-Type": "application/json"
@@ -79,15 +79,31 @@
       <li class="list-group-item">메뉴 번호: <span th:text="${menuVO.menuno}"></span></li>
       <li class="list-group-item">메뉴 이름: <span th:text="${menuVO.name}"></span></li>
       <li class="list-group-item">설명: <span th:text="${menuVO.explanation}"></span></li>
-      <li class="list-group-item">가격: <span th:text="${menuVO.price}" style="margin-right: 10px;"></span></li>
       <li class="list-group-item">추천수: <span id="hart_panel"></span><span id="recom_panel"></span></li>
       <li class="list-group-item">사진:
         <img th:src="@{|/menu/storage/${menuVO.photo}|}" style="margin-right: 10px;" alt="메뉴 이미지 경로">
       </li>
+      <li class="list-group-item">정가: <span th:text="${menuVO.price}" style="margin-right: 10px;"></span></li>
+      <li class="list-group-item">할인율: <span th:text="${menuVO.dc}"></span>%</li>
+      <li class="list-group-item">포인트: <span th:text="${menuVO.point}"></span></li>
+      <li class="list-group-item">판매가: <span th:text="${menuVO.saleprice}"></span>원</li>
       <li class="list-group-item">가게 번호: <span th:text="${menuVO.storeno}"></span></li>
     </ul>
   </div>
   
-
+    <!-- 장바구니 담기 버튼 -->
+  <form method="post" th:action="@{/th/cart/create}">
+    <input type="hidden" name="menuno" th:value="${menuVO.menuno}" />
+    <input type="hidden" name="name" th:value="${menuVO.name}" />
+    <input type="hidden" name="photo" th:value="${menuVO.photo}" />
+    <input type="hidden" name="price" th:value="${menuVO.price}" />
+    <input type="hidden" name="saleprice" th:value="${menuVO.saleprice}" />
+    <input type="hidden" name="dc" th:value="${menuVO.dc}" />
+    <input type="hidden" name="point" th:value="${menuVO.point}" />
+    <input type="hidden" name="cnt" value="1" />
+    <input type="hidden" name="memberno" th:value="${session.memberno}" />
+    <button type="submit" style="margin: 20px auto; display: block;">장바구니 담기</button>
+  </form>
+  
 </div>
 </html>

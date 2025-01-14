@@ -64,6 +64,12 @@ public interface MenuDAOInter {
      */
     public ArrayList<MenuVO> list_search_paging(Map<String, Object> map);
     
+    /**
+     * 특정 음식점의 메뉴 조회
+     * @param storeno 음식점 번호
+     * @return 해당 음식점의 메뉴 목록
+     */
+    public List<MenuVO> listByStore(int storeno);    
     
     /** 추천 수 증가 */
     public int increaseRecom(int menurecomno);

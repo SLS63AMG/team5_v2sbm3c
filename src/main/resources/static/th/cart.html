@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장바구니</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+
+    <!-- 상품 목록 -->
+    <h2>상품 목록</h2>
+    <div id="menu-list"></div>
+
+    <!-- 장바구니 목록 -->
+    <h2>장바구니</h2>
+    <div id="cart-list"></div>
+
+    <script>
+        // Fetch menu list (상품 목록 가져오기)
+        function fetchMenuList() {
+            $.ajax({
+                url: "/th/menu/list_all", // 메뉴 리스트를 가져오는 경로
+                type: "GET",
+                success: function (data) {
+                    const menuList = $("#menu-list");
+                    menuList.empty();
+                    data.forEach(item => {
+                        menuList.append(`
+                            <div>
+                                <p>${item.name} - ${item.price}원</p>
+                                <button onclick="addToCart(${item.menuno})">장바구니에 추가</button>
+                            </div>
+                        `);
+                    });
+                },
+                error: function () {
+                    alert("상품 목록을 가져오는데 실패했습니다.");
+                }
+            });
+        }
+
+        // Fetch cart list (장바구니 목록 가져오기)
+        function fetchCart() {
+            $.ajax({
+                url: "/th/cart/list_by_memberno",
+                type: "GET",
+                success: function (data) {
+                    const cartList = $("#cart-list");
+                    cartList.empty();
+                    data.forEach(item => {
+                        cartList.append(`
+                            <div>
+                                <p>${item.name} - ${item.cnt} x ${item.price} = ${item.tot}</p>
+                                <button onclick="updateCartCnt(${item.cartno}, ${item.cnt + 1})">+</button>
+                                <button onclick="updateCartCnt(${item.cartno}, ${item.cnt - 1})">-</button>
+                                <button onclick="deleteCartItem(${item.cartno})">삭제</button>
+                            </div>
+                        `);
+                    });
+                },
+                error: function () {
+                    alert("장바구니 목록을 가져오는데 실패했습니다.");
+                }
+            });
+        }
+
+        // Add item to cart (상품 장바구니 추가)
+        function addToCart(menuno) {
+            $.ajax({
+                url: "/th/cart/create",
+                type: "POST",
+                data: { menuno },
+                success: function (response) {
+                    const data = JSON.parse(response);
+                    if (data.cnt > 0) {
+                        alert("장바구니에 추가되었습니다.");
+                        fetchCart(); // 장바구니 갱신
+                    } else {
+                        alert("장바구니 추가 실패.");
+                    }
+                },
+                error: function () {
+                    alert("상품을 장바구니에 추가하는데 실패했습니다.");
+                }
+            });
+        }
+
+        // Update cart count (수량 변경)
+        function updateCartCnt(cartno, cnt) {
+            $.ajax({
+                url: "/th/cart/update_cnt",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ cartno, cnt }),
+                success: function (response) {
+                    if (response.success) {
+                        fetchCart();
+                    } else {
+                        alert("수량 변경 실패.");
+                    }
+                }
+            });
+        }
+
+        // Delete cart item (상품 삭제)
+        function deleteCartItem(cartno) {
+            $.ajax({
+                url: "/th/cart/delete",
+                type: "POST",
+                data: { cartno },
+                success: function (response) {
+                    if (response.success) {
+                        fetchCart();
+                    } else {
+                        alert("상품 삭제 실패.");
+                    }
+                }
+            });
+        }
+
+        // Initialize data on page load
+        fetchMenuList(); // 상품 목록 초기화
+        fetchCart(); // 장바구니 목록 초기화
+    </script>
+</body>
+</html>
