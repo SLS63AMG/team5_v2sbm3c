@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.mvc.storegood.StoregoodDAOInter">
+
+    <!-- storegood 테이블에 데이터 삽입 -->
+    <insert id="create" parameterType="dev.mvc.storegood.StoregoodVO">
+        INSERT INTO storegood (storegoodno, rdate, storeno, memberno)
+        VALUES (storegood_seq.nextval, sysdate, #{storeno}, #{memberno})
+    </insert>
+
+    <!-- storegood 테이블의 전체 목록 조회 -->
+    <select id="list_all" resultType="dev.mvc.storegood.StoregoodVO">
+        SELECT storegoodno, rdate, storeno, memberno
+        FROM storegood
+        ORDER BY storegoodno DESC
+    </select>
+
+    <!-- 특정 storegood 데이터 삭제 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM storegood
+        WHERE storegoodno = #{storegoodno}
+    </delete>
+
+    <!-- 특정 음식점(storeno)와 회원(memberno)의 추천 여부 확인 -->
+    <select id="hartCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*) as cnt
+        FROM storegood
+        WHERE storeno = #{storeno} AND memberno = #{memberno}
+    </select>
+    
+     <!-- 일반적인 조회 -->
+  <select id="read" resultType="dev.mvc.storegood.StoregoodVO" parameterType="int">
+    SELECT storegoodno, rdate, storeno, memberno
+    FROM storegood
+    WHERE storegoodno = #{storegoodno}
+  </select>  
+
+  <!-- storeno, memberno로 조회 -->
+  <select id="readByStorenoMemberno" resultType="dev.mvc.storegood.StoregoodVO" parameterType="HashMap">
+    SELECT storegoodno, rdate, storeno, memberno
+    FROM storegood
+    WHERE storeno=#{storeno} AND memberno=#{memberno}
+  </select>  
+
+</mapper>

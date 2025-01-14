@@ -70,4 +70,26 @@ public class StoreProc implements StoreProcInter {
     public List<StoreVO> searchByPage(Map<String, Object> map) {
         return storeDAO.searchByPage(map); // 검색과 페이지네이션을 적용하여 음식점 리스트를 반환
     }
+    
+    @Autowired
+    private StoreProcInter storeService; // 인터페이스 타입으로 정의
+    
+    @Override
+    public int increaseRecom(int storegoodno) {
+      int cnt = this.storeDAO.increaseRecom(storegoodno);
+      return cnt;
+    }
+
+    @Override
+    public int decreaseRecom(int storegoodno) {
+      int cnt = this.storeDAO.decreaseRecom(storegoodno);
+      return cnt;
+    }
+    
+    @Override
+    public int good(int storeno) {
+      
+      return 0;
+    }
+
 }

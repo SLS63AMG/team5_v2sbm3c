@@ -23,6 +23,7 @@ import com.zaxxer.hikari.HikariDataSource;
                                        "dev.mvc.loginlog",
                                        "dev.mvc.inquiry",
                                        "dev.mvc.answer",
+                                       "dev.mvc.wishlist",
                                        "dev.mvc.survey",
                                        "dev.mvc.surveyitem",
                                        "dev.mvc.menu",
@@ -33,7 +34,8 @@ import com.zaxxer.hikari.HikariDataSource;
                                        "dev.mvc.surveymember",
                                        "dev.mvc.menurecom",   
                                        "dev.mvc.storec",             
-                                       "dev.mvc.surveygood"})
+                                       "dev.mvc.surveygood",
+                                       "dev.mvc.storegood"})
 
 public class DatabaseConfiguration {
     

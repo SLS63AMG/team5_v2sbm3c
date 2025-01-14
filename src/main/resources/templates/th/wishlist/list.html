@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
+<div layout:fragment="content">
+  
+  <div class='title_line'>문의 사항</div>
+
+  <aside class="aside_right">
+    <a href="javascript:location.reload();" class="menu-link">새로고침</a>
+    <span class='menu_divide' >│</span> 
+    <a href='./list' class="menu-link">목록</a>
+  </aside> 
+
+  <div th:replace="~{th/wishlist/list_search_com::list_search_fragment}"></div>
+  <div class='menu_line'></div>
+       
+  <table class="table table-striped">
+    <colgroup>
+      <col style='width: 3%;'/>
+      <col style='width: 15%;'/>
+      <col style='width: 5%;'/>
+      <col style='width: 10%;'/>
+      <col style='width: 15%;'/>
+      <col style='width: 15%;'/>
+      <col style='width: 5%;'/>
+    </colgroup>
+    <thead>
+      <tr>
+        <th class='th_bs'> </th>
+        <th class='th_bs'>식당 이름</th>
+        <th class='th_bs'>업종</th>
+        <th class='th_bs'>리뷰</th>
+        <th class='th_bs'>주소</th>
+        <th class='th_bs'>전화번호</th>
+        <th class='th_bs'>평점</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="wishlistVO, status:${list}"
+      th:onclick="|location.href='/th/store/read/${wishlistVO.storeno}'|"
+      style="cursor: pointer;">
+        <td th:text="${no - status.index}"></td>
+        <td th:text="${wishlistVO.name}"></td>
+        <td th:text="${wishlistVO.distinction}"></td>
+        <td th:text="${wishlistVO.reviewcnt}"></td>
+        <td th:text="${wishlistVO.address1}"></td>
+        <td th:text="${wishlistVO.tel}"></td>
+        <td th:text="${wishlistVO.rating}"></td>
+      </tr>
+      
+    </tbody>
+  </table>
+  
+
+  <div class="Bottom_menu" th:utext="${paging}"></div>
+
+</div>
+
+
+
+</html>

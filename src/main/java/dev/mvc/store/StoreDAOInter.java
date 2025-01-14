@@ -28,5 +28,11 @@ public interface StoreDAOInter {
     public int count();
     public int searchCount(String keyword);
     public List<StoreVO> searchByPage(Map<String, Object> map);
+    /** 추천 수 증가 */
+    public int increaseRecom(int storegoodno);
 
+    /** 추천 수 감소 */
+    public int decreaseRecom(int storegoodno);
+
+    public int good(int storeno);
 }
