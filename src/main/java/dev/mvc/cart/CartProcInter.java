@@ -1,6 +1,7 @@
 package dev.mvc.cart;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CartProcInter {
     /**
@@ -25,6 +26,8 @@ public interface CartProcInter {
      */
     public int delete(int cartno);
     
-    public int updatecnt(int cartno, int cnt);
+    public int updatecnt(Map<String, Object> map);
+    
+    public CartVO findCart(int memberno, int menuno);
 
 }

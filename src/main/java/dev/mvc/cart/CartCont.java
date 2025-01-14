@@ -1,5 +1,6 @@
 package dev.mvc.cart;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,9 +9,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.mvc.member.MemberProcInter;
 import dev.mvc.menu.MenuProcInter;
+import dev.mvc.store.StoreVO;
+import dev.mvc.tool.Tool;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -32,8 +38,15 @@ public class CartCont {
     // 장바구니 추가
     @PostMapping("/create")
     public String create(CartVO cartVO, Model model) {
+      // 동일한 메뉴가 이미 장바구니에 있는지 확인
+      CartVO existingCart = cartProc.findCart(cartVO.getMemberno(), cartVO.getMenuno());
+      if (existingCart != null) {
+          // 이미 존재하는 경우
+          model.addAttribute("message", "해당 메뉴가 이미 장바구니에 있습니다.");
+          return "redirect:/th/cart/list_all?memberno=" + cartVO.getMemberno(); // 리스트 페이지로 이동
+      }
+      // 새로 추가
         int cnt = this.cartProc.create(cartVO);
-
         if (cnt == 1) {
             return "redirect:/th/cart/list_all?memberno=" + cartVO.getMemberno();
         } else {
@@ -82,28 +95,40 @@ public class CartCont {
     
     @PostMapping(value = "/updatecnt")
     @ResponseBody
-    public String updatecnt(@RequestBody Map<String, Object> map) {
-        try {
-            int cartno = Integer.parseInt(map.get("cartno").toString());
-            int cnt = Integer.parseInt(map.get("cnt").toString());
-            System.out.println(map);
-            // 수량 검증
-            if (cnt <= 0) {
-                return "fail"; // 수량이 0 이하일 경우
+    public Map<String, Object> updatecnt(HttpSession session, @RequestBody String json_src) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> response = new HashMap<>();
+        
+        // 로그인 여부 확인
+        if (Tool.isMember(session)) { 
+            try {
+                // JSON 데이터 파싱
+                HashMap<String, Object> map = objectMapper.readValue(json_src, HashMap.class);
+                System.out.println("map->" + map);
+                System.out.println("map.get(\"operation\")->" + map.get("operation"));
+
+                // cnt 업데이트 처리
+                int updatedRows = this.cartProc.updatecnt(map);
+                if (updatedRows > 0) {
+                    response.put("success", true);
+                    response.put("message", "카운트 업데이트 성공");
+                } else {
+                    response.put("success", false);
+                    response.put("error", "업데이트된 레코드가 없습니다.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.put("success", false);
+                response.put("error", e.getMessage());
             }
-
-            // DB 업데이트
-            int result = this.cartProc.updatecnt(cartno, cnt);
-            return result > 0 ? "success" : "fail";
-
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            return "fail"; // 잘못된 형식의 데이터 처리
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "fail"; // 기타 예외 처리
+        } else {
+            // 비회원 처리
+            response.put("success", false);
+            response.put("url", "/member/login");
+            response.put("error", "로그인이 필요합니다.");
         }
+        
+        return response;
     }
 
-    
 }

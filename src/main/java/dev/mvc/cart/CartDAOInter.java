@@ -28,4 +28,5 @@ public interface CartDAOInter {
     
     public int updatecnt(Map<String, Object> map);
 
+    public CartVO findCart(Map<String, Object> params);
 }
