@@ -3,16 +3,51 @@
 <!-- SB가 자동으로 구현하여 연동하는 interface -->
 <mapper namespace="dev.mvc.rating.RatingDAOInter">
   
+  <!-- 평점 등록 -->
   <insert id="rating_insert" parameterType="dev.mvc.rating.RatingVO">
+    INSERT INTO mrating(storeno, memberno, rating)
+    VALUES(#{storeno}, #{memberno}, #{rating})
   </insert>
   
+  <!-- 평점 수정 -->
   <update id="rating_update" parameterType="dev.mvc.rating.RatingVO">
+    UPDATE mrating
+    SET rating=#{rating}
+    WHERE storeno=#{storeno} AND memberno=#{memberno}
   </update>
   
+  <!-- 평점 삭제 -->
   <delete id="rating_delete" parameterType="dev.mvc.rating.RatingVO">
+    DELETE mrating
+    WHERE storeno=#{storeno} AND memberno=#{memberno}
   </delete>
 
+  <!-- 평점 조회 -->
   <select id="rating_read" resultType="double" parameterType="dev.mvc.rating.RatingVO">
+    SELECT rating 
+    FROM mrating
+    WHERE storeno=#{storeno} AND memberno=#{memberno}
   </select>
+  
+    <!-- 평점 존재 여부 확인 -->
+  <select id="rating_check" resultType="int" parameterType="dev.mvc.rating.RatingVO">
+    SELECT count(*) as cnt
+    FROM mrating
+    WHERE storeno=#{storeno} AND memberno=#{memberno}
+  </select>
+  
+  <!-- 평점 평균 -->
+  <select id="rating_avg" resultType="double" parameterType="dev.mvc.rating.RatingVO">
+    SELECT AVG(rating) as avg_rating
+    FROM mrating
+    WHERE storeno = #{storeno}
+  </select>
+  
+  <!-- 식당 평균 갱신 -->
+  <update id="store_rating" parameterType="dev.mvc.store.StoreVO">
+    UPDATE store
+    SET rating=#{rating}
+    WHERE storeno=#{storeno}
+  </update>
   
 </mapper>
