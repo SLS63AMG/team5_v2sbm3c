@@ -61,4 +61,7 @@ public class MenuVO {
     /** 포인트 */
     @Min(value = 0, message = "포인트는 0 이상이어야 합니다.")
     private Integer point;
+    
+    private String storeName; // 가게 이름
+    
 }
