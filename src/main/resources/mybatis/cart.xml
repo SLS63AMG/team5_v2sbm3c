@@ -23,4 +23,25 @@
         DELETE FROM cart WHERE cartno = #{cartno}
     </delete>
     
+    <update id="updatecnt" parameterType="map">
+        UPDATE cart
+        SET cnt = cnt 
+        <choose>
+            <when test="operation == 'plus'">
+                + 1
+            </when>
+            <when test="operation == 'minus'">
+                - 1
+            </when>
+        </choose>
+        WHERE cartno = #{cartno}
+    </update>
+    
+    <select id="findCart" parameterType="map" resultType="dev.mvc.cart.CartVO">
+        SELECT * 
+        FROM cart
+        WHERE memberno = #{memberno}
+          AND menuno = #{menuno}
+    </select>
+
 </mapper>

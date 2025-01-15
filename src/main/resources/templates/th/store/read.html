@@ -131,14 +131,6 @@
       margin: 20px 0;
     }
 
-    .menu-table img {
-      width: 200px; /* 이미지 가로 크기 */
-      height: auto; /* 비율 유지 */
-      border: 1px solid #ddd; /* 테두리 추가 */
-      border-radius: 5px; /* 둥근 모서리 */
-      margin: 5px; /* 이미지 간격 */
-    }
-
   </style>
 </head>
 <body>
@@ -241,55 +233,33 @@
 
       <!-- 즐겨찾기 (찜목록) 등록 -->
 
-      <!-- 메뉴 리스트 -->
-      <div th:fragment="list_all_fragment">
-        <table class="menu-table" style="width: 100%; border: 1px solid #ddd;">
-          <colgroup>
-            <col style="width: 8%;" />  <!-- 번호 -->
-            <col style="width: 10%;" /> <!-- 메뉴명 -->
-            <col style="width: 15%;" /> <!-- 사진 -->
-            <col style="width: 30%;" /> <!-- 설명 -->
-            <col style="width: 10%;" /> <!-- 가격 -->
-            <col style="width: 10%;" /> <!-- 관리 -->
-          </colgroup>
-          <thead>
-            <tr style="background-color: #f4f4f4; border: 1px solid #ddd;">
-              <th style="border: 1px solid #ddd;">번호</th>
-              <th style="border: 1px solid #ddd;">메뉴명</th>
-              <th style="border: 1px solid #ddd;">사진</th>
-              <th style="border: 1px solid #ddd;">설명</th>
-              <th style="border: 1px solid #ddd;">가격</th>
-              <th style="border: 1px solid #ddd;">관리</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="menuVO : ${menulist}" style="border: 1px solid #ddd;">
-              <td style="border: 1px solid #ddd;" th:text="${menuVO.menuno}"></td>
-              <td style="border: 1px solid #ddd;">
-                <a th:href="@{/th/menu/read/{menuno}(menuno=${menuVO.menuno})}" style="display:block;" th:text="${menuVO.name}">메뉴명</a>
-              </td>
-              <td>
-                <img th:src="@{|/menu/storage/${menuVO.photo}|}" alt="메뉴 이미지" class="menu-image" />
-              </td>
-              <td style="border: 1px solid #ddd;" th:text="${menuVO.explanation}"></td>
-              <td style="border: 1px solid #ddd;" th:text="${menuVO.price}"></td>
-              <td style="border: 1px solid #ddd;">
-                <a th:href="@{/th/menu/update/{menuno}(menuno=${menuVO.menuno})}">
-                  <button class="btn btn-sm btn-warning">수정</button>
-                </a>
-                <a th:href="@{/th/menu/delete/{menuno}(menuno=${menuVO.menuno})}" onclick="return confirm('정말 삭제하시겠습니까?');">
-                  <button class="btn btn-sm btn-danger">삭제</button>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- 페이징 UI 필요 시 추가 -->
-        <div class="Bottom_menu" th:utext="${paging}"></div>
+     <!-- 메뉴목록 -->
+    <div style='width: 100%;'> <!-- 갤러리 Layout 시작 -->
+      <div th:if="${menulist.size() > 0}" th:each="menuVO : ${menulist}" 
+           th:attr="onclick=|location.href='@{/th/menu/read/{menuno}(menuno=${menuVO.menuno})}'|"
+           style='width: 24%; height: 200px; float: left; margin: 0.5%; padding: 0.5%; background-color: #EEEFFF; text-align: left; cursor: pointer;'>
+    
+        <!-- 사진 -->
+        <div style="width: 100%; height: 100px;">
+          <img th:src="@{|/menu/storage/${menuVO.photo}|}" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+    
+        <!-- 메뉴명 -->
+        <div>
+          <span th:if="${menuVO.name.length() > 30}" 
+                th:text="|${menuVO.name.substring(0, 30)}...|" style="font-weight: bold;"></span>
+          <span th:if="${menuVO.name.length() <= 30}" 
+                th:text="|${menuVO.name}|" style="font-weight: bold;"></span>
+          <br>
+          <span th:text="|가격: ${menuVO.price} 원|"></span>
+        </div>
       </div>
-
+    
+      <!-- 메뉴가 없을 때 -->
+      <div th:if="${menulist.size() == 0}" style="text-align: center; padding: 50px 0px;">
+        <span>등록된 메뉴가 없습니다.</span>
+      </div>
     </div>
-  </div>
+
 </body>
 </html>

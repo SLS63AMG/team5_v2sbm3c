@@ -25,4 +25,8 @@ public interface CartDAOInter {
      * @return 삭제된 레코드 수
      */
     public int delete(int cartno);
+    
+    public int updatecnt(Map<String, Object> map);
+
+    public CartVO findCart(Map<String, Object> params);
 }

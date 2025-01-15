@@ -1,6 +1,7 @@
 package dev.mvc.cart;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CartProcInter {
     /**
@@ -24,4 +25,9 @@ public interface CartProcInter {
      * @return 삭제된 레코드 수
      */
     public int delete(int cartno);
+    
+    public int updatecnt(Map<String, Object> map);
+    
+    public CartVO findCart(int memberno, int menuno);
+
 }
