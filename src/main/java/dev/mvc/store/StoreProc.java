@@ -1,12 +1,13 @@
 package dev.mvc.store;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-@Service("dev.mvc.store.StoreProc") // Bean 이름 설정
+@Component("dev.mvc.store.StoreProc") // Bean 이름 설정
 public class StoreProc implements StoreProcInter {
 
     @Autowired

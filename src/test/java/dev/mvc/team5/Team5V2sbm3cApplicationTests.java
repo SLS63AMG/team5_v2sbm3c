@@ -15,8 +15,4 @@ class Team5V2sbm3cApplicationTests {
 	void contextLoads() {
 	}
 	
-	@Autowired
-	@Qualifier("dev.mvc.answer.AnswerProc")
-	private AnswerProcInter answerProc;
-	
 }
