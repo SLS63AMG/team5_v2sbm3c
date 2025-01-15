@@ -24,7 +24,9 @@
         <!-- Thymeleaf 반복문 -->
         <tr th:each="ranking : ${list}">
           <td style="padding: 10px; text-align: left;" th:text="${ranking.rank}"></td>
-          <td style="padding: 10px; text-align: left;" th:text="${ranking.storeName}"></td>
+          <td style="padding: 10px; text-align: left;">
+              <a th:href="@{/th/store/read/{storeno}(storeno=${ranking.storeno})}" th:text="${ranking.storeName}"></a>
+          </td>
           <td style="padding: 10px; text-align: left;" th:text="${ranking.distinction}"></td>
           <td style="padding: 10px; text-align: left;" th:text="${ranking.rating}"></td>
           <td>

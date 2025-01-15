@@ -83,18 +83,19 @@
 
     <!-- 검색 + 페이징 -->
     <select id="list_search_paging" resultType="dev.mvc.menu.MenuVO" parameterType="Map">
-        SELECT menuno, name, explanation, price, photo, recom, storeno, dc, saleprice, point, r
+        SELECT menuno, name, explanation, price, photo, recom, storeno, storeName, r
         FROM (
-            SELECT menuno, name, explanation, price, photo, recom, storeno, dc, saleprice, point, rownum AS r
+            SELECT menuno, name, explanation, price, photo, recom, storeno, storeName, rownum AS r
             FROM (
-                SELECT menuno, name, explanation, price, photo, recom, storeno, dc, saleprice, point
-                FROM menu
+                SELECT m.menuno as menuno, m.name as name, m.explanation as explanation, m.price as price, m.photo as photo, m.recom as recom, m.storeno as storeno, s.name AS storeName
+                FROM menu m
+                JOIN store s ON m.storeno = s.storeno
                 WHERE 1=1
-                <if test="word != null and word != ''">
-                    AND (UPPER(name) LIKE '%' || UPPER(#{word}) || '%'
-                         OR UPPER(explanation) LIKE '%' || UPPER(#{word}) || '%')
-                </if>
-                ORDER BY menuno DESC
+                  <if test="word != null and word != ''">
+                    AND (UPPER(m.name) LIKE '%' || UPPER(#{word}) || '%'
+                         OR UPPER(m.explanation) LIKE '%' || UPPER(#{word}) || '%')
+                  </if>
+                ORDER BY m.menuno DESC
             )
             WHERE rownum &lt;= #{end_num}
         )

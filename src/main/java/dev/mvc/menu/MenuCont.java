@@ -225,7 +225,7 @@ public class MenuCont {
     ) {
 
         // 검색 결과 가져오기
-        ArrayList<MenuVO> searchResults = this.menuProc.list_search_paging(word, nowPage, 10);
+        ArrayList<MenuVO> searchResults = this.menuProc.list_search_paging(word, nowPage, 12);
         model.addAttribute("list", searchResults);
 
         // 검색된 결과 개수
@@ -233,7 +233,7 @@ public class MenuCont {
         model.addAttribute("search_cnt", searchCnt);
 
         // 페이징 처리
-        String paging = this.menuProc.pagingBox(nowPage, word, "list_all", searchCnt, 10, 90);
+        String paging = this.menuProc.pagingBox(nowPage, word, "list_all", searchCnt, 12, 90);
         model.addAttribute("paging", paging);
 
         // **menuVO 초기화 추가**
