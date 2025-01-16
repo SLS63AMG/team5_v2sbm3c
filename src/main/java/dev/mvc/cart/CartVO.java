@@ -1,9 +1,5 @@
 package dev.mvc.cart;
 
-import java.util.Date;
-
-import dev.mvc.menu.MenuVO;
-import dev.mvc.store.StoreVO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,23 +8,39 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CartVO {
-  private int cartno;     // 장바구니 번호
-  private int cartcnt;    // 장바구니 상품 개수
-  private Date cartdate;  // 장바구니 추가 날짜
-  private int menuno;     // 메뉴 번호 (FK)
-  private int memberno;   // 회원 번호 (FK)
-  private MenuVO menuVO;
-  
-  // menuVO에 대한 getter, setter 추가
-  public MenuVO getMenuVO() {
-      return menuVO;
-  }
+    /** 장바구니 번호 */
+    private int cartno;
 
-  public void setMenuVO(MenuVO menuVO) {
-      this.menuVO = menuVO;
-  }
+    /** 메뉴 번호 */
+    private int menuno;
 
-  public int size() {
-    return 0;
-  }
+    /** 메뉴 이름 */
+    private String name;
+
+    /** 메뉴 이미지 */
+    private String photo;
+
+    /** 가격 */
+    private int price;
+
+    /** 할인율 */
+    private int dc;
+
+    /** 판매가 */
+    private int saleprice;
+
+    /** 포인트 */
+    private int point;
+
+    /** 회원 번호 */
+    private int memberno;
+
+    /** 수량 */
+    private int cnt;
+
+    /** 총 금액 = 판매가 x 수량 */
+    private int tot;
+
+    /** 등록일 */
+    private String rdate;
 }

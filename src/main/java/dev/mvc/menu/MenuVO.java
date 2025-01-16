@@ -47,4 +47,21 @@ public class MenuVO {
     
     /** 추천 수 */
     private Integer recom = 0;
+    
+    /** 할인율 */
+    @Min(value = 0, message = "할인율은 0 이상이어야 합니다.")
+    @Max(value = 100, message = "할인율은 100 이하이어야 합니다.")
+    private Integer dc;
+
+    /** 판매가 */
+    @NotNull(message = "판매가는 필수 입력 항목입니다.")
+    @Min(value = 0, message = "판매가는 0 이상이어야 합니다.")
+    private Integer saleprice;
+
+    /** 포인트 */
+    @Min(value = 0, message = "포인트는 0 이상이어야 합니다.")
+    private Integer point;
+    
+    private String storeName; // 가게 이름
+    
 }

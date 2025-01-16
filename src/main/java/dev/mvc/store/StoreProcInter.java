@@ -34,4 +34,12 @@ public interface StoreProcInter {
 
     // 검색과 페이지네이션을 적용한 음식점 리스트 반환
     public List<StoreVO> searchByPage(Map<String, Object> map);
+    
+    /** 추천 수 증가 */
+    public int increaseRecom(int storegoodno);
+
+    /** 추천 수 감소 */
+    public int decreaseRecom(int storegoodno);
+
+    public int good(int storeno);
 }

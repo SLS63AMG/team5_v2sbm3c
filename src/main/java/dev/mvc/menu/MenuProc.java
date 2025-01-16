@@ -110,6 +110,7 @@ public class MenuProc implements MenuProcInter {
       
       ArrayList<MenuVO> list = this.menuDAO.list_search_paging(map);
       // System.out.println("-> " + list.size());
+       System.out.println("-> " + list);
       
       return list;
     }
@@ -211,6 +212,11 @@ public class MenuProc implements MenuProcInter {
       str.append("</div>"); 
        
       return str.toString(); 
+    }
+    
+    @Override
+    public List<MenuVO> listByStore(int storeno) {
+        return this.menuDAO.listByStore(storeno);
     }
     
     

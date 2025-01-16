@@ -2,73 +2,77 @@
 <html layout:decorate="~{th/layout}"> <!-- layout.html 상속-->
 <div layout:fragment="content">
 
-  <script>
-    window.onload = function() {
-      // <img src="/contents/images/hart_off_50.png" style="width: 22px" title="추천">          
-      // <img src="/contents/images/hart_on_50.png" style="width: 22px" title="비추천">   
-      // 현재 로그인한 사용자의 추천 여부 반영
-
-      let hartCnt = '[[${hartCnt}]]'; //  javascript -> Thymeleaf -> session
-      let tag='';
-      
-      if (hartCnt == 1) {
-        tag = '<a href="javascript:good([[${menuVO.menuno}]])"><img src="/menu/images/hart_on_50.png" style="width: 22px" title="추천"></a>';
-        document.querySelector('#hart_panel').innerHTML = tag; 
-      } else {
-        tag = '<a href="javascript:good([[${menuVO.menuno}]])"><img src="/menu/images/hart_off_50.png" style="width: 22px" title="추천"></a>';
-        document.querySelector('#hart_panel').innerHTML = tag; 
-      }    
-      
-      document.querySelector('#recom_panel').innerHTML = '([[${menuVO.recom}]])';
-    }
-
-    function good(menuno) {
-      console.log('-> menuno: ' + menuno);
-
-      fetch("http://localhost:9093/th/menu/good", {
-          "method": "post",
-          "headers": {
-              "Content-Type": "application/json"
-          },
-          body: JSON.stringify({menuno}) // {"contentsno":contentsno}, JSON 형식으로 전송
-        })
-        .then((response) => response.json()) // 응답 문자열 추출
-        .then((data) => {
-          console.log('-> data.isMember: ' + data.isMember);
-
-          if (data.isMember == 1) { // 회원
-            let hartCnt =data.hartCnt; //  javascript -> Thymeleaf -> session
-            let tag='';
-            
-            if (hartCnt == 1) {
-              tag = '<a href="javascript:good([[${menuVO.menuno}]])"><img src="/menu/images/hart_on_50.png" style="width: 22px" title="추천"></a>';
-              document.querySelector('#hart_panel').innerHTML = tag; 
-            } else {
-              tag = '<a href="javascript:good([[${menuVO.menuno}]])"><img src="/menu/images/hart_off_50.png" style="width: 22px" title="추천"></a>';
-              document.querySelector('#hart_panel').innerHTML = tag; 
-            }    
-            
-            document.querySelector('#recom_panel').innerHTML = '(' + data.recom + ')';
-          
-          } else { // 비회원
-            alert("로그인해야 추천 할 수 있습니다.");
-           // location.href='/th/member/login';  
-
-          }
+  <script th:inline="javascript">
+      window.onload = function() {
+        let hartCnt = parseInt('[[${hartCnt}]]', 10) || 0; // JavaScript에서 hartCnt 값을 숫자로 변환
+        console.log("hartCnt 초기 값:", hartCnt);
+  
+        let tag = '';
+  
+        // hartCnt 값에 따라 하트 이미지를 설정
+        if (hartCnt === 1) {
+          tag = `
+            <a href="javascript:good([[${menuVO.menuno}]])">
+              <img src="/menu/images/hart_on_50.png" style="width: 22px" title="추천">
+            </a>`;
+        } else {
+          tag = `
+            <a href="javascript:good([[${menuVO.menuno}]])">
+              <img src="/menu/images/hart_off_50.png" style="width: 22px" title="추천">
+            </a>`;
         }
-      );
-    }
-  </script> 
+  
+        // UI 업데이트
+        document.querySelector('#hart_panel').innerHTML = tag;
+        document.querySelector('#recom_panel').innerHTML = `([[${menuVO.recom}]])`;
+      };
+  
+      function good(menuno) {
+        console.log('-> menuno: ' + menuno);
+  
+        fetch("/th/menu/good", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({menuno}) // {"menuno":menuno} 형식으로 서버에 전송
+          })
+          .then((response) => response.json()) // 서버 응답 데이터 추출
+          .then((data) => {
+            console.log('-> 서버 응답 데이터:', data);
+  
+            if (data.isMember === 1) { // 회원일 경우
+              let hartCnt = data.hartCnt; // 서버에서 전달된 hartCnt 상태
+              let tag = '';
+  
+              // hartCnt에 따라 UI 업데이트
+              if (hartCnt === 1) {
+                tag = `
+                  <a href="javascript:good(${menuno})">
+                    <img src="/menu/images/hart_on_50.png" style="width: 22px" title="추천">
+                  </a>`;
+              } else {
+                tag = `
+                  <a href="javascript:good(${menuno})">
+                    <img src="/menu/images/hart_off_50.png" style="width: 22px" title="추천">
+                  </a>`;
+              }
+  
+              document.querySelector('#hart_panel').innerHTML = tag;
+              document.querySelector('#recom_panel').innerHTML = `(${data.recom})`;
+  
+            } else { // 비회원일 경우
+              alert("로그인해야 추천할 수 있습니다.");
+            }
+          })
+          .catch((error) => console.error("Error 발생:", error));
+      }
+  </script>
+
   <!-- 메뉴 조회 제목 및 작업 메뉴 -->
   <div class="title_line">메뉴 조회</div>
   <aside class="aside_right">
-    <a th:href="@{|/th/menu/list_all|}">목록</a>
-    <span class="menu_divide">|</span>
-    <a th:href="@{|/th/menu/update/${menuVO.menuno}?word=${word}&now_page=${now_page}|}">수정</a>
-    <span class="menu_divide">|</span>
-    <a th:href="@{|/th/menu/delete/${menuVO.menuno}?word=${word}&now_page=${now_page}|}">삭제</a>
-    <span class="menu_divide">|</span>
-    <a th:href="@{|/th/menu/create|}">등록</a>
+    <a th:href="@{|/th/store/list|}">목록</a>
     <span class="menu_divide">|</span>
     <a href="javascript: location.reload();">새로 고침</a>
   </aside>
@@ -79,15 +83,31 @@
       <li class="list-group-item">메뉴 번호: <span th:text="${menuVO.menuno}"></span></li>
       <li class="list-group-item">메뉴 이름: <span th:text="${menuVO.name}"></span></li>
       <li class="list-group-item">설명: <span th:text="${menuVO.explanation}"></span></li>
-      <li class="list-group-item">가격: <span th:text="${menuVO.price}" style="margin-right: 10px;"></span></li>
       <li class="list-group-item">추천수: <span id="hart_panel"></span><span id="recom_panel"></span></li>
       <li class="list-group-item">사진:
-        <img th:src="@{|/menu/storage/${menuVO.photo}|}" style="margin-right: 10px;" alt="메뉴 이미지 경로">
+        <img th:src="@{|/menu/storage/${menuVO.photo}|}" style="margin-right: 10px; max-width: 600px; max-height: 700px;" alt="메뉴 이미지 경로">
       </li>
+      <li class="list-group-item">정가: <span th:text="${menuVO.price}" style="margin-right: 10px;"></span></li>
+      <li class="list-group-item">할인율: <span th:text="${menuVO.dc}"></span>%</li>
+      <li class="list-group-item">포인트: <span th:text="${menuVO.point}"></span></li>
+      <li class="list-group-item">판매가: <span th:text="${menuVO.saleprice}"></span>원</li>
       <li class="list-group-item">가게 번호: <span th:text="${menuVO.storeno}"></span></li>
     </ul>
   </div>
   
-
+    <!-- 장바구니 담기 버튼 -->
+  <form method="post" th:action="@{/th/cart/create}">
+    <input type="hidden" name="menuno" th:value="${menuVO.menuno}" />
+    <input type="hidden" name="name" th:value="${menuVO.name}" />
+    <input type="hidden" name="photo" th:value="${menuVO.photo}" />
+    <input type="hidden" name="price" th:value="${menuVO.price}" />
+    <input type="hidden" name="saleprice" th:value="${menuVO.saleprice}" />
+    <input type="hidden" name="dc" th:value="${menuVO.dc}" />
+    <input type="hidden" name="point" th:value="${menuVO.point}" />
+    <input type="hidden" name="cnt" value="1" />
+    <input type="hidden" name="memberno" th:value="${session.memberno}" />
+    <button type="submit" style="margin: 20px auto; display: block;">장바구니 담기</button>
+  </form>
+  
 </div>
 </html>

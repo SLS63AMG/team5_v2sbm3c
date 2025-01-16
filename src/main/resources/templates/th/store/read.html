@@ -1,154 +1,265 @@
 <!DOCTYPE html>
 <html layout:decorate="~{th/layout}">
-  <head>
-    <style>
-      /* 중앙 정렬 및 테이블 스타일 */
-      .table {
-        width: 100%;
-        max-width: 800px;
-        margin: 20px auto;
-        border-collapse: collapse;
-        font-size: 16px;
-        table-layout: fixed;
+<head>
+  <script>
+    window.onload = function() {
+      let hartCnt = '[[${hartCnt}]]'; // javascript -> Thymeleaf -> session
+      let tag = '';
+
+      if (hartCnt == 1) {
+        tag = '<a href="javascript:good([[${storeVO.storeno}]])"><img src="/store/images/hart_on_50.png" style="width: 22px" title="추천"></a>';
+        document.querySelector('#hart_panel').innerHTML = tag; 
+      } else {
+        tag = '<a href="javascript:good([[${storeVO.storeno}]])"><img src="/store/images/hart_off_50.png" style="width: 22px" title="추천"></a>';
+        document.querySelector('#hart_panel').innerHTML = tag; 
       }
 
-      .table td {
-        border: 1px solid #ddd;
-        padding: 12px;
-        word-wrap: break-word;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+      document.querySelector('#recom_panel').innerHTML = '([[${storeVO.recom}]])';
+    }
 
-      .table tr:nth-child(even) {
-        background-color: #f9f9f9;
-      }
+    function good(storeno) {
+      console.log('-> storeno: ' + storeno);
 
-      .table tr:hover {
-        background-color: #f1f1f1;
-      }
+      fetch("/th/store/good", {
+        "method": "post",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ storeno }) // {"storeno":storeno}, JSON 형식으로 전송
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('-> data.isMember: ' + data.isMember);
 
-      .table td:first-child {
-        font-weight: bold;
-        background-color: #f4f4f4;
-        width: 30%;
-        text-align: left;
-      }
+        if (data.isMember == 1) { // 회원
+          let hartCnt = data.hartCnt;
+          let tag = '';
 
-      .table td:last-child {
-        width: 70%;
-        text-align: left;
-      }
+          if (hartCnt == 1) {
+            tag = '<a href="javascript:good([[${storeVO.storeno}]])"><img src="/store/images/hart_on_50.png" style="width: 22px" title="추천"></a>';
+            document.querySelector('#hart_panel').innerHTML = tag; 
+          } else {
+            tag = '<a href="javascript:good([[${storeVO.storeno}]])"><img src="/store/images/hart_off_50.png" style="width: 22px" title="추천"></a>';
+            document.querySelector('#hart_panel').innerHTML = tag; 
+          }
 
-      /* 버튼 스타일 */
-      .btn {
-        display: inline-block;
-        font-size: 16px;
-        padding: 10px 20px;
-        margin: 10px 5px;
-        text-decoration: none;
-        color: #fff;
-        border-radius: 4px;
-        cursor: pointer;
-      }
+          document.querySelector('#recom_panel').innerHTML = '(' + data.recom + ')';
 
-      .btn-warning {
-        background-color: #ffc107;
-        border: 1px solid #ffc107;
-      }
+        } else { // 비회원
+          alert("로그인해야 추천 할 수 있습니다.");
+        }
+      });
+    }
+  </script>
+  <style>
+    /* 중앙 정렬 및 테이블 스타일 */
+    .table {
+      width: 100%;
+      max-width: 800px;
+      margin: 20px auto;
+      border-collapse: collapse;
+      font-size: 16px;
+      table-layout: fixed;
+    }
 
-      .btn-warning:hover {
-        background-color: #e0a800;
-        border-color: #e0a800;
-      }
+    .table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      word-wrap: break-word;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-      .btn-danger {
-        background-color: #dc3545;
-        border: 1px solid #dc3545;
-      }
+    .table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
 
-      .btn-danger:hover {
-        background-color: #c82333;
-        border-color: #c82333;
-      }
+    .table tr:hover {
+      background-color: #f1f1f1;
+    }
 
-      /* 제목 스타일 */
-      .title_line {
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-        margin: 20px 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div layout:fragment="content">
-      <div class="title_line">음식점 상세 정보</div>
+    .table td:first-child {
+      font-weight: bold;
+      background-color: #f4f4f4;
+      width: 30%;
+      text-align: left;
+    }
 
-      <div style="width: 60%; margin: 0 auto;">
-        <table class="table">
-          <tr>
-            <td>식당 이름</td>
-            <td th:text="${storeVO.name}"></td>
-          </tr>
-          <tr>
-            <td>업종</td>
-            <td th:text="${storeVO.distinction}"></td>
-          </tr>
-          <tr>
-            <td>리뷰 수</td>
-            <td th:text="${storeVO.reviewcnt}"></td>
-          </tr>
-          <tr>
-            <td>도로명 주소</td>
-            <td th:text="${storeVO.address1}"></td>
-          </tr>
-          <tr>
-            <td>상세 주소</td>
-            <td th:text="${storeVO.address2}"></td>
-          </tr>
-          <tr>
-            <td>영업 시간</td>
-            <td th:text="${storeVO.busihours}"></td>
-          </tr>
-          <tr>
-            <td>전화번호</td>
-            <td th:text="${storeVO.tel}"></td>
-          </tr>
-          <tr>
-            <td>예약 여부</td>
-            <td th:text="${storeVO.reservation == 'Y' ? '가능' : '불가능'}"></td>
-          </tr>
-          <tr>
-            <td>가게 등록 주소</td>
-            <td>
-              <a th:href="${storeVO.rsite}" target="_blank" th:text="${storeVO.rsite}"></a>
-            </td>
-          </tr>
-          <tr>
-            <td>지도 페이지 주소</td>
-            <td>
-              <a th:href="${storeVO.msite}" target="_blank" th:text="${storeVO.msite}"></a>
-            </td>
-          </tr>
-          <tr>
-            <td>평점</td>
-            <td th:text="${storeVO.rating}"></td>
-          </tr>
-          <tr>
-            <td>포스터</td>
-            <td>
-              <img th:src="@{|/store/storage/${storeVO.thumb1}|}" alt="음식점 이미지" style="max-width: 200px; height: auto;" />
-            </td>
-          </tr>
-        </table>
+    .table td:last-child {
+      width: 70%;
+      text-align: left;
+    }
 
-        <div style="text-align: center; margin-top: 20px;">
-          <a th:href="@{/th/store/update/{storeno}(storeno=${storeVO.storeno})}" class="btn btn-warning">수정</a>
-          <a th:href="@{/th/store/delete/{storeno}(storeno=${storeVO.storeno})}" class="btn btn-danger">삭제</a>
+    /* 버튼 스타일 */
+    .btn {
+      display: inline-block;
+      font-size: 16px;
+      padding: 10px 20px;
+      margin: 10px 5px;
+      text-decoration: none;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-warning {
+      background-color: #ffc107;
+      border: 1px solid #ffc107;
+    }
+
+    .btn-warning:hover {
+      background-color: #e0a800;
+      border-color: #e0a800;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      border: 1px solid #dc3545;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+      border-color: #c82333;
+    }
+
+    /* 제목 스타일 */
+    .title_line {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+  </style>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="title_line">음식점 상세 정보</div>
+
+    <div style="width: 60%; margin: 0 auto;">
+      <table class="table">
+        <tr>
+          <td>식당 이름</td>
+          <td th:text="${storeVO.name}"></td>
+        </tr>
+        <tr>
+          <td>업종</td>
+          <td th:text="${storeVO.distinction}"></td>
+        </tr>
+        <tr>
+          <td>리뷰 수</td>
+          <td th:text="${storeVO.reviewcnt}"></td>
+        </tr>
+        <tr>
+          <td>도로명 주소</td>
+          <td th:text="${storeVO.address1}"></td>
+        </tr>
+        <tr>
+          <td>상세 주소</td>
+          <td th:text="${storeVO.address2}"></td>
+        </tr>
+        <tr>
+          <td>영업 시간</td>
+          <td th:text="${storeVO.busihours}"></td>
+        </tr>
+        <tr>
+          <td>전화번호</td>
+          <td th:text="${storeVO.tel}"></td>
+        </tr>
+        <tr>
+          <td>예약 여부</td>
+          <td th:text="${storeVO.reservation == 'Y' ? '가능' : '불가능'}"></td>
+        </tr>
+        <tr>
+          <td>가게 등록 주소</td>
+          <td>
+            <a th:href="${storeVO.rsite}" target="_blank" th:text="${storeVO.rsite}"></a>
+          </td>
+        </tr>
+        <tr>
+          <td>지도 페이지 주소</td>
+          <td>
+            <a th:href="${storeVO.msite}" target="_blank" th:text="${storeVO.msite}"></a>
+          </td>
+        </tr>
+        <tr>
+          <td>평점</td>
+          <td th:text="${storeVO.rating}" id="store_rating"></td>
+        </tr>
+        <tr>
+          <td>포스터</td>
+          <td>
+            <img th:src="@{|/store/storage/${storeVO.thumb1}|}" alt="음식점 이미지" style="max-width: 200px; height: auto;" />
+          </td>
+        </tr>
+        <tr>
+          <td>추천수</td>
+          <td>
+            <span id="hart_panel"></span><span id="recom_panel"></span>
+          </td>
+        </tr>
+      </table>
+
+      <div style="text-align: center; margin-top: 20px;" th:if="${session.grade == 1}">
+        <a th:href="@{/th/store/update/{storeno}(storeno=${storeVO.storeno})}" class="btn btn-warning">수정</a>
+        <a th:href="@{/th/store/delete/{storeno}(storeno=${storeVO.storeno})}" class="btn btn-danger">삭제</a>
+      </div>
+      
+      <!-- 즐겨찾기 (찜목록) 등록 -->
+      <div class="rating-container" th:if="${mrating != -1}">
+        <div class="input-wrapper">
+          <input type="number" id="mrating" name="mrating" th:value="${mrating == -1 ? 0.0 : mrating}"  placeholder="평점 입력" min="0" max="10" step="0.1" 
+          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+          <button id="ratingbtn" name="ratingbtn" onclick="rating_btn()">
+            평점 남기기
+          </button>
+        </div>
+        <div id="rating_msg" name="rating_msg">
+        <span>※0점은 평점 삭제</span>
         </div>
       </div>
+      
+      <!-- 즐겨찾기 (찜목록) 등록 -->
+      <script src="/js/wishlist.js" type="text/javascript"></script>
+      <link href="/css/wishlist.css" rel="stylesheet" type="text/css">
+      <div class="centered-container">
+        <button id="wishbtn" name="wishbtn" onclick="wishlist_admi()">
+            <img id="wishlistImage" name="wishlistImage"
+            th:src="@{/wishlist/images/{file}(file=${state == 0 ? 'empstar.png' : 'star.png'})}"
+            class="icon" alt="wishlist">
+        </button>
+      </div>
+
+      <!-- 즐겨찾기 (찜목록) 등록 -->
+
+     <!-- 메뉴목록 -->
+    <div style='width: 100%;'> <!-- 갤러리 Layout 시작 -->
+      <div th:if="${menulist.size() > 0}" th:each="menuVO : ${menulist}" 
+           th:attr="onclick=|location.href='@{/th/menu/read/{menuno}(menuno=${menuVO.menuno})}'|"
+           style='width: 24%; height: 200px; float: left; margin: 0.5%; padding: 0.5%; background-color: #EEEFFF; text-align: left; cursor: pointer;'>
+    
+        <!-- 사진 -->
+        <div style="width: 100%; height: 100px;">
+          <img th:src="@{|/menu/storage/${menuVO.photo}|}" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+    
+        <!-- 메뉴명 -->
+        <div>
+          <span th:if="${menuVO.name.length() > 30}" 
+                th:text="|${menuVO.name.substring(0, 30)}...|" style="font-weight: bold;"></span>
+          <span th:if="${menuVO.name.length() <= 30}" 
+                th:text="|${menuVO.name}|" style="font-weight: bold;"></span>
+          <br>
+          <span th:text="|가격: ${menuVO.price} 원|"></span>
+        </div>
+      </div>
+    
+      <!-- 메뉴가 없을 때 -->
+      <div th:if="${menulist.size() == 0}" style="text-align: center; padding: 50px 0px;">
+        <span>등록된 메뉴가 없습니다.</span>
+      </div>
     </div>
-  </body>
+
+</body>
 </html>

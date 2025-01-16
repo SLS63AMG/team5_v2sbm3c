@@ -120,5 +120,19 @@
         )
         WHERE rn &gt;= #{startRow}
     </select>
+    
+        <!-- 추천 수 증가 -->
+    <update id="increaseRecom" parameterType="int">
+        UPDATE store
+        SET recom = recom + 1
+        WHERE storeno = #{storeno}
+    </update>
+
+    <!-- 추천 수 감소 -->
+    <update id="decreaseRecom" parameterType="int">
+        UPDATE store
+        SET recom = recom - 1
+        WHERE storeno = #{storeno}
+    </update>
 
 </mapper>

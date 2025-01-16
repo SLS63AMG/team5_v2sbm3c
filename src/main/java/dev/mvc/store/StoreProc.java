@@ -1,12 +1,13 @@
 package dev.mvc.store;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-@Service("dev.mvc.store.StoreProc") // Bean 이름 설정
+@Component("dev.mvc.store.StoreProc") // Bean 이름 설정
 public class StoreProc implements StoreProcInter {
 
     @Autowired
@@ -70,4 +71,26 @@ public class StoreProc implements StoreProcInter {
     public List<StoreVO> searchByPage(Map<String, Object> map) {
         return storeDAO.searchByPage(map); // 검색과 페이지네이션을 적용하여 음식점 리스트를 반환
     }
+    
+    @Autowired
+    private StoreProcInter storeService; // 인터페이스 타입으로 정의
+    
+    @Override
+    public int increaseRecom(int storegoodno) {
+      int cnt = this.storeDAO.increaseRecom(storegoodno);
+      return cnt;
+    }
+
+    @Override
+    public int decreaseRecom(int storegoodno) {
+      int cnt = this.storeDAO.decreaseRecom(storegoodno);
+      return cnt;
+    }
+    
+    @Override
+    public int good(int storeno) {
+      
+      return 0;
+    }
+
 }

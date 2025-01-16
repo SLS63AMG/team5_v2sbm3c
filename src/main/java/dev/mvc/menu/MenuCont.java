@@ -50,6 +50,7 @@ public class MenuCont {
     public String createForm(Model model) {
         MenuVO menuVO = new MenuVO();
         menuVO.setRecom(0); // 기본값 0 설정
+        menuVO.setPoint(0); // 기본값
         model.addAttribute("menuVO", menuVO);
         return "/th/menu/create";  // -> /templates/th/menu/create.html
     }
@@ -97,10 +98,8 @@ public class MenuCont {
         // 메뉴 등록 처리
         int cnt = menuProc.create(menuVO);
         if (cnt == 1) {
-            System.out.println("[POST] Create Success");
             return "redirect:/th/menu/list_all";
         } else {
-            System.out.println("[POST] Create Failed");
             model.addAttribute("code", "create_fail");
             return "/th/menu/msg";
         }
@@ -186,7 +185,7 @@ public class MenuCont {
 
         int cnt = menuProc.update(menuVO);
         if (cnt == 1) {
-            return "redirect:/th/menu/list_all";
+            return "redirect:/th/store/list";
         } else {
             model.addAttribute("code", "update_fail");
             return "/th/menu/msg";
@@ -226,7 +225,7 @@ public class MenuCont {
     ) {
 
         // 검색 결과 가져오기
-        ArrayList<MenuVO> searchResults = this.menuProc.list_search_paging(word, nowPage, 10);
+        ArrayList<MenuVO> searchResults = this.menuProc.list_search_paging(word, nowPage, 12);
         model.addAttribute("list", searchResults);
 
         // 검색된 결과 개수
@@ -234,7 +233,7 @@ public class MenuCont {
         model.addAttribute("search_cnt", searchCnt);
 
         // 페이징 처리
-        String paging = this.menuProc.pagingBox(nowPage, word, "list_all", searchCnt, 10, 90);
+        String paging = this.menuProc.pagingBox(nowPage, word, "list_all", searchCnt, 12, 90);
         model.addAttribute("paging", paging);
 
         // **menuVO 초기화 추가**
@@ -314,6 +313,5 @@ public class MenuCont {
       }
 
     }
-
 
 }
