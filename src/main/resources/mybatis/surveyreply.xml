@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.mvc.surveyreply.SurveyReplyDAOInter">
+  <insert id="create" parameterType="dev.mvc.surveyreply.SurveyReplyVO">
+    INSERT INTO surveyreply(surveyreplyno, surveyno, memberno, content, rdate)
+    VALUES(surveyreply_seq.nextval, #{surveyno}, #{memberno}, #{content}, sysdate)
+  </insert>
+
+  <select id="list" resultType="dev.mvc.surveyreply.SurveyReplyVO">
+    SELECT surveyreplyno, surveyno, memberno, content, rdate
+    FROM surveyreply
+    ORDER BY surveyreplyno DESC
+  </select>
+
+  <select id="list_by_surveyno" resultType="dev.mvc.surveyreply.SurveyReplyVO" parameterType="int">
+    SELECT surveyreplyno, surveyno, memberno, content, rdate
+    FROM surveyreply
+    WHERE surveyno=#{surveyno}
+    ORDER BY surveyreplyno DESC
+  </select>
+
+  <select id="read" resultType="dev.mvc.surveyreply.SurveyReplyVO" parameterType="int">
+    SELECT surveyreplyno, surveyno, memberno, content, rdate
+    FROM surveyreply
+    WHERE surveyreplyno = #{surveyreplyno}
+  </select>
+
+  <update id="update" parameterType="dev.mvc.surveyreply.SurveyReplyVO">
+    UPDATE surveyreply SET content=#{content}
+    WHERE surveyreplyno = #{surveyreplyno}
+  </update>
+    
+  <delete id="delete" parameterType="int">
+    DELETE FROM surveyreply
+    WHERE surveyreplyno=#{surveyreplyno}
+  </delete>
+</mapper>
