@@ -29,12 +29,15 @@ import dev.mvc.storegood.StoregoodVO;
 
 import dev.mvc.tool.Tool;
 import dev.mvc.tool.Upload;
+import dev.mvc.wishlist.WishlistProcInter;
 import jakarta.servlet.http.HttpSession;
 
 
 import java.io.File;
 import java.util.HashMap;
 import dev.mvc.menu.MenuProcInter;
+import dev.mvc.menu.MenuVO;
+import dev.mvc.rating.RatingProcInter;
 
 import java.util.List;
 import java.util.Map;
@@ -55,6 +58,18 @@ public class StoreCont {
     @Qualifier("dev.mvc.member.MemberProc") // 빈 이름 일치
     private MemberProcInter memberProc;
 
+    @Qualifier("dev.mvc.wishlist.WishlistProc")
+    @Autowired
+    private WishlistProcInter wishlistProc;
+    
+    @Autowired
+    @Qualifier("dev.mvc.menu.MenuProc") // 빈 이름 일치
+    private MenuProcInter menuProc;
+    
+    @Autowired
+    @Qualifier("dev.mvc.rating.RatingProc")
+    private RatingProcInter ratingProc;
+    
     @GetMapping("/list")
     public String list(
             @RequestParam(value = "nowPage", defaultValue = "1") int nowPage,
@@ -145,19 +160,39 @@ public class StoreCont {
     }
 
 
-    /**
-     * 특정 음식점을 조회하는 메서드 (GET 방식)
-     */
     @GetMapping("/read/{storeno}")
-    public String read(@PathVariable("storeno") int storeno, Model model) {
-        StoreVO storeVO = this.storeProc.read(storeno); // DB 조회
+    public String read(@PathVariable("storeno") int storeno, Model model, HttpSession session) {
+        StoreVO storeVO = this.storeProc.read(storeno);
+
         if (storeVO == null) {
-            model.addAttribute("code");
-            return "/th/menu/msg"; // 데이터가 없으면 404로 리다이렉트
+            model.addAttribute("code", "404");
+            return "/th/menu/msg";
         }
-        System.out.println("가게 등록 주소: " + storeVO.getMsite()); // 디버깅 로그
-        model.addAttribute("storeVO", storeVO); // "store"라는 이름으로 모델에 데이터 추가
-        return "/th/store/read"; // read.html로 이동
+
+        model.addAttribute("storeVO", storeVO);
+
+        List<MenuVO> menuList = this.menuProc.listByStore(storeno);
+        model.addAttribute("menulist", menuList);
+
+        if (session.getAttribute("memberno") != null) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("store", storeVO.getStoreno());
+            map.put("memberno", (int) session.getAttribute("memberno"));
+            map.put("check", "check");
+            int state = this.wishlistProc.wish_check(map);
+            model.addAttribute("state", state);
+        } else {
+            model.addAttribute("state", 0);
+        }
+        
+        if(session.getAttribute("memberno") != null) {
+          double rating = this.ratingProc.rating_read(storeno, (int) session.getAttribute("memberno"));
+          model.addAttribute("mrating", rating);
+        } else {
+          model.addAttribute("mrating", -1);
+        }
+        
+        return "/th/store/read";
     }
 
     /**
@@ -179,8 +214,6 @@ public class StoreCont {
         // View 이름 반환 (update.html로 이동)
         return "/th/store/update"; 
     }
-
-
 
     /**
      * 음식점 정보 수정을 처리하는 메서드 (POST 방식)

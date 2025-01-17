@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.mvc.order.OrdersDAOInter">
+
+    <insert id="create" parameterType="dev.mvc.order.OrdersVO">
+        INSERT INTO orders (
+            orderno, rname, rtel, rzipcode, raddress1, raddress2,
+            paytype, amount, rdate, menuno, storeno, memberno
+        ) VALUES (
+            orders_seq.NEXTVAL,
+            #{rname, jdbcType=VARCHAR},
+            #{rtel, jdbcType=VARCHAR},
+            #{rzipcode, jdbcType=VARCHAR},
+            #{raddress1, jdbcType=VARCHAR},
+            #{raddress2, jdbcType=VARCHAR},
+            #{paytype, jdbcType=INTEGER},
+            #{amount, jdbcType=INTEGER},
+            SYSDATE,
+            #{menuno, jdbcType=INTEGER},
+            #{storeno, jdbcType=INTEGER},
+            #{memberno, jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!-- 특정 주문 조회 -->
+    <select id="list" parameterType="int" resultType="dev.mvc.order.OrdersVO">
+        SELECT * FROM orders WHERE memberno = #{memberno} ORDER BY rdate DESC
+    </select>
+   
+    
+</mapper>

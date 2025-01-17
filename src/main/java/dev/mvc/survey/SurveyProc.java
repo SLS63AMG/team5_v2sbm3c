@@ -80,6 +80,19 @@ public class SurveyProc implements SurveyProcInter {
       return 0;
     }
     
+    @Override
+    public int increaseReplycnt(int surveyno) {
+      int count = surveyDAO.increaseReplycnt(surveyno);
+      return count;
+    }
+
+    @Override
+    public int decreaseReplycnt(int surveyno) {
+      int count = surveyDAO.decreaseReplycnt(surveyno);
+      return count;
+    }
+  
+    
     
 
     

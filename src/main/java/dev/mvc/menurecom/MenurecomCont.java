@@ -98,7 +98,7 @@ public class MenurecomCont {
           return "redirect:/th/menurecom/list_all";
 
         } else { // 정상적인 로그인이 아닌 경우 로그인 유도
-          ra.addAttribute("url", "/member/login"); // /templates/member/login_cookie_need.html
+          ra.addAttribute("url", "/th/member/login_cookie"); // /templates/member/login_cookie_need.html
           return "redirect:/th/menurecom/post2get"; // @GetMapping(value = "/msg")
         }
 

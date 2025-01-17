@@ -6,20 +6,20 @@
 
     <!-- 메뉴 등록 -->
     <insert id="create" parameterType="dev.mvc.menu.MenuVO">
-        INSERT INTO menu (menuno, name, explanation, price, photo, recom, storeno)
-        VALUES (MENU_SEQ.NEXTVAL, #{name}, #{explanation}, #{price}, #{photo}, 0, #{storeno})
+        INSERT INTO menu (menuno, name, explanation, price, photo, recom, storeno, dc, saleprice, point)
+        VALUES (MENU_SEQ.NEXTVAL, #{name}, #{explanation}, #{price}, #{photo}, 0, #{storeno}, #{dc}, #{saleprice}, #{point})
     </insert>
 
     <!-- 메뉴 목록 조회 -->
     <select id="list" resultType="dev.mvc.menu.MenuVO">
-        SELECT menuno, name, explanation, price, photo, recom, storeno
+        SELECT menuno, name, explanation, price, photo, recom, storeno, dc, saleprice, point
         FROM menu
         ORDER BY menuno ASC
     </select>
 
     <!-- 메뉴 상세 조회 -->
     <select id="read" parameterType="int" resultType="dev.mvc.menu.MenuVO">
-        SELECT menuno, name, explanation, price, photo, recom, storeno
+        SELECT menuno, name, explanation, price, photo, recom, storeno, dc, saleprice, point
         FROM menu
         WHERE menuno = #{menuno}
     </select>
@@ -32,7 +32,10 @@
             price = #{price, jdbcType=INTEGER},
             photo = #{photo, jdbcType=VARCHAR},
             recom = #{recom, jdbcType=INTEGER},
-            storeno = #{storeno, jdbcType=INTEGER}
+            storeno = #{storeno, jdbcType=INTEGER},
+            dc = #{dc, jdbcType=INTEGER},
+            saleprice = #{saleprice, jdbcType=INTEGER},
+            point = #{point, jdbcType=INTEGER}
         WHERE menuno = #{menuno, jdbcType=INTEGER}
     </update>
 
@@ -58,7 +61,7 @@
     
         <!-- 검색 기능 -->
     <select id="list_search" resultType="dev.mvc.menu.MenuVO" parameterType="String">
-        SELECT menuno, name, explanation, price, photo, recom, storeno
+        SELECT menuno, name, explanation, price, photo, recom, storeno, dc, saleprice, point
         FROM menu
         WHERE 1=1
         <if test="word != null and word != ''">
@@ -80,22 +83,37 @@
 
     <!-- 검색 + 페이징 -->
     <select id="list_search_paging" resultType="dev.mvc.menu.MenuVO" parameterType="Map">
-        SELECT menuno, name, explanation, price, photo, recom, storeno, r
+        SELECT menuno, name, explanation, price, photo, recom, storeno, storeName, r
         FROM (
-            SELECT menuno, name, explanation, price, photo, recom, storeno, rownum AS r
+            SELECT menuno, name, explanation, price, photo, recom, storeno, storeName, rownum AS r
             FROM (
-                SELECT menuno, name, explanation, price, photo, recom, storeno
-                FROM menu
+                SELECT m.menuno as menuno, m.name as name, m.explanation as explanation, m.price as price, m.photo as photo, m.recom as recom, m.storeno as storeno, s.name AS storeName
+                FROM menu m
+                JOIN store s ON m.storeno = s.storeno
                 WHERE 1=1
-                <if test="word != null and word != ''">
-                    AND (UPPER(name) LIKE '%' || UPPER(#{word}) || '%'
-                         OR UPPER(explanation) LIKE '%' || UPPER(#{word}) || '%')
-                </if>
-                ORDER BY menuno DESC
+                  <if test="word != null and word != ''">
+                    AND (UPPER(m.name) LIKE '%' || UPPER(#{word}) || '%'
+                         OR UPPER(m.explanation) LIKE '%' || UPPER(#{word}) || '%')
+                  </if>
+                ORDER BY m.menuno DESC
             )
             WHERE rownum &lt;= #{end_num}
         )
         WHERE r &gt;= #{start_num}
+    </select>
+    
+    <!-- 특정 음식점의 메뉴 조회 -->
+    <select id="listByStore" resultType="dev.mvc.menu.MenuVO" parameterType="int">
+        SELECT menuno, name, explanation, price, photo, recom, storeno, dc, saleprice, point
+        FROM menu
+        WHERE storeno = #{storeno}
+        ORDER BY menuno ASC
+    </select>
+    
+    <select id="findStoreNoByMenuNo" parameterType="int" resultType="int">
+        SELECT storeno
+        FROM menu
+        WHERE menuno = #{menuno}
     </select>
 
 </mapper>

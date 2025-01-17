@@ -44,14 +44,19 @@ public class MenuCont {
         System.out.println("-> MenuCont created.");
     }
 
-    // [1] 메뉴 등록
-    /** 등록 폼 */
+    // [1] 메뉴 등록 폼
     @GetMapping("/create")
-    public String createForm(Model model) {
+    public String createForm(Model model, HttpSession session) {
+        if (!Tool.isAdmin(session)) {
+            model.addAttribute("code", "admin_only");
+            return "/th/menu/msg";
+        }
+
         MenuVO menuVO = new MenuVO();
-        menuVO.setRecom(0); // 기본값 0 설정
+        menuVO.setRecom(0);
+        menuVO.setPoint(0);
         model.addAttribute("menuVO", menuVO);
-        return "/th/menu/create";  // -> /templates/th/menu/create.html
+        return "/th/menu/create";
     }
 
     /** 등록 처리 */
@@ -97,10 +102,8 @@ public class MenuCont {
         // 메뉴 등록 처리
         int cnt = menuProc.create(menuVO);
         if (cnt == 1) {
-            System.out.println("[POST] Create Success");
             return "redirect:/th/menu/list_all";
         } else {
-            System.out.println("[POST] Create Failed");
             model.addAttribute("code", "create_fail");
             return "/th/menu/msg";
         }
@@ -132,10 +135,14 @@ public class MenuCont {
         return "/th/menu/read";
     }
 
-    // [4] 메뉴 수정
-    /** 수정 폼 */
+    // [3] 메뉴 수정 폼
     @GetMapping("/update/{menuno}")
-    public String updateForm(@PathVariable("menuno") int menuno, Model model) {
+    public String updateForm(@PathVariable("menuno") int menuno, Model model, HttpSession session) {
+        if (!Tool.isAdmin(session)) {
+            model.addAttribute("code", "admin_only");
+            return "/th/menu/msg";
+        }
+
         MenuVO menuVO = this.menuProc.read(menuno);
         model.addAttribute("menuVO", menuVO);
         return "/th/menu/update";
@@ -186,17 +193,21 @@ public class MenuCont {
 
         int cnt = menuProc.update(menuVO);
         if (cnt == 1) {
-            return "redirect:/th/menu/list_all";
+            return "redirect:/th/store/list";
         } else {
             model.addAttribute("code", "update_fail");
             return "/th/menu/msg";
         }
     }
 
-    // [5] 메뉴 삭제
-    /** 삭제 폼 */
+    // [5] 메뉴 삭제 폼
     @GetMapping("/delete/{menuno}")
-    public String deleteForm(@PathVariable("menuno") int menuno, Model model) {
+    public String deleteForm(@PathVariable("menuno") int menuno, Model model, HttpSession session) {
+        if (!Tool.isAdmin(session)) {
+            model.addAttribute("code", "admin_only");
+            return "/th/menu/msg";
+        }
+
         MenuVO menuVO = this.menuProc.read(menuno);
         model.addAttribute("menuVO", menuVO);
         return "/th/menu/delete";
@@ -226,7 +237,7 @@ public class MenuCont {
     ) {
 
         // 검색 결과 가져오기
-        ArrayList<MenuVO> searchResults = this.menuProc.list_search_paging(word, nowPage, 10);
+        ArrayList<MenuVO> searchResults = this.menuProc.list_search_paging(word, nowPage, 12);
         model.addAttribute("list", searchResults);
 
         // 검색된 결과 개수
@@ -234,7 +245,7 @@ public class MenuCont {
         model.addAttribute("search_cnt", searchCnt);
 
         // 페이징 처리
-        String paging = this.menuProc.pagingBox(nowPage, word, "list_all", searchCnt, 10, 90);
+        String paging = this.menuProc.pagingBox(nowPage, word, "list_all", searchCnt, 12, 90);
         model.addAttribute("paging", paging);
 
         // **menuVO 초기화 추가**
@@ -314,6 +325,5 @@ public class MenuCont {
       }
 
     }
-
 
 }

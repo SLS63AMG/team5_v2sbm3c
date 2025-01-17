@@ -1,2 +1,18 @@
+<<<<<<< HEAD
 connection.project.dir=
 eclipse.preferences.version=1
+=======
+arguments=
+auto.sync=false
+build.scans.enabled=false
+connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)
+connection.project.dir=
+eclipse.preferences.version=1
+gradle.user.home=
+java.home=
+jvm.arguments=
+offline.mode=false
+override.workspace.settings=false
+show.console.view=false
+show.executions.view=false
+>>>>>>> f0c9a7093d4c5068c05852e74f80c863383a30b9

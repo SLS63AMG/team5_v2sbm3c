@@ -37,7 +37,20 @@ public interface SurveyProcInter {
      * @return
      */
     public int good(int surveyno);
-    
+    /**
+     * 댓글 수 증가
+     * @param 
+     * @return
+     */ 
+    public int increaseReplycnt(int surveyno);
+   
+    /**
+     * 댓글 수 감소
+     * @param 
+     * @return
+     */   
+    public int decreaseReplycnt(int surveyno);
+  
 
 }
 

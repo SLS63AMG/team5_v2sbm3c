@@ -1,54 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dev.mvc.cart.CartDAOInter">
 
     <!-- 장바구니 추가 -->
     <insert id="create" parameterType="dev.mvc.cart.CartVO">
-        INSERT INTO cart (cartno, cartcnt, cartdate, menuno, memberno)
-        VALUES (cart_seq.NEXTVAL, #{cartcnt}, SYSDATE, #{menuno}, #{memberno})
+        INSERT INTO cart (cartno, menuno, memberno, cnt, rdate)
+        VALUES (CART_SEQ.NEXTVAL, #{menuno}, #{memberno}, #{cnt}, SYSDATE)
     </insert>
 
-    <!-- 장바구니 항목 삭제 -->
+    <!-- 장바구니 목록 조회 -->
+    <select id="list" resultType="dev.mvc.cart.CartVO" parameterType="int">
+        SELECT c.cartno, c.menuno, m.name, m.photo, m.price, m.dc, m.saleprice, m.point,
+               c.memberno, c.cnt, (m.saleprice * c.cnt) AS tot, c.rdate
+        FROM cart c
+        JOIN menu m ON c.menuno = m.menuno
+        WHERE c.memberno = #{memberno}
+        ORDER BY c.cartno ASC
+    </select>
+
+    <!-- 장바구니 삭제 -->
     <delete id="delete" parameterType="int">
         DELETE FROM cart WHERE cartno = #{cartno}
     </delete>
     
-    <select id="listByMemberno" parameterType="int" resultType="dev.mvc.cart.CartVO">
-      SELECT cartno, cartcnt, cartdate, menuno, memberno
-      FROM cart
-      WHERE memberno = #{memberno}
-      ORDER BY cartno DESC
-    </select>
+    <update id="updatecnt" parameterType="map">
+        UPDATE cart
+        SET cnt = cnt 
+        <choose>
+            <when test="operation == 'plus'">
+                + 1
+            </when>
+            <when test="operation == 'minus'">
+                - 1
+            </when>
+        </choose>
+        WHERE cartno = #{cartno}
+    </update>
     
-  <!-- 장바구니(검색 + 페이징) -->
-  <select id="list_search_paging" resultType="dev.mvc.cart.CartVO" parameterType="map">
-    SELECT cartno, cartcnt, cartdate, menuno, memberno, r
-    FROM (
-        SELECT cartno, cartcnt, cartdate, menuno, memberno, ROW_NUMBER() OVER (ORDER BY cartno DESC) AS r
+    <select id="findCart" parameterType="map" resultType="dev.mvc.cart.CartVO">
+        SELECT * 
         FROM cart
         WHERE memberno = #{memberno}
-        <if test="word != null and word != ''">
-            AND (
-                UPPER(menuno) LIKE '%' || UPPER(#{word}) || '%'
-            )
-        </if>
-    )
-    WHERE r &gt;= #{start_num} AND r &lt;= #{end_num} <!-- WHERE r >= 1 AND r <= 3 -->
-  </select>
-
-  <!-- 검색된 레코드 개수 -->
-  <select id="list_search_count" resultType="Integer" parameterType="map">
-    SELECT COUNT(*) AS cnt
-    FROM cart
-    WHERE memberno = #{memberno}
-    <if test="word != null and word != ''">
-        AND (
-            UPPER(menuno) LIKE '%' || UPPER(#{word}) || '%'
-        )
-    </if>
-  </select>
-
+          AND menuno = #{menuno}
+    </select>
 
 </mapper>

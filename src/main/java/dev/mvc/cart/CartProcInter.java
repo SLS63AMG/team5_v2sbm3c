@@ -1,26 +1,33 @@
 package dev.mvc.cart;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import dev.mvc.menu.MenuVO;
-
 public interface CartProcInter {
+    /**
+     * 장바구니 추가
+     * @param cartVO 장바구니 데이터
+     * @return 추가된 레코드 수
+     */
+    public int create(CartVO cartVO);
 
-  public String pagingBox(int now_page, String word, String list_file_name, int search_count, int record_per_page,
-      int page_per_block);
+    /**
+     * 장바구니 목록 조회
+     * @param memberno 회원 번호
+     * @return 장바구니 목록
+     */
+    public List<CartVO> list(int memberno);
 
-  /** 장바구니에 메뉴 추가 */
-  public int create(CartVO cartVO);
 
-  /** 장바구니 항목 삭제 */
-  public int delete(int menuno);
-
-  public List<CartVO> listByMemberno(Integer memberno);
-
-  public ArrayList<CartVO> list_search_paging(String memberno, String word, int now_page, int record_per_page);
-  
-  public Integer list_search_count(String memberno, String word);
+    /**
+     * 장바구니 삭제
+     * @param cartno 장바구니 번호
+     * @return 삭제된 레코드 수
+     */
+    public int delete(int cartno);
+    
+    public int updatecnt(Map<String, Object> map);
+    
+    public CartVO findCart(int memberno, int menuno);
 
 }

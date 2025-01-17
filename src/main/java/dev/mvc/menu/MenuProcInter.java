@@ -50,6 +50,13 @@ public interface MenuProcInter {
     public String pagingBox(int now_page, String word, String list_file_name, int search_count, int record_per_page,
         int page_per_block);
     
+    /**
+     * 특정 음식점의 메뉴 조회
+     * @param storeno 음식점 번호
+     * @return 해당 음식점의 메뉴 목록
+     */
+    public List<MenuVO> listByStore(int storeno);
+
     
     /** 추천 수 증가 */
     public int increaseRecom(int menurecomno);
@@ -59,5 +66,6 @@ public interface MenuProcInter {
 
     public int good(int menuno);
     
+    public int findStoreNoByMenuNo(int menuno);
 
 }

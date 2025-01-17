@@ -3,28 +3,28 @@
 <head>
     <title>설문조사 항목</title>
     <style>
-        table {
+        .survey-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
 
-        th, td {
+        .survey-table th, .survey-table td {
             padding: 15px;
             text-align: center;
             font-size: 16px;
         }
 
-        th {
+        .survey-table th {
             background-color: #f2f2f2;
             font-weight: bold;
         }
 
-        td {
+        .survey-table td {
             border: 1px solid #ddd;
         }
 
-        button {
+        .survey-button {
             padding: 5px 10px;
             font-size: 14px;
             background-color: #4CAF50;
@@ -34,7 +34,7 @@
             cursor: pointer;
         }
 
-        button:hover {
+        .survey-button:hover {
             background-color: #45a049;
         }
 
@@ -48,20 +48,30 @@
             gap: 5px;
             justify-content: center;
         }
+
+        .survey-label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .survey-label input[type="radio"] {
+            margin-right: 10px;
+        }
     </style>
 </head>
 
 <div layout:fragment="content">
     <div class="title_line" th:text="${survey.topic}"></div>
     <form th:action="@{/th/surveyitem/vote}" method="post">
-        <table>
+        <table class="survey-table">
             <thead>
                 <tr>
                     <th th:if="${session.grade == 1}">순번</th>
                     <th>항목</th>
                     <th th:if="${session.grade == 1}">투표수</th>
                     <th th:if="${session.grade == 1}">작업</th>
-                    <th>선택</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,38 +83,40 @@
                             <form th:action="@{/th/surveyitem/moveUp}" method="post" style="display:inline;">
                                 <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
                                 <input type="hidden" name="surveyno" th:value="${surveyno}" />
-                                <button type="submit">⬆</button>
+                                <button type="submit" class="survey-button">⬆</button>
                             </form>
                             <form th:action="@{/th/surveyitem/moveDown}" method="post" style="display:inline;">
                                 <input type="hidden" name="surveyitemno" th:value="${item.surveyitemno}" />
                                 <input type="hidden" name="surveyno" th:value="${surveyno}" />
-                                <button type="submit">⬇</button>
+                                <button type="submit" class="survey-button">⬇</button>
                             </form>
                         </div>
                     </td>
-                    <td th:text="${item.item}"></td>
+                    <td>
+                        <!-- 라디오 버튼과 항목 텍스트를 라벨로 연결 -->
+                        <label class="survey-label">
+                            <input type="radio" name="surveyitemno" th:value="${item.surveyitemno}" required>
+                            <span th:text="${item.item}"></span>
+                        </label>
+                    </td>
                     <td th:if="${session.grade == 1}" th:text="${item.itemcnt}"></td>
                     <td th:if="${session.grade == 1}">
                         <!-- 수정/삭제 버튼 -->
                         <a th:href="@{/th/surveyitem/update/{surveyitemno}(surveyitemno=${item.surveyitemno})}">수정</a> |
                         <a th:href="@{/th/surveyitem/delete/{surveyitemno}(surveyitemno=${item.surveyitemno}, surveyno=${surveyno})}">삭제</a>
                     </td>
-                    <td>
-                        <!-- 라디오 버튼 -->
-                        <input type="radio" name="surveyitemno" th:value="${item.surveyitemno}" required>
-                    </td>
                 </tr>
             </tbody>
-
         </table>
         
         <!-- 하단 투표 버튼 -->
         <div class="vote-button-container">
             <input type="hidden" name="surveyno" th:value="${surveyno}" />
             <input type="hidden" name="memberno" th:value="${session.memberno}" />
-            <button type="submit">투표</button>
+            <button type="submit" class="survey-button">투표</button>
         </div>
     </form>
     <a th:if="${session.grade == 1}" th:href="@{/th/surveyitem/create/{surveyno}(surveyno=${surveyno})}">항목 등록</a>
 </div>
+</body>
 </html>
