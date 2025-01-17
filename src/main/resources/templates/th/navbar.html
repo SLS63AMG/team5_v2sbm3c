@@ -67,13 +67,7 @@
                 <a class="nav-link" th:href="@{/th/cart/list_search_paging}">장바구니</a>
               </li>
                
-              <li class="nav-item">
-                <a class="nav-link" th:href="@{/th/ranking/list_all}">음식점 랭킹 </a>
-              </li>
-               
-               <li class="nav-item">
-                <a class="nav-link" th:href="@{/th/survey/list}">설문조사</a>
-               </li>
+              
 
               <li class="nav-item">
                 <span th:if="${session.token == null}"><a class="nav-link" th:href="@{/member/login}" th:text="'로그인'"></a></span>
