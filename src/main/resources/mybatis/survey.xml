@@ -102,6 +102,21 @@
      SET goodcnt = goodcnt - 1
      WHERE surveyno = #{surveyno}
    </update>
+   
+   
+     <!-- 댓글 수 증가 -->
+  <update id="increaseReplycnt" parameterType="int">
+    UPDATE survey
+    SET replycnt = replycnt + 1
+    WHERE surveyno = #{surveyno}
+  </update>
+
+  <!-- 댓글 수 감소 -->
+  <update id="decreaseReplycnt" parameterType="int">
+    UPDATE survey
+    SET replycnt = replycnt - 1
+    WHERE surveyno = #{surveyno}
+  </update>
 
 
 

@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
 public interface StoregoodDAOInter {
     /**
      * 추천 등록

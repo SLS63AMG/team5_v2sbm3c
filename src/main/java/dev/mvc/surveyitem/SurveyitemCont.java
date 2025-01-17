@@ -97,7 +97,7 @@ public class SurveyitemCont {
         // 설문 참여 데이터 추가 및 메시지 반환
         String message = surveymemberService.addSurveyParticipation(surveyitemno, memberno);
         
-        if ("Vote registered successfully".equals(message)) {
+        if ("설문 참여가 완료됬습니다.".equals(message)) {
             // 투표가 성공적으로 등록된 경우에만 투표 수 증가
             surveyitemProc.vote(surveyitemno);
             

@@ -31,7 +31,7 @@ public class SurveygoodCont {
   private MemberProcInter memberProc;
   
   @Autowired
-  @Qualifier("dev.mvc.survey.SurveyProc") // @Component("dev.mvc.cate.CateProc")
+  @Qualifier("dev.mvc.survey.SurveyProc")
   private SurveyProcInter surveyProc;
   
   @Autowired

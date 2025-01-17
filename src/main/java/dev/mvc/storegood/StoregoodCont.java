@@ -25,7 +25,7 @@ public class StoregoodCont {
 
     @Autowired
     @Qualifier("dev.mvc.storegood.StoregoodProc")
-    StoregoodProcInter storegoodProc;
+    private StoregoodProcInter storegoodProc;
 
     public StoregoodCont() {
         System.out.println("-> StoregoodCont created.");

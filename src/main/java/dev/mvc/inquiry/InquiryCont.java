@@ -29,7 +29,6 @@ import dev.mvc.tool.Contents;
 import dev.mvc.tool.Tool;
 import dev.mvc.tool.Upload;
 import jakarta.servlet.http.HttpSession;
-import oracle.jdbc.proxy.annotation.Post;
 
 @RequestMapping("/inquiry")
 @Controller

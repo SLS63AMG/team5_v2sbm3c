@@ -11,18 +11,14 @@ function toggleOrderState(orderType) {
     if (orderType === "id") {
         if (currentOrderState === "id_asc") {
             currentOrderState = "id_desc";
-            document.getElementById("orderButton").value = "ID 내림차순 정렬"; // 버튼 텍스트 변경
         } else {
             currentOrderState = "id_asc";
-            document.getElementById("orderButton").value = "ID 오름차순 정렬"; // 버튼 텍스트 변경
         }
     } else if (orderType === "jdate") {
         if (currentOrderState === "jdate_asc") {
             currentOrderState = "jdate_desc";
-            document.getElementById("dateOrderButton").value = "접속 시도일 내림차순 정렬"; // 버튼 텍스트 변경
         } else {
             currentOrderState = "jdate_asc";
-            document.getElementById("dateOrderButton").value = "접속 시도일 오름차순 정렬"; // 버튼 텍스트 변경
         }
     }
 
@@ -123,11 +119,11 @@ function clearTable() {
     <th class='th_bs'>번호</th>
     <th class='th_bs'>아이피</th>
     <th class='th_bs'>아이디 
-        <input type="button" value="ID 오름차순 정렬" id="orderButton" onclick="toggleOrderState('id')">
+        <img src="/loginlog/images/order.png" class="icon" onclick="toggleOrderState('id')" style="cursor: pointer;">
     </th>
     <th class='th_bs'>
         접속 시도일 
-        <input type="button" value="접속 시도일 오름차순 정렬" id="dateOrderButton" onclick="toggleOrderState('jdate')">
+        <img src="/loginlog/images/order.png" class="icon" onclick="toggleOrderState('jdate')" style="cursor: pointer;">
     </th>
     <th class='th_bs'>성공여부</th>
     <th class='th_bs'>삭제</th>

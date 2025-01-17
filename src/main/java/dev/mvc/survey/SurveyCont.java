@@ -38,7 +38,7 @@ public class SurveyCont {
     
     @Autowired
     @Qualifier("dev.mvc.surveygood.SurveygoodProc") 
-    SurveygoodProcInter surveygoodProc;
+    private SurveygoodProcInter surveygoodProc;
     
     public SurveyCont() {
       System.out.println("-> SurveyCont created.");
