@@ -82,7 +82,46 @@ public class SMSCont {
   }
 
   
-  
+  @PostMapping(value = "/test")
+  public ModelAndView test(HttpSession session, HttpServletRequest request,
+      @RequestParam(name="rphone") String rphone) {
+    ModelAndView mav = new ModelAndView();
+    
+    // 아이디, 이름 확인 로직 예정
+    
+    
+    // 아이디, 이름 확인 로직 예정
+    
+    
+    // 아이디 확인
+    // ------------------------------------------------------------------------------------------------------
+    // 0 ~ 9, 번호 6자리 생성
+    // ------------------------------------------------------------------------------------------------------
+    String auth_no = "";
+    Random random = new Random();
+    for (int i=0; i<= 5; i++) {
+      auth_no = auth_no + random.nextInt(10); // 0 ~ 9, 번호 6자리 생성
+    }
+    session.setAttribute("auth_no", auth_no); // 생성된 번호를 비교를위하여 session 에 저장
+    
+    // id 찾은 경우 어느 회원의 패스워드를 변경하는지 확인할 목적으로 id를 session에 저장
+    session.setAttribute("id", "user1"); 
+    
+    //    System.out.println(auth_no);   
+    // ------------------------------------------------------------------------------------------------------
+    
+    System.out.println("-> IP:" + request.getRemoteAddr()); // 접속자의 IP 수집
+    
+    // 번호, 전화 번호, ip, auth_no, 날짜 -> SMS Oracle table 등록, 문자 전송 내역 관리 목적으로 저장(필수 아니나 권장)
+    
+    String msg = "[www.resort.co.kr] [" + auth_no + "]을 인증번호란에 입력해주세요.";
+    System.out.print(msg);
+    
+    mav.addObject("msg", msg); // request.setAttribute("msg")
+    mav.setViewName("/sms/proc");  // /WEB-INF/views/sms/proc.jsp
+    
+    return mav;
+  }
   
   
   

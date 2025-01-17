@@ -150,9 +150,7 @@ div::-webkit-scrollbar-track {
 
 /* 체크박스 CSS */
   /* 기본 체크박스를 숨기기 */
-  input[type="checkbox"][name="terms"] {
-    display: none;
-  }
+
   
   /* 원형 체크박스 만들기 */
   input[type="checkbox"][name="terms"] + label {
