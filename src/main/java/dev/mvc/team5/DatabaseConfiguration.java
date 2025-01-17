@@ -38,6 +38,7 @@ import com.zaxxer.hikari.HikariDataSource;
                                        "dev.mvc.surveygood",
                                        "dev.mvc.storegood"})
 
+
 public class DatabaseConfiguration {
     
     @Autowired
