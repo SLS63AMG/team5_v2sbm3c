@@ -44,15 +44,19 @@ public class MenuCont {
         System.out.println("-> MenuCont created.");
     }
 
-    // [1] 메뉴 등록
-    /** 등록 폼 */
+    // [1] 메뉴 등록 폼
     @GetMapping("/create")
-    public String createForm(Model model) {
+    public String createForm(Model model, HttpSession session) {
+        if (!Tool.isAdmin(session)) {
+            model.addAttribute("code", "admin_only");
+            return "/th/menu/msg";
+        }
+
         MenuVO menuVO = new MenuVO();
-        menuVO.setRecom(0); // 기본값 0 설정
-        menuVO.setPoint(0); // 기본값
+        menuVO.setRecom(0);
+        menuVO.setPoint(0);
         model.addAttribute("menuVO", menuVO);
-        return "/th/menu/create";  // -> /templates/th/menu/create.html
+        return "/th/menu/create";
     }
 
     /** 등록 처리 */
@@ -131,10 +135,14 @@ public class MenuCont {
         return "/th/menu/read";
     }
 
-    // [4] 메뉴 수정
-    /** 수정 폼 */
+    // [3] 메뉴 수정 폼
     @GetMapping("/update/{menuno}")
-    public String updateForm(@PathVariable("menuno") int menuno, Model model) {
+    public String updateForm(@PathVariable("menuno") int menuno, Model model, HttpSession session) {
+        if (!Tool.isAdmin(session)) {
+            model.addAttribute("code", "admin_only");
+            return "/th/menu/msg";
+        }
+
         MenuVO menuVO = this.menuProc.read(menuno);
         model.addAttribute("menuVO", menuVO);
         return "/th/menu/update";
@@ -192,10 +200,14 @@ public class MenuCont {
         }
     }
 
-    // [5] 메뉴 삭제
-    /** 삭제 폼 */
+    // [5] 메뉴 삭제 폼
     @GetMapping("/delete/{menuno}")
-    public String deleteForm(@PathVariable("menuno") int menuno, Model model) {
+    public String deleteForm(@PathVariable("menuno") int menuno, Model model, HttpSession session) {
+        if (!Tool.isAdmin(session)) {
+            model.addAttribute("code", "admin_only");
+            return "/th/menu/msg";
+        }
+
         MenuVO menuVO = this.menuProc.read(menuno);
         model.addAttribute("menuVO", menuVO);
         return "/th/menu/delete";

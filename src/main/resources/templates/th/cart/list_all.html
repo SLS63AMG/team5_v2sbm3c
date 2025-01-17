@@ -3,7 +3,6 @@
 <div layout:fragment="content">
 
   <h1>장바구니 목록</h1>
-
   <table style="width: 100%; border-collapse: collapse;">
     <thead>
       <tr>
@@ -63,11 +62,21 @@
 
   <!-- 주문하기 버튼 -->
   <div style="text-align: center; margin-top: 20px;">
-    <button style="padding: 10px 20px; background-color: #00c8c8; color: white; border: none; border-radius: 5px; font-size: 16px;">
-      주문하기
-    </button>
+    <form method="post" th:action="@{/th/orders/create}">
+      <div th:each="cart, stat : ${cartList}">
+        <input type="hidden" name="cartList[__${stat.index}__].menuno" th:value="${cart.menuno}" />
+        <input type="hidden" name="cartList[__${stat.index}__].cnt" th:value="${cart.cnt}" />
+        <input type="hidden" name="cartList[__${stat.index}__].saleprice" th:value="${cart.saleprice}" />
+        <input type="hidden" name="cartList[__${stat.index}__].photo" th:value="${cart.photo}" />
+        <input type="hidden" name="cartList[__${stat.index}__].name" th:value="${cart.name}" />
+      </div>
+      <input type="hidden" name="memberno" th:value="${session.memberno}" />
+      <button type="submit" style="padding: 10px 20px; background-color: #00c8c8; color: white; border: none; border-radius: 5px; font-size: 16px;">
+        주문하기
+      </button>
+    </form>
   </div>
-  
+
   <!-- JavaScript 코드 -->
   <script>
   function updatecnt(operation, cartno) {

@@ -237,5 +237,10 @@ public class MenuProc implements MenuProcInter {
       
       return 0;
     }
+    
+    @Override
+    public int findStoreNoByMenuNo(int menuno) {
+        return menuDAO.findStoreNoByMenuNo(menuno);
+    }
 
 }

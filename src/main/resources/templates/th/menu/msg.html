@@ -53,6 +53,12 @@
             <span class="span_fail">메뉴 삭제에 실패했습니다.</span><br>
             삭제 실패된 메뉴 이름: <span th:text="${name}"></span>
           </div>
+          
+          <!-- 관리자 권한 필요 -->
+          <div th:case="'admin_only'">
+            <span class="span_fail">관리자 권한이 필요합니다.</span><br>
+            해당 페이지에 접근할 수 있는 권한이 없습니다.
+          </div>
 
           <!-- 기타 -->
           <div th:default-case>

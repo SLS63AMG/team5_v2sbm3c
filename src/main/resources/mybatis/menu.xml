@@ -109,5 +109,11 @@
         WHERE storeno = #{storeno}
         ORDER BY menuno ASC
     </select>
+    
+    <select id="findStoreNoByMenuNo" parameterType="int" resultType="int">
+        SELECT storeno
+        FROM menu
+        WHERE menuno = #{menuno}
+    </select>
 
 </mapper>

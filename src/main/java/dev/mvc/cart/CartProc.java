@@ -15,17 +15,17 @@ public class CartProc implements CartProcInter {
 
     @Override
     public int create(CartVO cartVO) {
-        return cartDAO.create(cartVO);
+        return this.cartDAO.create(cartVO);
     }
 
     @Override
     public List<CartVO> list(int memberno) {
-        return cartDAO.list(memberno);
+        return this.cartDAO.list(memberno);
     }
 
     @Override
     public int delete(int cartno) {
-        return cartDAO.delete(cartno);
+        return this.cartDAO.delete(cartno);
     }
     
     @Override
@@ -38,7 +38,7 @@ public class CartProc implements CartProcInter {
         Map<String, Object> params = new HashMap<>();
         params.put("memberno", memberno);
         params.put("menuno", menuno);
-        return cartDAO.findCart(params); // 여기에 Map으로 전달
+        return this.cartDAO.findCart(params); // 여기에 Map으로 전달
     }
 
 

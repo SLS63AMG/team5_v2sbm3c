@@ -79,4 +79,5 @@ public interface MenuDAOInter {
    
     public int good(int menuno);
     
+    public int findStoreNoByMenuNo(int menuno);
 }

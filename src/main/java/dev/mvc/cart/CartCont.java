@@ -39,7 +39,7 @@ public class CartCont {
     @PostMapping("/create")
     public String create(CartVO cartVO, Model model) {
       // 동일한 메뉴가 이미 장바구니에 있는지 확인
-      CartVO existingCart = cartProc.findCart(cartVO.getMemberno(), cartVO.getMenuno());
+      CartVO existingCart = this.cartProc.findCart(cartVO.getMemberno(), cartVO.getMenuno());
       if (existingCart != null) {
           // 이미 존재하는 경우
           model.addAttribute("message", "해당 메뉴가 이미 장바구니에 있습니다.");

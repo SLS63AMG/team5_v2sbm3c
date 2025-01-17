@@ -66,5 +66,6 @@ public interface MenuProcInter {
 
     public int good(int menuno);
     
+    public int findStoreNoByMenuNo(int menuno);
 
 }
